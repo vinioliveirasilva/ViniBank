@@ -15,4 +15,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "ViniBank"
 include(":app")
- 
+include(":FeatureLogin")
+include(":DesignSystem")
