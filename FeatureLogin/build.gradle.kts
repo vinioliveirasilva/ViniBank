@@ -39,6 +39,7 @@ android {
 dependencies {
 
 
+    implementation(project(":FeatureSignUp"))
     implementation(project(":DesignSystem"))
     implementation(project(":Storage"))
     implementation(project(":Common"))

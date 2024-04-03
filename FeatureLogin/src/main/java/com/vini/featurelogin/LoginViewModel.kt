@@ -1,5 +1,6 @@
 package com.vini.featurelogin
 
+import android.app.Activity
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -42,6 +43,16 @@ class LoginViewModel(
                 }.collectLatest {
                     _event.sendInScope(this@LoginViewModel, LoginUIEvent.BusinessSuccess)
                 }
+        }
+    }
+
+    fun openSignUp() {
+        _event.sendInScope(this, LoginUIEvent.OpenSignUp)
+    }
+
+    fun doOnSignUpResult(resultCode: Int) {
+        if (resultCode == Activity.RESULT_OK) {
+            _event.sendInScope(this, LoginUIEvent.BusinessSuccess)
         }
     }
 

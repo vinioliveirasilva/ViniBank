@@ -6,4 +6,5 @@ sealed class LoginUIEvent {
     data object ShowLoader : LoginUIEvent()
     data object HideLoader : LoginUIEvent()
     data object BusinessSuccess : LoginUIEvent()
+    data object OpenSignUp : LoginUIEvent()
 }
