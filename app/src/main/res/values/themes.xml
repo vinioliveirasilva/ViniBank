@@ -1,11 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Base.Theme.ViniBank" parent="Theme.Material3.DayNight.NoActionBar">
-    </style>
 
-    <style name="Theme.ViniBank" parent="Base.Theme.ViniBank" >
-        <item name="colorPrimary">#E5E1DE</item>
+    <style name="Base.Theme.ViniBank" parent="Theme.Material3.DayNight.NoActionBar"/>
+
+    <style name="Theme.ViniBank" parent="Base.Theme.ViniBank">
+        <!--item name="colorPrimary">#E5E1DE</item>
         <item name="colorSecondary">#E5E1DE</item>
         <item name="android:colorBackground">#272F32</item>
-        <item name="colorSurface">#272F32</item>
+        <item name="colorSurface">#272F32</item-->
     </style>
 </resources>

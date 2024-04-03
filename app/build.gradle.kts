@@ -33,12 +33,19 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
 
 
     implementation(project(":FeatureLogin"))
+    implementation(project(":FeatureSignUp"))
+    implementation(project(":Common"))
+    implementation(project(":Storage"))
     implementation(project(":DesignSystem"))
 
     implementation(libs.koin)
@@ -48,6 +55,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
