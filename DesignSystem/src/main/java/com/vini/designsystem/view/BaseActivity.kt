@@ -6,10 +6,11 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import org.koin.androidx.scope.ScopeActivity
 
 open class BaseActivity(
     @LayoutRes val layoutRes: Int,
-) : AppCompatActivity(layoutRes) {
+) : ScopeActivity(layoutRes) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

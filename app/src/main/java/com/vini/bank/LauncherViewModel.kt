@@ -6,7 +6,7 @@ import com.vini.storage.LocalStorage
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 
-class LauncherViewModel(private val localStorage: com.vini.storage.LocalStorage) : ViewModel() {
+class LauncherViewModel(private val localStorage: LocalStorage) : ViewModel() {
 
     private val _event = Channel<LauncherUIEvent>()
     val event = _event.receiveAsFlow()
