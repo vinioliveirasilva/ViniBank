@@ -9,7 +9,7 @@ import com.vini.featurelogin.LoginActivity
 import com.vini.common.mvvm.observe
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class LauncherActivity : BaseActivity(R.layout.activity_main) {
+class LauncherActivity : BaseActivity(com.vini.designsystem.R.layout.main_content) {
 
     private val viewModel: LauncherViewModel by viewModel()
 

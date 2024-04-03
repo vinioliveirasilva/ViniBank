@@ -58,11 +58,17 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            style="@style/Widget.Material3.Button.ElevatedButton"
             android:id="@+id/doLoginButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/login_button" />
+
+        <Button
+            style="@style/Widget.Material3.Button.ElevatedButton"
+            android:id="@+id/doSignUpButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/signup_button" />
     </LinearLayout>
 
 
