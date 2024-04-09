@@ -3,6 +3,11 @@
 
     <application>
         <activity
+            android:name=".LoginActivityC"
+            android:exported="false"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.ViniBank" />
+        <activity
             android:name=".LoginActivity"
             android:exported="false" />
     </application>

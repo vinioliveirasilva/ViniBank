@@ -61,6 +61,7 @@
             android:id="@+id/doLoginButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/grid"
             android:text="@string/login_button" />
 
         <Button

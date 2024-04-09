@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.flow
 
 class LoginRepository(private val localStorage: LocalStorage) {
     fun doLogin(email: String, pass: String) = flow {
-        delay(1000L)
+        delay(5000L)
         val wasSuccess = localStorage.authenticate(email, pass)
         emit(wasSuccess ?: throw Exception("User Not Found"))
     }

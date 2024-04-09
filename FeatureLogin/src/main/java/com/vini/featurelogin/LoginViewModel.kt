@@ -1,64 +1,64 @@
 package com.vini.featurelogin
 
 import android.app.Activity
-import androidx.lifecycle.SavedStateHandle
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
-import com.vini.common.mvvm.sendInScope
+import com.vini.featurelogin.ui.loader.LoaderComponent
+import com.vini.featurelogin.ui.loader.LoaderComponentViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val state: SavedStateHandle,
     private val loginRepository: LoginRepository,
-) : ViewModel() {
+) : ViewModel(), LoaderComponent by LoaderComponentViewModel() {
 
-    private val _event = Channel<LoginUIEvent>()
-    val event = _event.receiveAsFlow()
+    val event = MutableStateFlow<LoginUIEvent>(value = LoginUIEvent.Empty)
+    val event1 = event.asStateFlow()
 
-    fun doOnCreate() {
-        _event.sendInScope(this, LoginUIEvent.SetupEmail(state.get<String>(Keys.email).orEmpty()))
+    private val _uiEvent = Channel<LoginUIEvent>()
+    val uievent = _uiEvent.receiveAsFlow()
+
+    init {
+        setupLoader(viewModelScope)
     }
 
     fun doOnLogin(email: String, pass: String) {
-        state[Keys.email] = email
         viewModelScope.launch {
             loginRepository.doLogin(email, pass)
                 .catch {
-                    _event.sendInScope(
-                        this@LoginViewModel,
-                        LoginUIEvent.HideLoader,
-                        LoginUIEvent.ShowAlert(it.message)
-                    )
+                    hideLoader()
+                    event.value = LoginUIEvent.ShowAlert(it.message)
                 }
                 .onStart {
-                    _event.sendInScope(this@LoginViewModel, LoginUIEvent.ShowLoader)
+                    showLoader()
                 }.onCompletion {
-                    _event.sendInScope(this@LoginViewModel, LoginUIEvent.HideLoader)
+                    hideLoader()
                 }.collectLatest {
-                    _event.sendInScope(this@LoginViewModel, LoginUIEvent.BusinessSuccess)
+                    event.value = LoginUIEvent.BusinessSuccess
+
                 }
         }
     }
 
     fun openSignUp() {
-        _event.sendInScope(this, LoginUIEvent.OpenSignUp)
+        event.value = LoginUIEvent.OpenSignUp
     }
 
     fun doOnSignUpResult(resultCode: Int) {
         if (resultCode == Activity.RESULT_OK) {
-            _event.sendInScope(this, LoginUIEvent.BusinessSuccess)
-        }
-    }
-
-    private companion object {
-        object Keys {
-            const val email = "EMAIL"
+            event.value = LoginUIEvent.BusinessSuccess
         }
     }
 }

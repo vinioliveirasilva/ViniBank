@@ -30,26 +30,30 @@ class LoginActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        observe(viewModel.event, ::handleEvent)
-        viewModel.doOnCreate()
+        observe(viewModel.uievent, ::handleEvent)
+        //viewModel.doOnCreate()
     }
 
     private fun handleEvent(event: LoginUIEvent): Any = when (event) {
         is LoginUIEvent.OpenSignUp -> signUpLauncher.launch(SignUpActivity.newIntent(this))
-        is LoginUIEvent.SetupEmail -> binding.emailInput.setText(event.email)
-        is LoginUIEvent.ShowLoader -> showLoader()
-        is LoginUIEvent.HideLoader -> hideLoader()
+        //is LoginUIEvent.SetupEmail -> binding.emailInput.setText(event.email)
+       // is LoginUIEvent.ShowLoader -> showLoader()
+        //is LoginUIEvent.HideLoader -> hideLoader()
         is LoginUIEvent.ShowAlert -> Toast.makeText(this, event.message, Toast.LENGTH_SHORT).show()
         is LoginUIEvent.BusinessSuccess -> {
-            setResult(Activity.RESULT_OK)
+            setResult(RESULT_OK)
             finish()
         }
+
+        LoginUIEvent.Empty -> TODO()
     }
 
     override fun onStart() {
         super.onStart()
         with(binding) {
             doLoginButton.setOnClickListener {
+                startActivity(LoginActivityC.newIntent(this@LoginActivity))
+                return@setOnClickListener
                 viewModel.doOnLogin(
                     email = emailInput.text.toString(),
                     pass = passInput.text.toString(),
