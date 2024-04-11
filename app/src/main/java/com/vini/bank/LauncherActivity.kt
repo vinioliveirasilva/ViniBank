@@ -7,7 +7,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.vini.common.mvvm.observe
 import com.vini.designsystem.view.BaseActivity
 import com.vini.featurelogin.LoginActivity
-import com.vini.featurelogin.LoginActivityC
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LauncherActivity : BaseActivity(com.vini.designsystem.R.layout.main_content) {
@@ -37,5 +36,5 @@ class LauncherActivity : BaseActivity(com.vini.designsystem.R.layout.main_conten
 
     private fun goToHome() = Toast.makeText(this, "Logado", Toast.LENGTH_SHORT).show()
 
-    private fun goToLogin() = loginLauncher.launch(LoginActivityC.newIntent(this))
+    private fun goToLogin() = loginLauncher.launch(LoginActivity.newIntent(this))
 }

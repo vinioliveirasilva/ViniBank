@@ -7,9 +7,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,16 +16,17 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vini.featurelogin.ui.dialog.NonDismissibleDialog
 import com.vini.featurelogin.ui.theme.ViniBankTheme
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
-sealed class LoaderState {
-    data object Showed : LoaderState()
-    data object Hidden : LoaderState()
-}
+data class LoaderState(
+    val visible: Boolean = false
+)
 
 interface LoaderComponent {
-    val loaderEvent: State<LoaderState>
+    val loaderState: StateFlow<LoaderState>
     fun setupLoader(scope: CoroutineScope)
     fun showLoader()
     fun hideLoader()
@@ -36,29 +34,27 @@ interface LoaderComponent {
 
 class LoaderComponentViewModel : LoaderComponent {
     private var internalScope: CoroutineScope? = null
-    override val loaderEvent = mutableStateOf<LoaderState>(LoaderState.Hidden)
+    private val _loaderState = MutableStateFlow(LoaderState())
+    override val loaderState = _loaderState.asStateFlow()
 
     override fun setupLoader(scope: CoroutineScope) {
         internalScope = scope
     }
 
     override fun showLoader() {
-        loaderEvent.value = LoaderState.Showed
+        _loaderState.update { it.copy(visible = true) }
     }
 
     override fun hideLoader() {
-        loaderEvent.value = LoaderState.Hidden
+        _loaderState.update { it.copy(visible = false) }
     }
 }
 
 @Composable
-fun Loader(state: State<LoaderState>) = with(
-    state
-) {
-    when (value) {
-        is LoaderState.Showed -> NonDismissibleDialog { LoaderContent() }
-        is LoaderState.Hidden -> {}
-    }
+fun Loader(state: StateFlow<LoaderState>) = if (state.collectAsStateWithLifecycle().value.visible) {
+    NonDismissibleDialog { LoaderContent() }
+} else {
+
 }
 
 @Composable
@@ -77,11 +73,13 @@ private fun LoaderContent() = Box(
     )
 }
 
+fun loaderStateMock(isVisible: Boolean = true) = MutableStateFlow(LoaderState(visible = isVisible))
+
 @SuppressLint("UnrememberedMutableState")
 @Preview(showBackground = true)
 @Composable
 private fun LoaderPreview() {
     ViniBankTheme {
-        Loader(state = derivedStateOf { LoaderState.Showed })
+        Loader(state = loaderStateMock())
     }
 }

@@ -1,8 +1,12 @@
 package com.vini.featurelogin
 
 sealed class LoginUIEvent {
-    class ShowAlert(val message: String?) : LoginUIEvent()
-    data object BusinessSuccess : LoginUIEvent()
-    data object OpenSignUp : LoginUIEvent()
-    data object Empty : LoginUIEvent()
+    data object DoOnDismissSnackBar : LoginUIEvent()
+
+    data class DoOnSignUp(val resultCode: Int) : LoginUIEvent()
+    data class DoOnLogin(val email: String, val pass: String) : LoginUIEvent()
+}
+
+sealed class LoginVMEvent {
+    data object BusinessSuccess : LoginVMEvent()
 }
