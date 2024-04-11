@@ -1,4 +1,4 @@
-package com.vini.featurelogin.ui.theme
+package com.vini.designsystem.compose.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

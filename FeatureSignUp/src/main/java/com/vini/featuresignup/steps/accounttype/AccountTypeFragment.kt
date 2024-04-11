@@ -3,8 +3,8 @@ package com.vini.featuresignup.steps.accounttype
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import com.vini.designsystem.view.BaseFragment
-import com.vini.designsystem.view.viewbinding.viewBinding
+import com.vini.designsystem.xml.view.BaseFragment
+import com.vini.designsystem.xml.view.viewbinding.viewBinding
 import com.vini.featuresignup.FlowManager
 import com.vini.featuresignup.R
 import com.vini.featuresignup.databinding.FragmentAccountTypeBinding

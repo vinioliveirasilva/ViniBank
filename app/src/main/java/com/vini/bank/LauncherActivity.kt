@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.vini.common.mvvm.observe
-import com.vini.designsystem.view.BaseActivity
+import com.vini.designsystem.xml.view.BaseActivity
 import com.vini.featurelogin.LoginActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

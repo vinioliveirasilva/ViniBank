@@ -1,4 +1,4 @@
-package com.vini.designsystem.view.viewbinding
+package com.vini.designsystem.xml.view.viewbinding
 
 import android.view.View
 import androidx.fragment.app.Fragment

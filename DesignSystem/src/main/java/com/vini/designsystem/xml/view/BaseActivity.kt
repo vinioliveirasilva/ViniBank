@@ -1,4 +1,4 @@
-package com.vini.designsystem.view
+package com.vini.designsystem.xml.view
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

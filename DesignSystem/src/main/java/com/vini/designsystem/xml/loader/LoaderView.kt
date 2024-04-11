@@ -1,4 +1,4 @@
-package com.vini.designsystem.loader
+package com.vini.designsystem.xml.loader
 
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner

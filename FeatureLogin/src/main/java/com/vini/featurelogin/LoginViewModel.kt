@@ -4,8 +4,8 @@ import android.app.Activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vini.common.mvvm.sendInScope
-import com.vini.featurelogin.ui.loader.LoaderComponent
-import com.vini.featurelogin.ui.loader.LoaderComponentViewModel
+import com.vini.designsystem.compose.loader.LoaderComponent
+import com.vini.designsystem.compose.loader.LoaderComponentViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -37,7 +37,6 @@ class LoginViewModel(
         viewModelScope.launch {
             loginRepository.doLogin(email, pass)
                 .catch {
-                    hideLoader()
                     _uiState.update { currentState -> currentState.copy(snackBarError = it.message) }
                 }
                 .onStart {

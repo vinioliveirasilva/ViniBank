@@ -6,8 +6,8 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.vini.common.mvvm.observe
-import com.vini.designsystem.view.BaseFragment
-import com.vini.designsystem.view.viewbinding.viewBinding
+import com.vini.designsystem.xml.view.BaseFragment
+import com.vini.designsystem.xml.view.viewbinding.viewBinding
 import com.vini.featuresignup.FlowManager
 import com.vini.featuresignup.R
 import com.vini.featuresignup.databinding.FragmentEmailBinding

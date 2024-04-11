@@ -1,4 +1,4 @@
-package com.vini.designsystem.view
+package com.vini.designsystem.xml.view
 
 import androidx.annotation.LayoutRes
 import org.koin.androidx.scope.ScopeFragment
