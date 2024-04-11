@@ -1,6 +1,5 @@
-package com.vini.featurelogin.ui.loader
+package com.vini.designsystem.compose.loader
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -13,8 +12,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vini.featurelogin.ui.dialog.NonDismissibleDialog
-import com.vini.featurelogin.ui.theme.ViniBankTheme
+import com.vini.designsystem.compose.dialog.NonDismissibleDialog
+import com.vini.designsystem.compose.theme.ViniBankTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -75,7 +74,6 @@ private fun LoaderContent() = Box(
 
 fun loaderStateMock(isVisible: Boolean = true) = MutableStateFlow(LoaderState(visible = isVisible))
 
-@SuppressLint("UnrememberedMutableState")
 @Preview(showBackground = true)
 @Composable
 private fun LoaderPreview() {

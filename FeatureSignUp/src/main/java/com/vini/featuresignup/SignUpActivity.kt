@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.annotation.IdRes
 import androidx.navigation.findNavController
-import com.vini.designsystem.view.BaseActivity
-import com.vini.designsystem.view.viewbinding.viewBinding
+import com.vini.designsystem.xml.view.BaseActivity
+import com.vini.designsystem.xml.view.viewbinding.viewBinding
 import com.vini.featuresignup.databinding.ActivitySignUpBinding
 
 interface FlowManager {

@@ -1,4 +1,4 @@
-package com.vini.featurelogin.ui.dialog
+package com.vini.designsystem.compose.dialog
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.window.Dialog

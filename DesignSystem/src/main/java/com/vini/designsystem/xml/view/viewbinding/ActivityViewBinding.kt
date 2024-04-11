@@ -1,6 +1,6 @@
 @file:Suppress("UNCHECKED_CAST")
 
-package com.vini.designsystem.view.viewbinding
+package com.vini.designsystem.xml.view.viewbinding
 
 import android.view.View
 import android.view.ViewGroup

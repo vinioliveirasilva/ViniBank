@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,7 +21,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,22 +35,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vini.common.mvvm.observe
-import com.vini.featurelogin.ui.loader.Loader
-import com.vini.featurelogin.ui.loader.LoaderState
-import com.vini.featurelogin.ui.loader.loaderStateMock
-import com.vini.featurelogin.ui.theme.ViniBankTheme
+import com.vini.designsystem.compose.loader.Loader
+import com.vini.designsystem.compose.loader.LoaderState
+import com.vini.designsystem.compose.loader.loaderStateMock
+import com.vini.designsystem.compose.theme.ViniBankTheme
+import com.vini.designsystem.compose.view.BaseComposeActivity
 import com.vini.featuresignup.SignUpActivity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.koin.android.scope.AndroidScopeComponent
-import org.koin.androidx.scope.activityScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.scope.Scope
 
-class LoginActivity : ComponentActivity(), AndroidScopeComponent {
+class LoginActivity : BaseComposeActivity() {
 
-    override val scope: Scope by activityScope()
     private val viewModel: LoginViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,11 +62,6 @@ class LoginActivity : ComponentActivity(), AndroidScopeComponent {
                 )
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        scope.close()
     }
 
     private fun handleEvent(event: LoginVMEvent) = when (event) {
@@ -124,7 +115,7 @@ fun LoginUi(
             }
 
             loginStated.snackBarError?.run {
-                LaunchedEffect(null) {
+                SideEffect {
                     scope.launch {
                         snackBarHostState
                             .showSnackbar(
