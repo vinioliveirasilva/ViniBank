@@ -5,8 +5,8 @@ import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 val LoginModule = module {
-    //scope<LoginActivityC> {
+    scope<LoginActivity> {
         viewModelOf(::LoginViewModel)
         factoryOf(::LoginRepository)
-    //}
+    }
 }

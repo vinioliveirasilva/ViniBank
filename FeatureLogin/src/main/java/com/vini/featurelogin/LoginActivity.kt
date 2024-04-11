@@ -44,10 +44,14 @@ import com.vini.featuresignup.SignUpActivity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.koin.android.scope.AndroidScopeComponent
+import org.koin.androidx.scope.activityScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.scope.Scope
 
-class LoginActivity : ComponentActivity() {
+class LoginActivity : ComponentActivity(), AndroidScopeComponent {
 
+    override val scope: Scope by activityScope()
     private val viewModel: LoginViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +66,11 @@ class LoginActivity : ComponentActivity() {
                 )
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.close()
     }
 
     private fun handleEvent(event: LoginVMEvent) = when (event) {
