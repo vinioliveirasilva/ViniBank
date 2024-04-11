@@ -90,7 +90,7 @@ class LoginActivity : ComponentActivity(), AndroidScopeComponent {
 fun LoginUi(
     loginState: StateFlow<LoginState>,
     loaderState: StateFlow<LoaderState>,
-    eventHandler: (LoginUIEvent) -> Unit,
+    eventHandler: (LoginUIEvent) -> Unit = {},
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -184,6 +184,6 @@ fun GreetingPreview() {
         LoginUi(
             loginState = MutableStateFlow(LoginState(email = "vini@email.com", pass = "123")),
             loaderState = loaderStateMock(false),
-        ) {}
+        )
     }
 }
