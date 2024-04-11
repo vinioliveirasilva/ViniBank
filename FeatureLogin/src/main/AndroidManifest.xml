@@ -4,7 +4,9 @@
     <application>
         <activity
             android:name=".LoginActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.ViniBank" />
     </application>
 
 </manifest>
