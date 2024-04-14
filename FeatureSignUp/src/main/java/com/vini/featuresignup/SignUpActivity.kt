@@ -1,5 +1,6 @@
 package com.vini.featuresignup
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +9,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.vini.designsystem.compose.view.BaseComposeActivity
+import com.vini.featuresignup.steps.accounttype.AccountTypeScreen
+import com.vini.featuresignup.steps.createpassword.CreatePasswordScreen
 import com.vini.featuresignup.steps.email.EmailScreen
 import com.vini.featuresignup.steps.personalinfo.PersonalInfoScreen
 
@@ -26,7 +29,22 @@ class SignUpActivity : BaseComposeActivity() {
                 }
                 composable(Route.PERSONAL_INFO) {
                     PersonalInfoScreen(
-                        onBusinessSuccess = { navController.navigate(Route.EMAIL) },
+                        onBusinessSuccess = { navController.navigate(Route.ACCOUNT_TYPE) },
+                        onBusinessFailure = { this@SignUpActivity.finish() }
+                    )
+                }
+                composable(Route.ACCOUNT_TYPE) {
+                    AccountTypeScreen(
+                        onBusinessSuccess = { navController.navigate(Route.CREATE_PASSWORD) },
+                        onBusinessFailure = { this@SignUpActivity.finish() }
+                    )
+                }
+                composable(Route.CREATE_PASSWORD) {
+                    CreatePasswordScreen(
+                        onBusinessSuccess = {
+                            this@SignUpActivity.setResult(Activity.RESULT_OK)
+                            this@SignUpActivity.finish()
+                        },
                         onBusinessFailure = { this@SignUpActivity.finish() }
                     )
                 }
@@ -38,6 +56,8 @@ class SignUpActivity : BaseComposeActivity() {
         private object Route {
             const val EMAIL = "email"
             const val PERSONAL_INFO = "personal_info"
+            const val ACCOUNT_TYPE = "account_type"
+            const val CREATE_PASSWORD = "create_password"
         }
 
         fun newIntent(context: Context) = Intent(context, SignUpActivity::class.java)
