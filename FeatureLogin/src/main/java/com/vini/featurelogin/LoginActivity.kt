@@ -87,6 +87,7 @@ fun LoginUi(
     val scope = rememberCoroutineScope()
 
     Scaffold(
+        modifier = Modifier.padding(dimensionResource(id = com.vini.designsystem.R.dimen.quadruple_grid)),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         topBar = {
             CenterAlignedTopAppBar(
@@ -100,12 +101,10 @@ fun LoginUi(
     ) { innerPadding ->
         Loader(loaderState)
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(dimensionResource(id = com.vini.designsystem.R.dimen.quadruple_grid))
+            modifier = Modifier.padding(innerPadding)
         ) {
             val context = LocalContext.current
-            val loginStated = loginState.collectAsStateWithLifecycle().value
+            val loginStated by loginState.collectAsStateWithLifecycle()
             var emailInput by rememberSaveable { mutableStateOf(loginStated.email) }
             var passInput by rememberSaveable { mutableStateOf(loginStated.pass) }
             val signUpLauncher = rememberLauncherForActivityResult(

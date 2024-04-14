@@ -2,27 +2,26 @@ package com.vini.featuresignup.steps.email
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
-import com.vini.common.mvvm.sendInScope
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 class EmailViewModel : ViewModel() {
 
-    private val _event = Channel<EmailUIEvent>()
-    val event = _event.receiveAsFlow()
-    fun doOnCreate() {
-        _event.sendInScope(this, EmailUIEvent.DisableContinueButton)
+    private val _uiState = MutableStateFlow(EmailState(isContinueEnable = false))
+    val uiState: StateFlow<EmailState> = _uiState.asStateFlow()
+
+    fun handleEvent(event: EmailUIEvent) = when (event) {
+        is EmailUIEvent.OnEmailUpdate -> doOnEmailChange(event.email)
+        else -> {}
     }
 
-    fun doOnEmailChange(email: String) {
+    private fun doOnEmailChange(email: String) {
         if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _event.sendInScope(
-                this,
-                EmailUIEvent.EnableContinueButton,
-                EmailUIEvent.PlaySuccessAnimation
-            )
+            _uiState.update { it.copy(isContinueEnable = true) }
         } else {
-            _event.sendInScope(this, EmailUIEvent.DisableContinueButton)
+            _uiState.update { it.copy(isContinueEnable = false) }
         }
     }
 }

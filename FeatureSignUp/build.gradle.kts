@@ -32,6 +32,15 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.10"
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 }
 
@@ -39,6 +48,25 @@ dependencies {
 
     implementation(project(":Common"))
     implementation(project(":DesignSystem"))
+
+    //Lottie
+    implementation(libs.lottie.compose)
+
+    //Compose
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.material3)
+    implementation(libs.koin.androidx.compose)
+
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.espresso.core)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.koin)
     implementation(libs.lottie)
