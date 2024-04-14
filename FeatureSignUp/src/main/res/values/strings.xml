@@ -1,1 +1,4 @@
-<resources></resources>
+<resources>
+    <string name="email_title">Email</string>
+    <string name="personal_info_title">Personal Info</string>
+</resources>

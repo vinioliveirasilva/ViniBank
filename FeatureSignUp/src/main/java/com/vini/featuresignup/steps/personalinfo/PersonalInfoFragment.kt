@@ -1,21 +1,93 @@
 package com.vini.featuresignup.steps.personalinfo
 
-import android.os.Bundle
-import android.view.View
-import androidx.fragment.app.viewModels
-import com.vini.designsystem.xml.view.BaseFragment
-import com.vini.designsystem.xml.view.viewbinding.viewBinding
-import com.vini.featuresignup.FlowManager
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.vini.designsystem.compose.theme.ViniBankTheme
 import com.vini.featuresignup.R
-import com.vini.featuresignup.databinding.FragmentPersonalInfoBinding
+import org.koin.androidx.compose.koinViewModel
 
-class PersonalInfoFragment : BaseFragment(R.layout.fragment_personal_info) {
-    private val viewModel: PersonalInfoViewModel by viewModels()
-    private val binding: FragmentPersonalInfoBinding by viewBinding()
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.textView.setOnClickListener {
-            (requireActivity() as FlowManager).onNext(R.id.personalInfoFragment)
+@Composable
+fun PersonalInfoScreen(
+    onBusinessSuccess: () -> Unit,
+    onBusinessFailure: () -> Unit,
+    viewModel: PersonalInfoViewModel = koinViewModel()
+) {
+    PersonalInfoUI(
+        onBusinessSuccess,
+        onBusinessFailure,
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PersonalInfoUI(
+    onBusinessSuccess: () -> Unit,
+    onBusinessFailure: () -> Unit,
+) {
+    ViniBankTheme {
+        val snackBarHostState = remember { SnackbarHostState() }
+
+        Scaffold(
+            modifier = Modifier
+                .padding(dimensionResource(id = com.vini.designsystem.R.dimen.quadruple_grid))
+                .background(Color.Cyan, RectangleShape),
+            snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+            topBar = {
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            text = stringResource(id = R.string.personal_info_title)
+                        )
+                    }
+                )
+            }
+        ) { internalPadding ->
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(internalPadding)
+            ) {
+                Text(
+                    text = "Personal info Fragmento",
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .clickable { onBusinessSuccess() }
+                        .size(32.dp)
+                )
+            }
         }
     }
+}
+
+@Preview
+@Composable
+fun PreviewPersonalInfo() {
+    PersonalInfoUI(
+        onBusinessSuccess = { },
+        onBusinessFailure = { }
+    )
 }

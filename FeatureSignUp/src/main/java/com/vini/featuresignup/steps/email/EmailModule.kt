@@ -4,7 +4,7 @@ import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
 val EmailModule = module {
-    scope<EmailFragment> {
+    //scope<EmailFragment> {
         viewModelOf(::EmailViewModel)
-    }
+    //}
 }
