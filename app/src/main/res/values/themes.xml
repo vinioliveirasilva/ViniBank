@@ -1,10 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.ViniBank" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <item name="colorPrimary">@color/black</item>
-        <item name="colorSecondary">@color/white</item>
-    </style>
 
-    <style name="Theme.ViniBank" parent="Base.Theme.ViniBank" />
+    <style name="Base.Theme.ViniBank" parent="Theme.Material3.DayNight.NoActionBar"/>
+
+    <style name="Theme.ViniBank" parent="Base.Theme.ViniBank">
+        <!--item name="colorPrimary">#E5E1DE</item>
+        <item name="colorSecondary">#E5E1DE</item>
+        <item name="android:colorBackground">#272F32</item>
+        <item name="colorSurface">#272F32</item-->
+    </style>
 </resources>

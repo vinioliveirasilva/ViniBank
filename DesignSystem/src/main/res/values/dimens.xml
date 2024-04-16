@@ -1,0 +1,8 @@
+<resources>
+    <dimen name="quarter_grid">2dp</dimen>
+    <dimen name="half_grid">4dp</dimen>
+    <dimen name="grid">8dp</dimen>
+    <dimen name="double_grid">16dp</dimen>
+    <dimen name="triple_grid">24dp</dimen>
+    <dimen name="quadruple_grid">32dp</dimen>
+</resources>
