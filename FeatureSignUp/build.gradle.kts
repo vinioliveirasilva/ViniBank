@@ -48,6 +48,7 @@ dependencies {
 
     implementation(project(":Common"))
     implementation(project(":DesignSystem"))
+    implementation(project(":Storage"))
 
     //Lottie
     implementation(libs.lottie.compose)
@@ -61,6 +62,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.material.icons.extended)
     implementation(libs.koin.androidx.compose)
 
     androidTestImplementation(platform(libs.androidx.compose.bom))

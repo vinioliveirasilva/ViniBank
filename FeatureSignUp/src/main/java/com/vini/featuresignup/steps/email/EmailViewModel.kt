@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.update
 
 class EmailViewModel : ViewModel() {
 
-    private val _uiState = MutableStateFlow(EmailState(isContinueEnable = false))
+    private val _uiState = MutableStateFlow(EmailState(isContinueEnable = false, email = ""))
     val uiState: StateFlow<EmailState> = _uiState.asStateFlow()
 
     fun handleEvent(event: EmailUIEvent) = when (event) {
@@ -18,10 +18,11 @@ class EmailViewModel : ViewModel() {
     }
 
     private fun doOnEmailChange(email: String) {
-        if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _uiState.update { it.copy(isContinueEnable = true) }
-        } else {
-            _uiState.update { it.copy(isContinueEnable = false) }
+        _uiState.update {
+            it.copy(
+                email = email,
+                isContinueEnable = Patterns.EMAIL_ADDRESS.matcher(email).matches()
+            )
         }
     }
 }

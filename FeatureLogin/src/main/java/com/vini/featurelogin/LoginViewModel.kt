@@ -18,28 +18,24 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+
 class LoginViewModel(
     private val loginRepository: LoginRepository,
 ) : ViewModel(),
     LoaderComponent by LoaderComponentViewModel() {
 
-    private val _vmEvent = Channel<LoginVMEvent> {  }
+    private val _vmEvent = Channel<LoginVMEvent>()
     val vmEvent = _vmEvent.receiveAsFlow()
 
     private val _uiState = MutableStateFlow(LoginState())
     val uiState: StateFlow<LoginState> = _uiState.asStateFlow()
 
-    init {
-        setupLoader(viewModelScope)
-    }
-
-    private fun doOnLogin(email: String, pass: String) {
+    private fun doLogin(email: String, pass: String) {
         viewModelScope.launch {
             loginRepository.doLogin(email, pass)
                 .catch {
                     _uiState.update { currentState -> currentState.copy(snackBarError = it.message) }
-                }
-                .onStart {
+                }.onStart {
                     showLoader()
                 }.onCompletion {
                     hideLoader()
@@ -49,15 +45,17 @@ class LoginViewModel(
         }
     }
 
-    private fun doOnSignUpResult(resultCode: Int) {
+    private fun onSignUpResult(resultCode: Int) {
         if (resultCode == Activity.RESULT_OK) {
             _vmEvent.sendInScope(this@LoginViewModel, LoginVMEvent.BusinessSuccess)
         }
     }
 
     fun handleEvent(loginUIEvent: LoginUIEvent) = when(loginUIEvent) {
-        is LoginUIEvent.DoOnLogin -> doOnLogin(loginUIEvent.email, loginUIEvent.pass)
-        is LoginUIEvent.DoOnSignUp -> doOnSignUpResult(loginUIEvent.resultCode)
+        is LoginUIEvent.DoOnLogin -> doLogin(_uiState.value.email, _uiState.value.pass)
+        is LoginUIEvent.DoOnSignUp -> onSignUpResult(loginUIEvent.resultCode)
         is LoginUIEvent.DoOnDismissSnackBar -> _uiState.update { it.copy(snackBarError = null) }
+        is LoginUIEvent.DoOnEmailChange -> _uiState.update { it.copy(email = loginUIEvent.email) }
+        is LoginUIEvent.DoOnPassChange -> _uiState.update { it.copy(pass = loginUIEvent.pass) }
     }
 }

@@ -1,38 +1,31 @@
 package com.vini.storage
 
 import android.content.Context
-//import com.vini.featurelogin.model.UserData
+import com.vini.common.gson.GsonProvider
 
-class LocalStorage(private val context: Context, private val gsonProvider: com.vini.common.gson.GsonProvider) {
+class LocalStorage(private val context: Context, private val gsonProvider: GsonProvider) {
 
     private val sharedPref by lazy {
         context.getSharedPreferences("login", Context.MODE_PRIVATE)
     }
 
-    fun isAuthenticated() : Boolean {
+    fun isAuthenticated(): Boolean {
         return sharedPref.getBoolean("auth", false)
     }
 
-    fun authenticate(email: String, pass: String) : Boolean? {
-        return if(email == "vinioliveirasilva@hotmail.com" && pass == "123") {
+    fun authenticate(email: String, pass: String): Boolean? {
+        return if (email == "vinioliveirasilva@hotmail.com" && pass == "123") {
             sharedPref.edit().putBoolean("auth", true).apply()
             true
         } else {
             null
         }
     }
-    /*
-    fun saveUserData(userData: UserData) {
-        sharedPref.edit().putString("userData", gsonProvider.toJson(userData)).apply()
+
+    fun <T> save(key: String, value: T) = when (value) {
+        is String -> sharedPref.edit().putString(key, value).apply()
+        else -> {}
     }
 
-    fun getSavedUserData(email: String, pass: String): UserData? {
-        return if(email == "vinioliveirasilva@hotmail.com" && pass == "123") {
-            UserData(name = "Vinicius Oliveira", email = email)
-        } else {
-            null
-        }
-    }
-
-     */
+    fun getString(key: String): String = sharedPref.getString(key, null).orEmpty()
 }

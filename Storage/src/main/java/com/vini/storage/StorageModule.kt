@@ -5,5 +5,6 @@ import org.koin.dsl.module
 
 val StorageModule = module {
     factoryOf(::SecureStorage)
+    factory { CryptographyProvider() }
     factoryOf(::LocalStorage)
 }
