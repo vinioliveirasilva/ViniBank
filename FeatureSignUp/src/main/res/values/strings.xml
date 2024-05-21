@@ -1,9 +1,11 @@
 <resources>
     <string name="email_title">Email</string>
-    <string name="personal_info_title">Personal Info</string>
-    <string name="personal_info_description">Personal info Fragmento</string>
+    <string name="personal_info_title">Informaçôes Pessoais</string>
     <string name="account_type_title">Account Type</string>
     <string name="account_type_description">Account Type Fragmento</string>
-    <string name="create_password_title">Create Password</string>
-    <string name="create_password_description">Create Password Fragmento</string>
+    <string name="create_password_title">Criar Senha</string>
+    <string name="personal_info_continue">Continuar</string>
+    <string name="personal_info_name_placeholder">Nome completo</string>
+    <string name="personal_info_doc_placeholder">CPF</string>
+    <string name="personal_info_phone_placeholder">Telefone</string>
 </resources>

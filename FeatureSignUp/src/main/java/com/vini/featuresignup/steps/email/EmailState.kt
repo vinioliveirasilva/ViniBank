@@ -1,5 +1,6 @@
 package com.vini.featuresignup.steps.email
 
 data class EmailState(
-    val isContinueEnable: Boolean
+    val isContinueEnable: Boolean,
+    val email: String
 )

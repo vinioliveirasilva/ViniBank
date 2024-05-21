@@ -33,7 +33,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.koin)
     implementation(libs.gson)
     implementation(libs.androidx.core.ktx)
