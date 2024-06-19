@@ -8,5 +8,6 @@ data class CreatePasswordState(
     val hasAtLeastOneUppercaseLetter: Boolean = false,
     val hasAtLeastOneNumber: Boolean = false,
     val hasAtLeastOneSpecialCharacter: Boolean = false,
-    val isContinueEnabled: Boolean = false
+    val isContinueEnabled: Boolean = false,
+    val isPasswordVisible: Boolean = false,
 )

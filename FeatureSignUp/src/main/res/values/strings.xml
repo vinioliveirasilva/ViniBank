@@ -8,4 +8,12 @@
     <string name="personal_info_name_placeholder">Nome completo</string>
     <string name="personal_info_doc_placeholder">CPF</string>
     <string name="personal_info_phone_placeholder">Telefone</string>
+    <string name="create_password_continue">Continuar</string>
+    <string name="create_password_password_placeholder">Senha</string>
+    <string name="confirm_password_password_confirm_placeholder">Confirmar Senha</string>
+    <string name="create_password_same_pass_validation">⬤ As senhas devem ser iguais</string>
+    <string name="create_password_min_length_pass_validation">⬤ A senha deve conter pelo menos 8 caracteres</string>
+    <string name="create_password_upper_case_pass_validation">⬤ A senha deve conter pelo menos uma letra maiúscula</string>
+    <string name="create_password_number_pass_validation">⬤ A senha deve conter pelo menos um número</string>
+    <string name="create_password_special_pass_validation">⬤ A senha deve conter pelo menos um caractere especial</string>
 </resources>

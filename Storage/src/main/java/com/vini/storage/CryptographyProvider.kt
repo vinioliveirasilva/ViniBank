@@ -69,7 +69,7 @@ class CryptographyProvider(
 
     private companion object {
         const val PROVIDER_NAME = "AndroidKeyStore"
-        const val KEY_ALIAS = "CryptographyProvider2.KeyAlias"
+        const val KEY_ALIAS = "CryptographyProvider.KeyAlias"
         const val PADDING = KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1
         const val BLOCK_MODE = KeyProperties.BLOCK_MODE_ECB
         const val ALGORITHM = KeyProperties.KEY_ALGORITHM_RSA

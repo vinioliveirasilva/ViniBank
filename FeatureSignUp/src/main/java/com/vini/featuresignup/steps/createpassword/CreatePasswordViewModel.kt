@@ -13,6 +13,7 @@ class CreatePasswordViewModel : ViewModel() {
     fun onEvent(event: CreatePasswordEvent) = when (event) {
         is CreatePasswordEvent.DoOnPasswordChange -> updatePassword(event)
         is CreatePasswordEvent.DoOnConfirmPasswordChange -> updateConfirmPassword(event)
+        is CreatePasswordEvent.DoOnShowPasswordChange -> _uiState.update { it.copy(isPasswordVisible = event.isVisible) }
     }
 
     private fun updatePassword(event: CreatePasswordEvent.DoOnPasswordChange) = with(event) {

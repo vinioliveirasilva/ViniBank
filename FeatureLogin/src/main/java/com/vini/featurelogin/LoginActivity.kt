@@ -10,43 +10,34 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.vini.common.mvvm.observe
 import com.vini.designsystem.compose.button.Buttons
+import com.vini.designsystem.compose.icon.passwordTrailingIcon
 import com.vini.designsystem.compose.loader.Loader
 import com.vini.designsystem.compose.loader.LoaderState
 import com.vini.designsystem.compose.loader.loaderStateMock
 import com.vini.designsystem.compose.scaffold.BaseScaffold
 import com.vini.designsystem.compose.theme.ViniBankTheme
 import com.vini.designsystem.compose.view.BaseComposeActivity
+import com.vini.designsystem.compose.visualtransformation.getPasswordVisualTransformation
 import com.vini.featuresignup.SignUpActivity
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginActivity : BaseComposeActivity() {
@@ -55,20 +46,15 @@ class LoginActivity : BaseComposeActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        observe(viewModel.vmEvent, ::handleEvent)
         setContent {
             ViniBankTheme {
                 LoginUi(
-                    viewModel.uiState, viewModel.loaderState, viewModel::handleEvent
+                    viewModel.uiState,
+                    viewModel.loaderState,
+                    viewModel::handleEvent,
+                    viewModel.vmEvent
                 )
             }
-        }
-    }
-
-    private fun handleEvent(event: LoginVMEvent) = when (event) {
-        is LoginVMEvent.BusinessSuccess -> {
-            setResult(Activity.RESULT_OK)
-            finish()
         }
     }
 
@@ -82,11 +68,10 @@ fun LoginUi(
     loginState: StateFlow<LoginState>,
     loaderState: StateFlow<LoaderState>,
     eventHandler: (LoginUIEvent) -> Unit = {},
+    loginVMEvent: Flow<LoginVMEvent>
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
-
-    val context = LocalContext.current
+    val context = LocalContext.current as LoginActivity
     val loginStated by loginState.collectAsStateWithLifecycle()
     val signUpLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -94,6 +79,30 @@ fun LoginUi(
         eventHandler(LoginUIEvent.DoOnSignUp(it.resultCode))
     }
 
+    LaunchedEffect(loginVMEvent) {
+        loginVMEvent.collect {
+            when (it) {
+                LoginVMEvent.BusinessSuccess -> {
+                    context.setResult(Activity.RESULT_OK)
+                    context.finish()
+                }
+            }
+        }
+    }
+
+    //Validar snackBar
+    LaunchedEffect(loginStated.snackBarError) {
+        loginStated.snackBarError?.let {
+            snackBarHostState.showSnackbar(
+                message = it,
+                duration = SnackbarDuration.Short,
+                withDismissAction = true
+            )
+            eventHandler(LoginUIEvent.DoOnDismissSnackBar)
+        }
+    }
+
+    Loader(loaderState)
     BaseScaffold(
         snackBarHostState = snackBarHostState,
         topBarTitle = stringResource(id = R.string.login_title),
@@ -106,22 +115,6 @@ fun LoginUi(
             )
         }
     ) {
-        var showPassword by remember { mutableStateOf(value = false) }
-
-        Loader(loaderState)
-
-        loginStated.snackBarError?.run {
-            SideEffect {
-                scope.launch {
-                    snackBarHostState.showSnackbar(
-                        message = this@run, duration = SnackbarDuration.Short
-                    )
-
-                    eventHandler(LoginUIEvent.DoOnDismissSnackBar)
-                }
-            }
-        }
-
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -140,28 +133,12 @@ fun LoginUi(
             onValueChange = { eventHandler(LoginUIEvent.DoOnPassChange(it)) },
             label = { Text(stringResource(id = R.string.login_pass_placeholder)) },
             singleLine = true,
-            visualTransformation = if (showPassword) {
-                VisualTransformation.None
-            } else {
-                PasswordVisualTransformation()
-            },
+            visualTransformation = getPasswordVisualTransformation(loginStated.isPasswordVisible),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            trailingIcon = {
-                if (showPassword) {
-                    IconButton(onClick = { showPassword = false }) {
-                        Icon(
-                            imageVector = Icons.Filled.Visibility,
-                            contentDescription = "hide_password"
-                        )
-                    }
-                } else {
-                    IconButton(onClick = { showPassword = true }) {
-                        Icon(
-                            imageVector = Icons.Filled.VisibilityOff,
-                            contentDescription = "hide_password"
-                        )
-                    }
-                }
+            trailingIcon = passwordTrailingIcon(loginStated.isPasswordVisible) {
+                eventHandler(
+                    LoginUIEvent.DoOnPasswordVisibilityChange(it)
+                )
             },
         )
     }
@@ -172,8 +149,15 @@ fun LoginUi(
 fun PreviewLoginScreen() {
     ViniBankTheme {
         LoginUi(
-            loginState = MutableStateFlow(LoginState(email = "vini@email.com", pass = "123")),
+            loginState = MutableStateFlow(
+                LoginState(
+                    email = "vini@email.com",
+                    pass = "123",
+                    snackBarError = "Error"
+                )
+            ),
             loaderState = loaderStateMock(false),
+            loginVMEvent = MutableStateFlow(LoginVMEvent.BusinessSuccess)
         )
     }
 }

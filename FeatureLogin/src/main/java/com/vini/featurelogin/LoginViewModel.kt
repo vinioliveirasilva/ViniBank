@@ -57,5 +57,6 @@ class LoginViewModel(
         is LoginUIEvent.DoOnDismissSnackBar -> _uiState.update { it.copy(snackBarError = null) }
         is LoginUIEvent.DoOnEmailChange -> _uiState.update { it.copy(email = loginUIEvent.email) }
         is LoginUIEvent.DoOnPassChange -> _uiState.update { it.copy(pass = loginUIEvent.pass) }
+        is LoginUIEvent.DoOnPasswordVisibilityChange -> _uiState.update { it.copy(isPasswordVisible = loginUIEvent.isVisible) }
     }
 }
