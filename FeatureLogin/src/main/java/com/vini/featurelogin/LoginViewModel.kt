@@ -21,8 +21,7 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val loginRepository: LoginRepository,
-) : ViewModel(),
-    LoaderComponent by LoaderComponentViewModel() {
+) : ViewModel(), LoaderComponent by LoaderComponentViewModel() {
 
     private val _vmEvent = Channel<LoginVMEvent>()
     val vmEvent = _vmEvent.receiveAsFlow()

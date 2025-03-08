@@ -9,12 +9,12 @@ import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 val SignUpModule = module {
-    //scope<SignUpActivity> {
+    scope<SignUpActivity> {
         viewModelOf(::SignUpViewModel)
         viewModelOf(::EmailViewModel)
         viewModelOf(::PersonalInfoViewModel)
         viewModelOf(::AccountTypeViewModel)
         viewModelOf(::CreatePasswordViewModel)
         factoryOf(::SignUpRepository)
-    //}
+    }
 }

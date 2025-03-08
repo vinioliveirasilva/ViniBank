@@ -13,6 +13,7 @@ import com.vini.featuresignup.steps.accounttype.AccountTypeScreen
 import com.vini.featuresignup.steps.createpassword.CreatePasswordScreen
 import com.vini.featuresignup.steps.email.EmailScreen
 import com.vini.featuresignup.steps.personalinfo.PersonalInfoScreen
+import org.koin.androidx.compose.scope.KoinActivityScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SignUpActivity : BaseComposeActivity() {
@@ -21,45 +22,49 @@ class SignUpActivity : BaseComposeActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val navController = rememberNavController()
+            KoinActivityScope {
+                val navController = rememberNavController()
+                NavHost(navController = navController, startDestination = Route.PERSONAL_INFO) {
+                    composable(Route.EMAIL) {
+                        EmailScreen(
+                            onBusinessSuccess = { email ->
+                                viewModel.storeEmail(email)
+                                navController.navigate(Route.PERSONAL_INFO)
+                            }
+                        )
+                    }
+                    composable(Route.PERSONAL_INFO) {
+                        PersonalInfoScreen(
+                            onBusinessSuccess = { userName ->
+                                viewModel.storeUserName(userName)
+                                navController.navigate(Route.CREATE_PASSWORD)
+                            }
+                        )
+                    }
+                    composable(Route.ACCOUNT_TYPE) {
+                        AccountTypeScreen(
+                            onBusinessSuccess = { navController.navigate(Route.CREATE_PASSWORD) },
+                            onBusinessFailure = { this@SignUpActivity.finish() }
+                        )
+                    }
+                    composable(Route.CREATE_PASSWORD) {
+                        CreatePasswordScreen(
+                            onBusinessSuccess = { password ->
+                                viewModel.storePassword(password)
 
-            NavHost(navController = navController, startDestination = Route.PERSONAL_INFO) {
-                composable(Route.EMAIL) {
-                    EmailScreen(
-                        onBusinessSuccess = { email ->
-                            viewModel.storeEmail(email)
-                            navController.navigate(Route.PERSONAL_INFO)
-                        }
-                    )
-                }
-                composable(Route.PERSONAL_INFO) {
-                    PersonalInfoScreen(
-                        onBusinessSuccess = { userName ->
-                            viewModel.storeUserName(userName)
-                            navController.navigate(Route.CREATE_PASSWORD)
-                        }
-                    )
-                }
-                /*
-                composable(Route.ACCOUNT_TYPE) {
-                    AccountTypeScreen(
-                        onBusinessSuccess = { navController.navigate(Route.CREATE_PASSWORD) },
-                        onBusinessFailure = { this@SignUpActivity.finish() }
-                    )
-                }
-                 */
-                composable(Route.CREATE_PASSWORD) {
-                    CreatePasswordScreen(
-                        onBusinessSuccess = { password ->
-                            viewModel.storePassword(password)
-
-                            this@SignUpActivity.setResult(Activity.RESULT_OK)
-                            this@SignUpActivity.finish()
-                        }
-                    )
+                                this@SignUpActivity.setResult(Activity.RESULT_OK)
+                                this@SignUpActivity.finish()
+                            }
+                        )
+                    }
                 }
             }
         }
+    }
+
+    private fun finishWithResult(result: Int = Activity.RESULT_CANCELED) {
+        setResult(result)
+        finish()
     }
 
     companion object {
