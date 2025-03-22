@@ -49,8 +49,6 @@ android {
 }
 
 dependencies {
-
-
     implementation(project(":FeatureSignUp"))
     implementation(project(":DesignSystem"))
     implementation(project(":Storage"))
@@ -73,7 +71,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-
     //Other
     //implementation(libs.koin.androidx.compose)
 
@@ -82,6 +79,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.material.icons.extended)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

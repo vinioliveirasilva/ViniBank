@@ -6,7 +6,8 @@
             android:name=".LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_main"
-            android:theme="@style/Theme.ViniBank" />
+            android:theme="@style/Theme.ViniBank"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

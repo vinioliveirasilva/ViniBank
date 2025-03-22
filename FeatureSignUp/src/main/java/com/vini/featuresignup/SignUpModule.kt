@@ -5,6 +5,7 @@ import com.vini.featuresignup.steps.createpassword.CreatePasswordViewModel
 import com.vini.featuresignup.steps.email.EmailViewModel
 import com.vini.featuresignup.steps.personalinfo.PersonalInfoViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 val SignUpModule = module {
@@ -14,5 +15,6 @@ val SignUpModule = module {
         viewModelOf(::PersonalInfoViewModel)
         viewModelOf(::AccountTypeViewModel)
         viewModelOf(::CreatePasswordViewModel)
+        factoryOf(::SignUpRepository)
     }
 }

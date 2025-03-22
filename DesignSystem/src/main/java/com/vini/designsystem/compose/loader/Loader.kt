@@ -14,7 +14,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vini.designsystem.compose.dialog.NonDismissibleDialog
 import com.vini.designsystem.compose.theme.ViniBankTheme
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,19 +25,13 @@ data class LoaderState(
 
 interface LoaderComponent {
     val loaderState: StateFlow<LoaderState>
-    fun setupLoader(scope: CoroutineScope)
     fun showLoader()
     fun hideLoader()
 }
 
 class LoaderComponentViewModel : LoaderComponent {
-    private var internalScope: CoroutineScope? = null
     private val _loaderState = MutableStateFlow(LoaderState())
     override val loaderState = _loaderState.asStateFlow()
-
-    override fun setupLoader(scope: CoroutineScope) {
-        internalScope = scope
-    }
 
     override fun showLoader() {
         _loaderState.update { it.copy(visible = true) }

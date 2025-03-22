@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "331532181944",
+    "project_id": "vinibank-vs",
+    "storage_bucket": "vinibank-vs.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:331532181944:android:fc129cefb4945177ec6f4d",
+        "android_client_info": {
+          "package_name": "com.vini.bank"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBXlrCsq10AEqmCaOlzn3C-vel10jdiqc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

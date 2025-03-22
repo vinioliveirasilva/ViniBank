@@ -1,13 +1,14 @@
 package com.vini.featurelogin
 
-import com.vini.storage.LocalStorage
+import com.vini.storage.SecureStorage
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onStart
 
-class LoginRepository(private val localStorage: LocalStorage) {
-    fun doLogin(email: String, pass: String) = flow {
-        delay(5000L)
-        val wasSuccess = localStorage.authenticate(email, pass)
-        emit(wasSuccess ?: throw Exception("User Not Found"))
+class LoginRepository(
+    private val secureStorage: SecureStorage,
+) {
+    fun doLogin(email: String, pass: String) = secureStorage.getUserData(email, pass).onStart {
+        delay(500)
     }
 }
+
