@@ -43,10 +43,10 @@ class LoaderComponentViewModel : LoaderComponent {
 }
 
 @Composable
-fun Loader(state: StateFlow<LoaderState>) = if (state.collectAsStateWithLifecycle().value.visible) {
+fun Loader(state: StateFlow<LoaderState>, content: @Composable () -> Unit = {}) = if (state.collectAsStateWithLifecycle().value.visible) {
     NonDismissibleDialog { LoaderContent() }
 } else {
-
+    content()
 }
 
 @Composable
@@ -59,8 +59,7 @@ private fun LoaderContent() = Box(
         )
 ) {
     CircularProgressIndicator(
-        modifier = Modifier
-            .align(Alignment.Center),
+        modifier = Modifier.align(Alignment.Center),
         color = Color.Blue
     )
 }
@@ -71,6 +70,6 @@ fun loaderStateMock(isVisible: Boolean = true) = MutableStateFlow(LoaderState(vi
 @Composable
 private fun LoaderPreview() {
     ViniBankTheme {
-        Loader(state = loaderStateMock())
+        Loader(state = loaderStateMock()) {}
     }
 }

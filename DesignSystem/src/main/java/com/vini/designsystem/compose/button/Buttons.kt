@@ -68,7 +68,7 @@ fun Buttons(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewButtons() {
+private fun PreviewButtons() {
     Buttons(
         primaryAction = { },
         primaryText = "Botão Primario",

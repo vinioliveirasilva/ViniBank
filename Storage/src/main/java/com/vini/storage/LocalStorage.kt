@@ -1,6 +1,7 @@
 package com.vini.storage
 
 import android.content.Context
+import androidx.core.content.edit
 import com.vini.common.gson.GsonProvider
 
 class LocalStorage(private val context: Context, private val gsonProvider: GsonProvider) {
@@ -15,7 +16,7 @@ class LocalStorage(private val context: Context, private val gsonProvider: GsonP
 
     fun authenticate(email: String, pass: String): Boolean? {
         return if (email == "vinioliveirasilva@hotmail.com" && pass == "123") {
-            sharedPref.edit().putBoolean("auth", true).apply()
+            sharedPref.edit { putBoolean("auth", true) }
             true
         } else {
             null
@@ -23,7 +24,7 @@ class LocalStorage(private val context: Context, private val gsonProvider: GsonP
     }
 
     fun <T> save(key: String, value: T) = when (value) {
-        is String -> sharedPref.edit().putString(key, value).apply()
+        is String -> sharedPref.edit { putString(key, value) }
         else -> {}
     }
 

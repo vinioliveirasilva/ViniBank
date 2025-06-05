@@ -35,22 +35,58 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-
     buildFeatures {
         viewBinding = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.10"
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 }
 
 dependencies {
 
 
+    implementation(project(":Auth"))
+    implementation(project(":Network"))
+    implementation(project(":Router"))
     implementation(project(":FeatureLogin"))
     implementation(project(":FeatureSignUp"))
+    implementation(project(":FeatureHome"))
     implementation(project(":Common"))
     implementation(project(":Storage"))
     implementation(project(":DesignSystem"))
+    implementation(project(":ServerDriveUi"))
+
+
+    implementation(libs.gson)
 
     implementation(libs.koin)
+
+    //Compose
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.koin.androidx.compose)
+
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.espresso.core)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+
+    //Lottie
+    implementation(libs.lottie.compose)
 
     // Firebase
     implementation(libs.firebase.crashlytics)
@@ -66,4 +102,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    testImplementation(libs.mockk.android)
+    testImplementation(libs.mockk.agent)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
