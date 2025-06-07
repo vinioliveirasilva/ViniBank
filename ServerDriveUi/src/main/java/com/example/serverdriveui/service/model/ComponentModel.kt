@@ -19,11 +19,3 @@ data class ComponentModel(
     @SerializedName("validator")
     val validators: List<ValidatorModel> = emptyList()
 )
-
-@Serializable
-data class ActionModel(
-    @SerializedName("type")
-    val type: String,
-    @SerializedName("data")
-    val data: Map<String, String> = mapOf()
-)

@@ -7,7 +7,6 @@ import com.example.serverdriveui.SdUiModel
 import com.example.serverdriveui.SdUiRepository
 import com.example.serverdriveui.SdUiViewModel
 import com.example.serverdriveui.SdUiViewModel2
-import com.example.serverdriveui.service.SdUiMockService
 import com.example.serverdriveui.service.SdUiService
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.service.model.ScreenModel
@@ -42,11 +41,12 @@ import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
+import retrofit2.Retrofit
 
 val ServerDriveUiModule = module {
     scope<SdUiActivity> {
-        //single<SdUiService> { get<Retrofit>().create(SdUiService::class.java) }
-        factory<SdUiService> { SdUiMockService() }
+        scoped<SdUiService> { get<Retrofit>().create(SdUiService::class.java) }
+        //factory<SdUiService> { SdUiMockService() }
         factory<SdUiRepository> { SdUiRepository(sdUiService = get(), componentParser = get()) }
 
         //Parsers

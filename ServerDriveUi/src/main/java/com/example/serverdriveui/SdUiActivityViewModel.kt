@@ -38,10 +38,7 @@ class SdUiActivityViewModel(
                     )
                 )
                 .catch {
-                    //println(it)
                     val screen = Gson().fromJson<ScreenModel>(it.message, ScreenModel::class.java)
-                    val code = 400
-                    val message = "Email ja cadastrado"
                     navigateOnError.update { true }
                     emit(screen)
                     //should show error feedback with a retry button and close button

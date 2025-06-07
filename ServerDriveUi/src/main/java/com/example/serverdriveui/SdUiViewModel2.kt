@@ -2,6 +2,7 @@ package com.example.serverdriveui
 
 import androidx.lifecycle.ViewModel
 import com.example.serverdriveui.service.model.ScreenModel
+import com.example.serverdriveui.service.model.SdUiError
 import com.example.serverdriveui.ui.actions.ContinueAction.Companion.CONTINUE_EFFECT_ID
 import com.example.serverdriveui.ui.component.manager.Component
 import com.example.serverdriveui.ui.component.manager.ComponentParser
@@ -44,14 +45,10 @@ class SdUiViewModel2(
                     destination.lastScreenId
                 )
             )
-            .catch {
-                //println(it)
-                val screen =
-                    Gson().fromJson<ScreenModel>(it.message, ScreenModel::class.java)
-                val code = 400
-                val message = "Email ja cadastrado"
-                components.value = componentParser.parse(screen.components)
-                //should show error feedback with a retry button and close button
+            .catch { error ->
+                val errorFeedback =
+                    Gson().fromJson<SdUiError>(error.message?.split("Network call failed: 400 ")?.last().orEmpty(), SdUiError::class.java)
+                components.value = componentParser.parse(errorFeedback.screen.components)
             }
             .onStart { showLoader() }
             .onCompletion { hideLoader() }
