@@ -1,9 +1,20 @@
 package com.vini.bank
 
-import android.app.Activity
 import android.os.Bundle
-import android.widget.Toast
+import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.router.FeatureRouter
+import com.example.router.routes.HomeRoute
+import com.example.router.routes.LoginRoute
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
@@ -11,53 +22,74 @@ import com.google.firebase.analytics.logEvent
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.google.firebase.remoteconfig.remoteConfig
 import com.vini.common.mvvm.observe
-import com.vini.designsystem.xml.view.BaseActivity
-import com.vini.featurelogin.LoginActivity
+import com.vini.designsystem.compose.view.BaseComposeActivity
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
-class LauncherActivity : BaseActivity(com.vini.designsystem.R.layout.main_content) {
+class LauncherActivity : BaseComposeActivity() {
 
     private val viewModel: LauncherViewModel by viewModel()
+    private val featureRouter: FeatureRouter by inject { parametersOf(this) }
     private lateinit var analytics: FirebaseAnalytics
 
     private val loginLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
-    ) {
-        if (it.resultCode == Activity.RESULT_OK) {
-            goToHome()
-        } else {
-            finish()
-        }
-    }
+    ) { viewModel.doOnLoginRouteResult(it) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         analytics = Firebase.analytics
         observe(viewModel.event, ::handleEvent)
-        savedInstanceState ?: run {
 
-            val remoteConfig = Firebase.remoteConfig
-            val configSettings = remoteConfigSettings {
-                minimumFetchIntervalInSeconds = 3600
-            }
-            remoteConfig.setConfigSettingsAsync(configSettings)
-            remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
+        setContent {
+            Row(modifier = Modifier.fillMaxSize()) {
+                val composition by rememberLottieComposition(
+                    LottieCompositionSpec.RawRes(
+                        com.vini.designsystem.R.raw.lottie_launcher
+                    )
+                )
 
-            viewModel.doOnCreate()
-            analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                param(FirebaseAnalytics.Param.ITEM_ID, "1")
-                param(FirebaseAnalytics.Param.ITEM_NAME, "name")
-                param(FirebaseAnalytics.Param.CONTENT_TYPE, "image")
+                val progress by animateLottieCompositionAsState(
+                    composition,
+                    isPlaying = viewModel.uiState.collectAsState().value,
+                    restartOnPlay = true
+                )
+
+                LottieAnimation(
+                    modifier = Modifier.fillMaxSize(),
+                    composition = composition,
+                    progress = { progress }
+                )
             }
+        }
+
+        //savedInstanceState ?: setupRemoteConfig()
+
+        viewModel.doOnCreate()
+    }
+
+    private fun setupRemoteConfig() {
+        val remoteConfig = Firebase.remoteConfig
+        val configSettings = remoteConfigSettings {
+            minimumFetchIntervalInSeconds = 60
+        }
+        remoteConfig.setConfigSettingsAsync(configSettings)
+        remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
+        remoteConfig.fetchAndActivate().addOnCompleteListener {
+            println(remoteConfig.getBoolean("abc"))
+        }
+
+        analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+            param(FirebaseAnalytics.Param.ITEM_ID, "1")
+            param(FirebaseAnalytics.Param.ITEM_NAME, "name")
+            param(FirebaseAnalytics.Param.CONTENT_TYPE, "image")
         }
     }
 
-    private fun handleEvent(event: LauncherUIEvent) = when(event) {
-        is LauncherUIEvent.OpenHome -> goToHome()
-        is LauncherUIEvent.OpenLogin -> goToLogin()
+    private fun handleEvent(event: LauncherUIEvent) = when (event) {
+        is LauncherUIEvent.OpenHome -> featureRouter.navigateAndFinish(HomeRoute())
+        is LauncherUIEvent.OpenLogin -> featureRouter.navigate(LoginRoute(), loginLauncher)
+        is LauncherUIEvent.Finish -> finish()
     }
-
-    private fun goToHome() = Toast.makeText(this, "Logado", Toast.LENGTH_SHORT).show()
-
-    private fun goToLogin() = loginLauncher.launch(LoginActivity.newIntent(this))
 }

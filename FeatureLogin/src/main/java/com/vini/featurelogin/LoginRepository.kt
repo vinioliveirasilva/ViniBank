@@ -1,14 +1,10 @@
 package com.vini.featurelogin
 
-import com.vini.storage.SecureStorage
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.onStart
+import com.example.auth.AuthProvider
 
 class LoginRepository(
-    private val secureStorage: SecureStorage,
+    private val authProvider: AuthProvider,
 ) {
-    fun doLogin(email: String, pass: String) = secureStorage.getUserData(email, pass).onStart {
-        delay(500)
-    }
+    fun doLogin(email: String, pass: String) = authProvider.authenticate(email, pass)
 }
 

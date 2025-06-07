@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    kotlin("plugin.serialization") version "2.1.20"
 }
 
 android {
@@ -49,6 +50,7 @@ dependencies {
     implementation(project(":Common"))
     implementation(project(":DesignSystem"))
     implementation(project(":Storage"))
+    implementation(project(":ServerDriveUi"))
 
     //Lottie
     implementation(libs.lottie.compose)
@@ -64,6 +66,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.koin.androidx.compose)
+    implementation(libs.kotlinx.serialization.json)
 
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.espresso.core)

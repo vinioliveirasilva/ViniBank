@@ -7,4 +7,5 @@ val StorageModule = module {
     factoryOf(::SecureStorage)
     factory { CryptographyProvider() }
     factoryOf(::LocalStorage)
+    factoryOf(::SessionStorage)
 }

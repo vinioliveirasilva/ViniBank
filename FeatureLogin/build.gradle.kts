@@ -35,7 +35,6 @@ android {
     }
     
     buildFeatures {
-        viewBinding = true
         compose = true
     }
     composeOptions {
@@ -53,6 +52,8 @@ dependencies {
     implementation(project(":DesignSystem"))
     implementation(project(":Storage"))
     implementation(project(":Common"))
+    implementation(project(":Router"))
+    implementation(project(":Auth"))
 
     implementation(libs.koin)
     implementation(libs.lottie)
