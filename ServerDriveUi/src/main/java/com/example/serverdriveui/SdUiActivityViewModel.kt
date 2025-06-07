@@ -24,8 +24,7 @@ class SdUiActivityViewModel(
 
     init {
         viewModelScope.launch {
-            stateManager.registerState<SdUiDestination?>(CONTINUE_EFFECT_ID)
-            stateManager.getState<SdUiDestination?>(CONTINUE_EFFECT_ID)?.collect { println("vmPrincipal ".plus(it)) }
+            stateManager.registerState(CONTINUE_EFFECT_ID)
         }
 
         viewModelScope.launch {
@@ -51,6 +50,5 @@ class SdUiActivityViewModel(
                 .flowOn(Dispatchers.IO)
                 .launchIn(viewModelScope)
         }
-
     }
 }

@@ -58,7 +58,12 @@ fun SdUiScreen2(
     )
 
 
-    LaunchedEffect(viewModel.navigateOnSuccess) {
+    LaunchedEffect(true) {
+        scope.launch {
+            viewModel.initialize()?.collect {
+
+            }
+        }
         scope.launch {
             viewModel.navigateOnSuccess.collect {
                 it?.run { navHostController.navigate(SdUiDestination2(this)) }

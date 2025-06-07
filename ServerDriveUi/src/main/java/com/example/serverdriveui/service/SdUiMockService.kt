@@ -7,7 +7,6 @@ import com.example.serverdriveui.service.model.ScreenModel
 import com.example.serverdriveui.service.model.SdUiRequest
 import com.example.serverdriveui.service.model.ValidatorModel
 import com.google.gson.Gson
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -17,8 +16,8 @@ class SdUiMockService : SdUiService {
 
     override fun getScreenModel(request: SdUiRequest): Flow<ScreenModel> {
         return flow {
-            println(request)
-            delay(1000)
+            //println(request)
+            //delay(1000)
             val response = getScreen(request)
             println(Gson().toJson(response))
             println(" ")

@@ -4,7 +4,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 class GlobalStateManager(
@@ -12,14 +11,14 @@ class GlobalStateManager(
 ) {
     private val globalState = mutableMapOf<String, MutableSharedFlow<Any?>>()
 
-    fun <T> registerState(id: String) {
+    fun registerState(id: String) {
         if (globalState.containsKey(id)) return
         globalState[id] = MutableSharedFlow()
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getState(id: String) : SharedFlow<T>? {
-        return globalState[id]?.asSharedFlow() as? SharedFlow<T>
+    fun <T> getState(id: String): SharedFlow<T>? {
+        return globalState[id] as? SharedFlow<T>
     }
 
     fun <T> updateState(id: String, data: T) = scope.launch {
