@@ -2,7 +2,9 @@ package com.example.serverdriveui.service.model
 
 
 import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ComponentModel(
     @SerializedName("staticProperty")
     val staticProperty: Map<String, String> = mapOf(),
@@ -18,6 +20,7 @@ data class ComponentModel(
     val validators: List<ValidatorModel> = emptyList()
 )
 
+@Serializable
 data class ActionModel(
     @SerializedName("type")
     val type: String,

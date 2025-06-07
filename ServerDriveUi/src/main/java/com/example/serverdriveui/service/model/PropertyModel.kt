@@ -2,7 +2,9 @@ package com.example.serverdriveui.service.model
 
 
 import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class PropertyModel(
     @SerializedName("name")
     val name: String,

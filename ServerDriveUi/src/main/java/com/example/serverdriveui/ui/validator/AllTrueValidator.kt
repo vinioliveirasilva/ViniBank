@@ -2,6 +2,7 @@ package com.example.serverdriveui.ui.validator
 
 import com.example.serverdriveui.service.model.ValidatorModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
+import com.example.serverdriveui.ui.validator.manager.Validator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel

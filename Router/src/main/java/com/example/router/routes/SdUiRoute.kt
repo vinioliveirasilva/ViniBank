@@ -10,11 +10,11 @@ class SdUiRoute(override val data: SdUiRouteData? = null) : Route(data) {
 }
 
 sealed class SdUiRouteData private constructor(bundleAction: Bundle.() -> Unit = {}) : RouteData(bundleAction) {
-    data class StartAsDefault(val screenId: String) : SdUiRouteData(
-        bundleAction = { putString("screenId", screenId) }
+    data class StartAsDefault(val flowId: String) : SdUiRouteData(
+        bundleAction = { putString("flowId", flowId) }
     )
 }
 
 class SdUiRouteDataParser(intent: Intent? = null) {
-    val screenId = intent?.getStringExtra("screenId").orEmpty()
+    val flowId = intent?.getStringExtra("flowId").orEmpty()
 }

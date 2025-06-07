@@ -35,7 +35,7 @@ android {
 dependencies {
     implementation(project(":Network"))
 
-    implementation("com.squareup.retrofit2:retrofit:2.7.2")
+    implementation(libs.retrofit)
 
     implementation(libs.koin)
 

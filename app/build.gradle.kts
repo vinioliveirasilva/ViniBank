@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    kotlin("plugin.serialization") version "2.1.20"
 }
 
 android {
@@ -36,7 +37,6 @@ android {
         jvmTarget = "17"
     }
     buildFeatures {
-        viewBinding = true
         compose = true
     }
     composeOptions {

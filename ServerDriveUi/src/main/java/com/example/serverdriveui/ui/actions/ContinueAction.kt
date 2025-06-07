@@ -1,7 +1,8 @@
 package com.example.serverdriveui.ui.actions
 
 import androidx.navigation.NavHostController
-import com.example.serverdriveui.SDUI
+import com.example.serverdriveui.GlobalStateManager
+import com.example.serverdriveui.SdUiDestination
 import com.example.serverdriveui.ui.actions.manager.Action
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.google.gson.JsonObject
@@ -10,10 +11,14 @@ import com.vini.common.or
 
 class ContinueAction(
     val data: Map<String, String>,
-    private val stateManager: ComponentStateManager
+    private val stateManager: ComponentStateManager,
+    private val globalStateManager: GlobalStateManager,
 ) : Action {
 
     private val nextScreenId = data["nextScreenId"].orEmpty()
+    private val currentScreenId = data["currentScreenId"].orEmpty()
+    private val flowId = data["flowId"].orEmpty()
+
     private val screenData = data["screenData"]?.let {
         JsonParser.parseString(it)
     }?.asJsonObject.or(JsonObject())
@@ -30,10 +35,11 @@ class ContinueAction(
                 stateManager.getState<String>(requestData.key)?.value.orEmpty()
             )
         }
-        navController.navigate(SDUI(nextScreenId, screenData.toString()))
+        globalStateManager.updateState(CONTINUE_EFFECT_ID, SdUiDestination(flowId, nextScreenId, screenData.toString(), currentScreenId))
     }
 
     companion object {
         const val IDENTIFIER = "continue"
+        const val CONTINUE_EFFECT_ID = "CONTINUE_EFFECT_ID"
     }
 }

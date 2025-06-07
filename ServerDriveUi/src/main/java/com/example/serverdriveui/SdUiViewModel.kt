@@ -2,7 +2,8 @@ package com.example.serverdriveui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.serverdriveui.ui.components.manager.Component
+import com.example.serverdriveui.ui.component.manager.Component
+import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.vini.designsystem.compose.loader.LoaderComponent
 import com.vini.designsystem.compose.loader.LoaderComponentViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,23 +17,20 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class SdUiViewModel(
-    private val screenId: String,
-    private val screenData: String,
+    private val model: SdUiModel,
     private val repository: SdUiRepository,
+    private val componentParser: ComponentParser,
 ) : ViewModel(), LoaderComponent by LoaderComponentViewModel() {
     val components: MutableStateFlow<List<Component>> = MutableStateFlow(emptyList())
 
     init {
         viewModelScope.launch {
             repository
-                .getScreen(screenId, screenData)
-                .catch {
-                    println(it)
-                    //should show error feedback with a retry button and close button
-                }
+                .getScreen(model)
+                .catch { println(it) }
                 .onStart { showLoader() }
                 .onCompletion { hideLoader() }
-                .map { components.value = it }
+                .map { components.value = componentParser.parse(it.components) }
                 .flowOn(Dispatchers.IO)
                 .launchIn(viewModelScope)
         }

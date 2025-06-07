@@ -72,7 +72,7 @@ class LoginActivity : BaseComposeActivity() {
                 )
 
                 LoginVMEvent.NavigateToSdUi -> featureRouter.navigate(
-                    SdUiRoute(data = SdUiRouteData.StartAsDefault(screenId = "SignUp.Email")),
+                    SdUiRoute(data = SdUiRouteData.StartAsDefault(flowId = "SignUp")),
                     signUpLauncher
                 )
             }

@@ -50,12 +50,16 @@ dependencies {
     implementation(project(":Network"))
     implementation(project(":Router"))
 
-    implementation("com.squareup.retrofit2:retrofit:2.7.2")
+    //Lottie
+    implementation(libs.lottie.compose)
+
+    //Retrofit
+    implementation(libs.retrofit)
     implementation(libs.gson)
 
+    //Koin
     implementation(libs.koin)
 
-    //Compose
     //Compose
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.activity.compose)

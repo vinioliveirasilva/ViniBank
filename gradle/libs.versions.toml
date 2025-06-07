@@ -30,6 +30,7 @@ googleServices = "4.4.1"
 firebaseCrashlyticsGradle = "2.9.9"
 firebaseAnalytics = "21.6.2"
 firebaseConfig = "21.6.3"
+okhttp = "3.14.7"
 retrofit = "2.11.0"
 
 [libraries]
@@ -74,8 +75,10 @@ firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics
 firebase-config = { group = "com.google.firebase", name = "firebase-config", version.ref = "firebaseConfig" }
 mockk-agent = { module = "io.mockk:mockk-agent", version.ref = "mockkAgent" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockkAndroid" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+retrofit-converter-scalar = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

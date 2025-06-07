@@ -33,10 +33,10 @@ android {
 }
 
 dependencies {
-    implementation("com.squareup.retrofit2:retrofit:2.7.2")
-    implementation("com.squareup.retrofit2:converter-gson:2.7.2")
-    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
-    implementation("com.squareup.okhttp3:okhttp:3.14.7")
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.retrofit.converter.scalar)
+    implementation(libs.okhttp)
 
     implementation(libs.koin)
     implementation(libs.gson)
