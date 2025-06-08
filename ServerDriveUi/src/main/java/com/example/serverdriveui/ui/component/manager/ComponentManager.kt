@@ -21,6 +21,7 @@ import com.example.serverdriveui.ui.component.components.SpacerComponent
 import com.example.serverdriveui.ui.component.components.TextComponent
 import com.example.serverdriveui.ui.component.components.TopAppBarComponent
 import com.example.serverdriveui.ui.component.components.createpassword.CreatePasswordComponent
+import com.example.serverdriveui.ui.component.components.textinput.OutlinedTextInputComponent
 import com.example.serverdriveui.ui.component.components.textinput.TextInputComponent
 import com.example.serverdriveui.ui.validator.manager.Validator
 import com.google.gson.JsonObject
@@ -54,6 +55,7 @@ class ComponentManager(private val koinScope: Scope) {
         TopAppBarComponent.IDENTIFIER -> koinScope.get<TopAppBarComponent> { parametersOf(dynamicProperties, staticProperties, validator) }
         SpacerComponent.IDENTIFIER -> koinScope.get<SpacerComponent> { parametersOf(staticProperties, validator) }
         TextInputComponent.IDENTIFIER -> koinScope.get<TextInputComponent> { parametersOf(dynamicProperties, staticProperties, validator) }
+        OutlinedTextInputComponent.IDENTIFIER -> koinScope.get<OutlinedTextInputComponent> { parametersOf(dynamicProperties, staticProperties, validator) }
         LottieAnimationComponent.IDENTIFIER -> koinScope.get<LottieAnimationComponent> { parametersOf(dynamicProperties, staticProperties, action, validator) }
         CreatePasswordComponent.IDENTIFIER -> koinScope.get<CreatePasswordComponent> { parametersOf(dynamicProperties, staticProperties, action, validator) }
         else -> unknownComponent()

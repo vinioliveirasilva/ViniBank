@@ -1,8 +1,8 @@
 package com.example.serverdriveui.ui.component.components.textinput
 
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -24,7 +24,7 @@ import com.example.serverdriveui.ui.component.properties.static.TextFormatterPro
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.Validator
 
-data class TextInputComponent(
+data class OutlinedTextInputComponent(
     private val dynamicProperties: List<PropertyModel>,
     private val staticProperties: Map<String, String>,
     private val stateManager: ComponentStateManager,
@@ -47,7 +47,7 @@ data class TextInputComponent(
     ): @Composable ColumnScope.() -> Unit = {
         val text = getText().collectAsState()
 
-        TextField(
+        OutlinedTextField(
             keyboardOptions = keyboardOptions,
             visualTransformation = visualTransformation,
             singleLine = true,
@@ -66,6 +66,6 @@ data class TextInputComponent(
     }
 
     companion object {
-        const val IDENTIFIER = "textInput"
+        const val IDENTIFIER = "outlinedTextInput"
     }
 }

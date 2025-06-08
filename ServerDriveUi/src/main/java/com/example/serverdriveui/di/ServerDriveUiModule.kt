@@ -27,6 +27,7 @@ import com.example.serverdriveui.ui.component.components.TextComponent
 import com.example.serverdriveui.ui.component.components.TopAppBarComponent
 import com.example.serverdriveui.ui.component.components.createpassword.CreatePasswordComponent
 import com.example.serverdriveui.ui.component.components.createpassword.CreatePasswordViewModel
+import com.example.serverdriveui.ui.component.components.textinput.OutlinedTextInputComponent
 import com.example.serverdriveui.ui.component.components.textinput.TextInputComponent
 import com.example.serverdriveui.ui.component.manager.Component
 import com.example.serverdriveui.ui.component.manager.ComponentManager
@@ -65,6 +66,7 @@ val ServerDriveUiModule = module {
         factory<TextComponent> { (dynamicProperties: List<PropertyModel>, staticProperties: Map<String, String>, validators: List<Validator>) -> TextComponent(dynamicProperties, staticProperties, get(), validators) }
         factory<TopAppBarComponent> { (dynamicProperties: List<PropertyModel>, staticProperties: Map<String, String>, validators: List<Validator>) -> TopAppBarComponent(dynamicProperties, staticProperties, get(), validators) }
         factory<TextInputComponent> { (dynamicProperties: List<PropertyModel>, staticProperties: Map<String, String>, validators: List<Validator>) -> TextInputComponent(dynamicProperties, staticProperties, get(), validators) }
+        factory<OutlinedTextInputComponent> { (dynamicProperties: List<PropertyModel>, staticProperties: Map<String, String>, validators: List<Validator>) -> OutlinedTextInputComponent(dynamicProperties, staticProperties, get(), validators) }
         factory<SpacerComponent> { (staticProperties: Map<String, String>, validators: List<Validator>) -> SpacerComponent(staticProperties, validators) }
         factory<RowComponent> { (dynamicProperties: List<PropertyModel>, staticProperties: Map<String, String>, innerComponents: List<Component>, validators: List<Validator>) -> RowComponent(dynamicProperties, staticProperties, innerComponents, validators) }
         factory<ColumnComponent> { (dynamicProperties: List<PropertyModel>, staticProperties: Map<String, String>, innerComponents: List<Component>, validators: List<Validator>) -> ColumnComponent(dynamicProperties, staticProperties, innerComponents, validators) }
