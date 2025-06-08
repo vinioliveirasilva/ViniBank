@@ -23,7 +23,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.router.FeatureRouter
 import com.example.router.routes.SdUiRoute
 import com.example.router.routes.SdUiRouteData
-import com.example.router.routes.SignUpRoute
 import com.vini.common.mvvm.observe
 import com.vini.designsystem.compose.button.Buttons
 import com.vini.designsystem.compose.icon.passwordTrailingIcon
@@ -67,7 +66,7 @@ class LoginActivity : BaseComposeActivity() {
                 }
 
                 LoginVMEvent.NavigateToSignUp -> featureRouter.navigate(
-                    SignUpRoute(),
+                    SdUiRoute(data = SdUiRouteData.StartAsDefault(flowId = "SignUp")),
                     signUpLauncher
                 )
 
