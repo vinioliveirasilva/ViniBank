@@ -15,6 +15,7 @@ import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.actions.manager.Action
 import com.example.serverdriveui.ui.component.components.ButtonComponent
 import com.example.serverdriveui.ui.component.components.OutlinedButtonComponent
+import com.example.serverdriveui.ui.component.components.ElevatedButtonComponent
 import com.example.serverdriveui.ui.component.components.ColumnComponent
 import com.example.serverdriveui.ui.component.components.LottieAnimationComponent
 import com.example.serverdriveui.ui.component.components.RowComponent
@@ -33,6 +34,7 @@ class ComponentManager(private val koinScope: Scope) {
 
     fun getComponent(identifier: String, data: JsonObject): Component = when (identifier) {
         ButtonComponent.IDENTIFIER -> koinScope.get<ButtonComponent> { parametersOf(data) }
+        ElevatedButtonComponent.IDENTIFIER -> koinScope.get<ElevatedButtonComponent> { parametersOf(data) }
         OutlinedButtonComponent.IDENTIFIER -> koinScope.get<OutlinedButtonComponent> { parametersOf(data) }
         ColumnComponent.IDENTIFIER -> koinScope.get<ColumnComponent> { parametersOf(data) }
         RowComponent.IDENTIFIER -> koinScope.get<RowComponent> { parametersOf(data) }
@@ -51,6 +53,7 @@ class ComponentManager(private val koinScope: Scope) {
         validator: List<Validator>
     ): Component = when (identifier) {
         ButtonComponent.IDENTIFIER -> koinScope.get<ButtonComponent> { parametersOf(dynamicProperties, staticProperties, action, validator) }
+        ElevatedButtonComponent.IDENTIFIER -> koinScope.get<ElevatedButtonComponent> { parametersOf(dynamicProperties, staticProperties, action, validator) }
         OutlinedButtonComponent.IDENTIFIER -> koinScope.get<OutlinedButtonComponent> { parametersOf(dynamicProperties, staticProperties, action, validator) }
         ColumnComponent.IDENTIFIER -> koinScope.get<ColumnComponent> { parametersOf(dynamicProperties, staticProperties, innerComponents, validator) }
         RowComponent.IDENTIFIER -> koinScope.get<RowComponent> { parametersOf(dynamicProperties, staticProperties, innerComponents, validator) }
