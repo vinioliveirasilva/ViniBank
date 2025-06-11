@@ -14,10 +14,10 @@ import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.actions.manager.Action
 import com.example.serverdriveui.ui.component.components.ButtonComponent
-import com.example.serverdriveui.ui.component.components.OutlinedButtonComponent
-import com.example.serverdriveui.ui.component.components.ElevatedButtonComponent
 import com.example.serverdriveui.ui.component.components.ColumnComponent
+import com.example.serverdriveui.ui.component.components.ElevatedButtonComponent
 import com.example.serverdriveui.ui.component.components.LottieAnimationComponent
+import com.example.serverdriveui.ui.component.components.OutlinedButtonComponent
 import com.example.serverdriveui.ui.component.components.RowComponent
 import com.example.serverdriveui.ui.component.components.SpacerComponent
 import com.example.serverdriveui.ui.component.components.TextComponent
@@ -47,23 +47,22 @@ class ComponentManager(private val koinScope: Scope) {
     fun getComponent(
         identifier: String,
         dynamicProperties: List<PropertyModel>,
-        staticProperties: Map<String, String>,
         innerComponents: List<Component>,
         action: Action,
         validator: List<Validator>
     ): Component = when (identifier) {
-        ButtonComponent.IDENTIFIER -> koinScope.get<ButtonComponent> { parametersOf(dynamicProperties, staticProperties, action, validator) }
-        ElevatedButtonComponent.IDENTIFIER -> koinScope.get<ElevatedButtonComponent> { parametersOf(dynamicProperties, staticProperties, action, validator) }
-        OutlinedButtonComponent.IDENTIFIER -> koinScope.get<OutlinedButtonComponent> { parametersOf(dynamicProperties, staticProperties, action, validator) }
-        ColumnComponent.IDENTIFIER -> koinScope.get<ColumnComponent> { parametersOf(dynamicProperties, staticProperties, innerComponents, validator) }
-        RowComponent.IDENTIFIER -> koinScope.get<RowComponent> { parametersOf(dynamicProperties, staticProperties, innerComponents, validator) }
-        TextComponent.IDENTIFIER -> koinScope.get<TextComponent> { parametersOf(dynamicProperties, staticProperties, validator) }
-        TopAppBarComponent.IDENTIFIER -> koinScope.get<TopAppBarComponent> { parametersOf(dynamicProperties, staticProperties, validator) }
-        SpacerComponent.IDENTIFIER -> koinScope.get<SpacerComponent> { parametersOf(staticProperties, validator) }
-        TextInputComponent.IDENTIFIER -> koinScope.get<TextInputComponent> { parametersOf(dynamicProperties, staticProperties, validator) }
-        OutlinedTextInputComponent.IDENTIFIER -> koinScope.get<OutlinedTextInputComponent> { parametersOf(dynamicProperties, staticProperties, validator) }
-        LottieAnimationComponent.IDENTIFIER -> koinScope.get<LottieAnimationComponent> { parametersOf(dynamicProperties, staticProperties, action, validator) }
-        CreatePasswordComponent.IDENTIFIER -> koinScope.get<CreatePasswordComponent> { parametersOf(dynamicProperties, staticProperties, action, validator) }
+        ButtonComponent.IDENTIFIER -> koinScope.get<ButtonComponent> { parametersOf(dynamicProperties, action, validator) }
+        ElevatedButtonComponent.IDENTIFIER -> koinScope.get<ElevatedButtonComponent> { parametersOf(dynamicProperties, action, validator) }
+        OutlinedButtonComponent.IDENTIFIER -> koinScope.get<OutlinedButtonComponent> { parametersOf(dynamicProperties, action, validator) }
+        ColumnComponent.IDENTIFIER -> koinScope.get<ColumnComponent> { parametersOf(dynamicProperties, innerComponents, validator) }
+        RowComponent.IDENTIFIER -> koinScope.get<RowComponent> { parametersOf(dynamicProperties, innerComponents, validator) }
+        TextComponent.IDENTIFIER -> koinScope.get<TextComponent> { parametersOf(dynamicProperties, action, validator) }
+        TopAppBarComponent.IDENTIFIER -> koinScope.get<TopAppBarComponent> { parametersOf(dynamicProperties, action, validator) }
+        SpacerComponent.IDENTIFIER -> koinScope.get<SpacerComponent> { parametersOf(dynamicProperties, action, validator) }
+        TextInputComponent.IDENTIFIER -> koinScope.get<TextInputComponent> { parametersOf(dynamicProperties, action, validator) }
+        OutlinedTextInputComponent.IDENTIFIER -> koinScope.get<OutlinedTextInputComponent> { parametersOf(dynamicProperties, action, validator) }
+        LottieAnimationComponent.IDENTIFIER -> koinScope.get<LottieAnimationComponent> { parametersOf(dynamicProperties, action, validator) }
+        CreatePasswordComponent.IDENTIFIER -> koinScope.get<CreatePasswordComponent> { parametersOf(dynamicProperties, action, validator) }
         else -> unknownComponent()
     }
 

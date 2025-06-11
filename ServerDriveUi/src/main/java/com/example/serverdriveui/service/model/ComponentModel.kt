@@ -6,8 +6,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ComponentModel(
-    @SerializedName("staticProperty")
-    val staticProperty: Map<String, String> = mapOf(),
     @SerializedName("dynamicProperty")
     val dynamicProperty: List<PropertyModel> = emptyList(),
     @SerializedName("type")

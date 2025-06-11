@@ -3,11 +3,13 @@ package com.vini.bank
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
@@ -43,7 +45,7 @@ class LauncherActivity : BaseComposeActivity() {
         observe(viewModel.event, ::handleEvent)
 
         setContent {
-            Row(modifier = Modifier.fillMaxSize()) {
+            Row(modifier = Modifier.fillMaxSize().background(Color.White)) {
                 val composition by rememberLottieComposition(
                     LottieCompositionSpec.RawRes(
                         com.vini.designsystem.R.raw.lottie_launcher

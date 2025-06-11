@@ -30,7 +30,7 @@ val NetworkModule = module {
 
     single<Retrofit> {
         Builder()
-            .baseUrl("http://192.168.15.4:8080/")
+            .baseUrl("http://192.168.15.181:8080/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())

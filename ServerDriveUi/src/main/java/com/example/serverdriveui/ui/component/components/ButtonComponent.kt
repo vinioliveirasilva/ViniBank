@@ -12,25 +12,30 @@ import com.example.serverdriveui.ui.actions.manager.Action
 import com.example.serverdriveui.ui.component.manager.Component
 import com.example.serverdriveui.ui.component.properties.dynamic.EnabledComponentProperty
 import com.example.serverdriveui.ui.component.properties.dynamic.EnabledProperty
+import com.example.serverdriveui.ui.component.properties.dynamic.HorizontalFillTypeComponentProperty
+import com.example.serverdriveui.ui.component.properties.dynamic.HorizontalFillTypeProperty
+import com.example.serverdriveui.ui.component.properties.dynamic.HorizontalPaddingComponentProperty
+import com.example.serverdriveui.ui.component.properties.dynamic.HorizontalPaddingProperty
 import com.example.serverdriveui.ui.component.properties.dynamic.TextComponentProperty
 import com.example.serverdriveui.ui.component.properties.dynamic.TextProperty
-import com.example.serverdriveui.ui.component.properties.static.FillTypeComponentModifier
-import com.example.serverdriveui.ui.component.properties.static.FillTypeModifier
-import com.example.serverdriveui.ui.component.properties.static.PaddingComponentModifier
-import com.example.serverdriveui.ui.component.properties.static.PaddingModifier
+import com.example.serverdriveui.ui.component.properties.dynamic.VerticalFillTypeComponentProperty
+import com.example.serverdriveui.ui.component.properties.dynamic.VerticalFillTypeProperty
+import com.example.serverdriveui.ui.component.properties.dynamic.VerticalPaddingComponentProperty
+import com.example.serverdriveui.ui.component.properties.dynamic.VerticalPaddingProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.Validator
 
 data class ButtonComponent(
     private val dynamicProperties: List<PropertyModel>,
-    private val staticProperties: Map<String, String>,
+    private val validators: List<Validator>,
     private val action: Action,
     private val stateManager: ComponentStateManager,
-    private val validators: List<Validator>,
 ) : Component,
     TextComponentProperty by TextProperty(dynamicProperties, stateManager),
-    FillTypeComponentModifier by FillTypeModifier(staticProperties),
-    PaddingComponentModifier by PaddingModifier(staticProperties),
+    VerticalFillTypeComponentProperty by VerticalFillTypeProperty(dynamicProperties, stateManager),
+    HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(dynamicProperties, stateManager),
+    VerticalPaddingComponentProperty by VerticalPaddingProperty(dynamicProperties, stateManager),
+    HorizontalPaddingComponentProperty by HorizontalPaddingProperty(dynamicProperties, stateManager),
     EnabledComponentProperty by EnabledProperty(dynamicProperties, stateManager) {
 
     init {
@@ -44,8 +49,10 @@ data class ButtonComponent(
             Button(
                 enabled = isEnabled,
                 modifier = Modifier
-                    .then(fillTypeModifier)
-                    .then(paddingModifier),
+                    .then(horizontalFillTypeModifier)
+                    .then(verticalFillTypeModifier)
+                    .then(horizontalPaddingModifier)
+                    .then(verticalPaddingModifier),
                 onClick = { action.execute(navController) },
                 content = { Text(getText().collectAsState().value) }
             )

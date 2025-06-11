@@ -23,7 +23,6 @@ class ComponentParser(
             componentManager.getComponent(
                 it.type,
                 it.dynamicProperty,
-                it.staticProperty,
                 parse(it.components),
                 actionParser.parse(it.action),
                 it.validators.map { validatorParser.parse(it) }

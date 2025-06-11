@@ -11,7 +11,15 @@ import org.koin.dsl.module
 
 val HomeModule = module {
     viewModelOf(::HomeViewModel)
-    single { HomeContentProviderImpl(getAll()) }
+    single {
+        HomeContentProviderImpl(
+            listOf(
+                get<MainContentProvider>(),
+                get<CardContentProvider>(),
+                get<InvestmentContentProvider>()
+            )
+        )
+    }
     singleOf(::InvestmentContentProvider) bind ContentProvider::class
     singleOf(::CardContentProvider) bind ContentProvider::class
     singleOf(::MainContentProvider) bind ContentProvider::class

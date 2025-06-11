@@ -8,29 +8,37 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.component.manager.Component
-import com.example.serverdriveui.ui.component.properties.static.AlignmentComponentProperty
-import com.example.serverdriveui.ui.component.properties.static.AlignmentProperty
-import com.example.serverdriveui.ui.component.properties.static.ArrangementComponentProperty
-import com.example.serverdriveui.ui.component.properties.static.ArrangementProperty
-import com.example.serverdriveui.ui.component.properties.static.FillTypeComponentModifier
-import com.example.serverdriveui.ui.component.properties.static.FillTypeModifier
-import com.example.serverdriveui.ui.component.properties.static.PaddingComponentModifier
-import com.example.serverdriveui.ui.component.properties.static.PaddingModifier
-import com.example.serverdriveui.ui.component.properties.static.WeightComponentModifier
-import com.example.serverdriveui.ui.component.properties.static.WeightModifier
+import com.example.serverdriveui.ui.component.properties.dynamic.HorizontalArrangementComponentProperty
+import com.example.serverdriveui.ui.component.properties.dynamic.HorizontalArrangementProperty
+import com.example.serverdriveui.ui.component.properties.dynamic.HorizontalFillTypeComponentProperty
+import com.example.serverdriveui.ui.component.properties.dynamic.HorizontalFillTypeProperty
+import com.example.serverdriveui.ui.component.properties.dynamic.HorizontalPaddingComponentProperty
+import com.example.serverdriveui.ui.component.properties.dynamic.HorizontalPaddingProperty
+import com.example.serverdriveui.ui.component.properties.dynamic.VerticalAlignmentComponentProperty
+import com.example.serverdriveui.ui.component.properties.dynamic.VerticalAlignmentProperty
+import com.example.serverdriveui.ui.component.properties.dynamic.VerticalFillTypeComponentProperty
+import com.example.serverdriveui.ui.component.properties.dynamic.VerticalFillTypeProperty
+import com.example.serverdriveui.ui.component.properties.dynamic.VerticalPaddingComponentProperty
+import com.example.serverdriveui.ui.component.properties.dynamic.VerticalPaddingProperty
+import com.example.serverdriveui.ui.component.properties.dynamic.WeightComponentModifier
+import com.example.serverdriveui.ui.component.properties.dynamic.WeightModifier
+import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.Validator
+import com.example.serverdriveui.util.asValue
 
 class RowComponent(
     private val dynamicProperties: List<PropertyModel>,
-    private val staticProperties: Map<String, String>,
     private val components: List<Component>,
     private val validators: List<Validator>,
+    private val stateManager: ComponentStateManager,
 ) : Component,
-    FillTypeComponentModifier by FillTypeModifier(staticProperties),
-    PaddingComponentModifier by PaddingModifier(staticProperties),
-    AlignmentComponentProperty by AlignmentProperty(staticProperties),
-    ArrangementComponentProperty by ArrangementProperty(staticProperties),
-    WeightComponentModifier by WeightModifier(staticProperties) {
+    VerticalFillTypeComponentProperty by VerticalFillTypeProperty(dynamicProperties, stateManager),
+    HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(dynamicProperties, stateManager),
+    VerticalPaddingComponentProperty by VerticalPaddingProperty(dynamicProperties, stateManager),
+    HorizontalPaddingComponentProperty by HorizontalPaddingProperty(dynamicProperties, stateManager),
+    VerticalAlignmentComponentProperty by VerticalAlignmentProperty(dynamicProperties, stateManager),
+    HorizontalArrangementComponentProperty by HorizontalArrangementProperty(dynamicProperties, stateManager),
+    WeightComponentModifier by WeightModifier(dynamicProperties, stateManager) {
 
     init {
         validators.forEach { it.initialize() }
@@ -39,12 +47,14 @@ class RowComponent(
     @Composable
     override fun getComponent(navController: NavHostController): @Composable ColumnScope.() -> Unit = {
         Row(
-            verticalAlignment = verticalAlignment,
-            horizontalArrangement = horizontalArrangement,
+            verticalAlignment = getVerticalAlignment().asValue(),
+            horizontalArrangement = getHorizontalArrangement().asValue(),
             modifier = Modifier
-                .then(fillTypeModifier)
-                .then(paddingModifier)
-                .then(weightModifier())
+                .then(horizontalFillTypeModifier)
+                .then(verticalFillTypeModifier)
+                .then(horizontalPaddingModifier)
+                .then(verticalPaddingModifier)
+                .then(weightModifier)
         ) {
             components.forEach { Column { it.getComponent(navController).invoke(this) } }
         }

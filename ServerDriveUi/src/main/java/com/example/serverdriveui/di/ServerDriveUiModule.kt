@@ -19,10 +19,10 @@ import com.example.serverdriveui.ui.actions.manager.Action
 import com.example.serverdriveui.ui.actions.manager.ActionManager
 import com.example.serverdriveui.ui.actions.manager.ActionParser
 import com.example.serverdriveui.ui.component.components.ButtonComponent
-import com.example.serverdriveui.ui.component.components.OutlinedButtonComponent
-import com.example.serverdriveui.ui.component.components.ElevatedButtonComponent
 import com.example.serverdriveui.ui.component.components.ColumnComponent
+import com.example.serverdriveui.ui.component.components.ElevatedButtonComponent
 import com.example.serverdriveui.ui.component.components.LottieAnimationComponent
+import com.example.serverdriveui.ui.component.components.OutlinedButtonComponent
 import com.example.serverdriveui.ui.component.components.RowComponent
 import com.example.serverdriveui.ui.component.components.SpacerComponent
 import com.example.serverdriveui.ui.component.components.TextComponent
@@ -65,20 +65,18 @@ val ServerDriveUiModule = module {
         factory<ValidatorManager> { ValidatorManager(koinScope = this) }
 
         //Components
-        factory<TextComponent> { (dynamicProperties: List<PropertyModel>, staticProperties: Map<String, String>, validators: List<Validator>) -> TextComponent(dynamicProperties, staticProperties, get(), validators) }
-        factory<TopAppBarComponent> { (dynamicProperties: List<PropertyModel>, staticProperties: Map<String, String>, validators: List<Validator>) -> TopAppBarComponent(dynamicProperties, staticProperties, get(), validators) }
-        factory<TextInputComponent> { (dynamicProperties: List<PropertyModel>, staticProperties: Map<String, String>, validators: List<Validator>) -> TextInputComponent(dynamicProperties, staticProperties, get(), validators) }
-        factory<OutlinedTextInputComponent> { (dynamicProperties: List<PropertyModel>, staticProperties: Map<String, String>, validators: List<Validator>) -> OutlinedTextInputComponent(dynamicProperties, staticProperties, get(), validators) }
-        factory<SpacerComponent> { (staticProperties: Map<String, String>, validators: List<Validator>) -> SpacerComponent(staticProperties, validators) }
-        factory<RowComponent> { (dynamicProperties: List<PropertyModel>, staticProperties: Map<String, String>, innerComponents: List<Component>, validators: List<Validator>) -> RowComponent(dynamicProperties, staticProperties, innerComponents, validators) }
-        factory<ColumnComponent> { (dynamicProperties: List<PropertyModel>, staticProperties: Map<String, String>, innerComponents: List<Component>, validators: List<Validator>) -> ColumnComponent(dynamicProperties, staticProperties, innerComponents, validators) }
-        factory<ButtonComponent> { (dynamicProperties: List<PropertyModel>, staticProperties: Map<String, String>, action: Action, validators: List<Validator>) -> ButtonComponent(dynamicProperties, staticProperties, action, get(), validators) }
-        factory<ElevatedButtonComponent> { (dynamicProperties: List<PropertyModel>, staticProperties: Map<String, String>, action: Action, validators: List<Validator>) ->
-            ElevatedButtonComponent(dynamicProperties, staticProperties, action, get(), validators) }
-        factory<OutlinedButtonComponent> { (dynamicProperties: List<PropertyModel>, staticProperties: Map<String, String>, action: Action, validators: List<Validator>) ->
-            OutlinedButtonComponent(dynamicProperties, staticProperties, action, get(), validators) }
-        factory<LottieAnimationComponent> { (dynamicProperties: List<PropertyModel>, staticProperties: Map<String, String>, action: Action, validators: List<Validator>) -> LottieAnimationComponent(dynamicProperties, staticProperties, action, get(), validators) }
-        factory<CreatePasswordComponent> { (dynamicProperties: List<PropertyModel>, staticProperties: Map<String, String>, action: Action, validators: List<Validator>) -> CreatePasswordComponent(dynamicProperties, staticProperties, validators, get(), get()) }
+        factory<TextComponent> { (dynamicProperties: List<PropertyModel>, action: Action, validators: List<Validator>) -> TextComponent(dynamicProperties, validators, action, get()) }
+        factory<TopAppBarComponent> { (dynamicProperties: List<PropertyModel>, action: Action, validators: List<Validator>) -> TopAppBarComponent(dynamicProperties, validators, action, get()) }
+        factory<TextInputComponent> { (dynamicProperties: List<PropertyModel>, action: Action, validators: List<Validator>) -> TextInputComponent(dynamicProperties, validators, action, get()) }
+        factory<OutlinedTextInputComponent> { (dynamicProperties: List<PropertyModel>, action: Action,  validators: List<Validator>) -> OutlinedTextInputComponent(dynamicProperties, validators, action, get()) }
+        factory<SpacerComponent> { (dynamicProperties: List<PropertyModel>, action: Action, validators: List<Validator>) -> SpacerComponent(dynamicProperties, validators, action, get()) }
+        factory<RowComponent> { (dynamicProperties: List<PropertyModel>, innerComponents: List<Component>, validators: List<Validator>) -> RowComponent(dynamicProperties, innerComponents, validators, get()) }
+        factory<ColumnComponent> { (dynamicProperties: List<PropertyModel>, innerComponents: List<Component>, validators: List<Validator>) -> ColumnComponent(dynamicProperties, innerComponents, validators, get()) }
+        factory<ButtonComponent> { (dynamicProperties: List<PropertyModel>, action: Action, validators: List<Validator>) -> ButtonComponent(dynamicProperties, validators, action, get()) }
+        factory<ElevatedButtonComponent> { (dynamicProperties: List<PropertyModel>, action: Action, validators: List<Validator>) -> ElevatedButtonComponent(dynamicProperties, validators, action, get()) }
+        factory<OutlinedButtonComponent> { (dynamicProperties: List<PropertyModel>, action: Action, validators: List<Validator>) -> OutlinedButtonComponent(dynamicProperties, validators, action, get()) }
+        factory<LottieAnimationComponent> { (dynamicProperties: List<PropertyModel>, action: Action, validators: List<Validator>) -> LottieAnimationComponent(dynamicProperties, validators, action, get()) }
+        factory<CreatePasswordComponent> { (dynamicProperties: List<PropertyModel>, action: Action, validators: List<Validator>) -> CreatePasswordComponent(dynamicProperties, validators, get(), get()) }
         viewModelOf(::CreatePasswordViewModel)
 
         //Actions

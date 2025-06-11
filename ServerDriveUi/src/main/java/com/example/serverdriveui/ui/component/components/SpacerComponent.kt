@@ -5,16 +5,21 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import com.example.serverdriveui.service.model.PropertyModel
+import com.example.serverdriveui.ui.actions.manager.Action
 import com.example.serverdriveui.ui.component.manager.Component
-import com.example.serverdriveui.ui.component.properties.static.SizeComponentModifier
-import com.example.serverdriveui.ui.component.properties.static.SizeModifier
+import com.example.serverdriveui.ui.component.properties.dynamic.SizeComponentModifier
+import com.example.serverdriveui.ui.component.properties.dynamic.SizeModifier
+import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.Validator
 
 class SpacerComponent(
-    private val staticProperties: Map<String, String>,
+    private val dynamicProperties: List<PropertyModel>,
     private val validators: List<Validator>,
+    private val action: Action,
+    private val stateManager: ComponentStateManager,
 ) : Component,
-    SizeComponentModifier by SizeModifier(staticProperties)
+    SizeComponentModifier by SizeModifier(dynamicProperties, stateManager)
 {
 
     init {
