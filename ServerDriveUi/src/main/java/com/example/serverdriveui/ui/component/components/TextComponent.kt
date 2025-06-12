@@ -3,6 +3,10 @@ package com.example.serverdriveui.ui.component.components
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
@@ -60,5 +64,19 @@ data class TextComponent(
 
     companion object {
         const val IDENTIFIER = "text"
+    }
+}
+
+@Preview
+@Composable
+fun TextComponentPreview() {
+    val navHostController = NavHostController(LocalContext.current)
+    Column(modifier = Modifier.fillMaxSize()) {
+        TextComponent(
+            listOf(PropertyModel(name = "text", value = "Hello")),
+            emptyList(),
+            object : Action { override fun execute(navController: NavHostController) {} },
+            ComponentStateManager(),
+        ).getComponent(navController = navHostController).invoke(this)
     }
 }

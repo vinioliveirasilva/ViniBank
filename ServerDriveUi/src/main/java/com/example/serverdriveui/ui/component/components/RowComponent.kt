@@ -3,8 +3,11 @@ package com.example.serverdriveui.ui.component.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.component.manager.Component
@@ -62,5 +65,26 @@ class RowComponent(
 
     companion object {
         const val IDENTIFIER = "row"
+    }
+}
+
+@Preview
+@Composable
+fun RowComponentPreview() {
+    val navHostController = NavHostController(LocalContext.current)
+    Column(modifier = Modifier.fillMaxSize()) {
+        RowComponent(
+            dynamicProperties = emptyList(),
+            components = listOf(
+                TextComponent(
+                    listOf(PropertyModel(name = "text", value = "Item")),
+                    emptyList(),
+                    object : Action { override fun execute(navController: NavHostController) {} },
+                    ComponentStateManager(),
+                )
+            ),
+            validators = emptyList(),
+            stateManager = ComponentStateManager(),
+        ).getComponent(navController = navHostController).invoke(this)
     }
 }

@@ -2,7 +2,11 @@ package com.example.serverdriveui.ui.component.components
 
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
@@ -33,6 +37,20 @@ class SpacerComponent(
 
     companion object {
         const val IDENTIFIER = "spacer"
+    }
+}
+
+@Preview
+@Composable
+fun SpacerComponentPreview() {
+    val navHostController = NavHostController(LocalContext.current)
+    Column(modifier = Modifier.fillMaxSize()) {
+        SpacerComponent(
+            listOf(PropertyModel(name = "size", value = "16")),
+            emptyList(),
+            object : Action { override fun execute(navController: NavHostController) {} },
+            ComponentStateManager(),
+        ).getComponent(navController = navHostController).invoke(this)
     }
 }
 
