@@ -5,6 +5,10 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
@@ -64,6 +68,22 @@ data class ElevatedButtonComponent(
 
     companion object {
         const val IDENTIFIER = "elevatedButton"
+    }
+}
+
+@Preview
+@Composable
+fun ElevatedButtonComponentPreview() {
+    val navHostController = NavHostController(LocalContext.current)
+    Column(modifier = Modifier.fillMaxSize()) {
+        ElevatedButtonComponent(
+            listOf(PropertyModel(name = "text", value = "Button")),
+            emptyList(),
+            object : Action {
+                override fun execute(navController: NavHostController) {}
+            },
+            ComponentStateManager(),
+        ).getComponent(navController = navHostController).invoke(this)
     }
 }
 

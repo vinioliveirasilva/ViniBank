@@ -8,6 +8,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -17,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.example.serverdriveui.ui.component.components.createpassword.CreatePasswordViewModel
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.component.components.createpassword.properties.ValidPasswordComponentProperty
 import com.example.serverdriveui.ui.component.components.createpassword.properties.ValidPasswordProperty
@@ -150,6 +155,20 @@ class CreatePasswordComponent(
 
     companion object {
         const val IDENTIFIER = "createPassword"
+    }
+}
+
+@Preview
+@Composable
+fun CreatePasswordComponentPreview() {
+    val navHostController = NavHostController(LocalContext.current)
+    Column(modifier = Modifier.fillMaxSize()) {
+        CreatePasswordComponent(
+            listOf(PropertyModel(name = "isPasswordValid", value = "false")),
+            emptyList(),
+            CreatePasswordViewModel(),
+            ComponentStateManager(),
+        ).getComponent(navController = navHostController).invoke(this)
     }
 }
 
