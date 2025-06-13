@@ -11,8 +11,8 @@ import com.vini.designsystem.compose.loader.LoaderComponent
 import com.vini.designsystem.compose.loader.LoaderComponentViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapConcat
@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 
 class SdUiViewModel2(
     private val model: ScreenModel,
@@ -32,7 +33,8 @@ class SdUiViewModel2(
         componentParser.parse(model.components)
     )
 
-    val navigateOnSuccess: MutableSharedFlow<ScreenModel?> = MutableSharedFlow()
+    private val _navigation: Channel<ScreenModel?> = Channel()
+    val navigateOnSuccess = _navigation.receiveAsFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun initialize() = stateManager.getState<SdUiDestination>(CONTINUE_EFFECT_ID)?.flatMapConcat { destination ->
@@ -48,13 +50,15 @@ class SdUiViewModel2(
             .catch { error ->
                 val errorFeedback =
                     Gson().fromJson<SdUiError>(error.message?.split("Network call failed: 400 ")?.last().orEmpty(), SdUiError::class.java)
+                println("initialize abc")
                 components.value = componentParser.parse(errorFeedback.screen.components)
             }
             .onStart { showLoader() }
             .onCompletion { hideLoader() }
             .map {
+                println("initialize: $it")
                 delay(500)
-                navigateOnSuccess.emit(it)
+                _navigation.send(it)
             }
             .flowOn(Dispatchers.IO)
     }

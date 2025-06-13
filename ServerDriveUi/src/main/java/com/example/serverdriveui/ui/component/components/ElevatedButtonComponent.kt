@@ -1,6 +1,6 @@
 package com.example.serverdriveui.ui.component.components
 
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,7 +47,7 @@ data class ElevatedButtonComponent(
     }
 
     @Composable
-    override fun getComponent(navController: NavHostController): @Composable ColumnScope.() -> Unit =
+    override fun getComponent(navController: NavHostController): @Composable LazyListScope.() -> Unit =
         {
             val isEnabled = getEnabled().collectAsState().value
             ElevatedButton(

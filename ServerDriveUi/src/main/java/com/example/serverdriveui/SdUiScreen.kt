@@ -3,6 +3,9 @@ package com.example.serverdriveui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -12,9 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.ScreenModel
 import com.example.serverdriveui.ui.component.manager.Component
-import com.vini.designsystem.compose.loader.Loader
-import com.vini.designsystem.compose.loader.LoaderState
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -27,22 +27,6 @@ data class SdUiModel(
 )
 
 @Composable
-fun SdUiScreen(
-    model: SdUiModel,
-    navHostController: NavHostController,
-    viewModel: SdUiViewModel = koinViewModel { parametersOf(model) },
-) {
-
-    val scope = rememberCoroutineScope()
-
-    SdUiUI(
-        viewModel.components.collectAsState().value,
-        viewModel.loaderState,
-        navHostController
-    )
-}
-
-@Composable
 fun SdUiScreen2(
     model: ScreenModel,
     navHostController: NavHostController,
@@ -50,10 +34,11 @@ fun SdUiScreen2(
 ) {
 
     val scope = rememberCoroutineScope()
+    val components = viewModel.components.collectAsState().value
 
     SdUiUI(
-        viewModel.components.collectAsState().value,
-        viewModel.loaderState,
+        components,
+        //viewModel.loaderState,
         navHostController
     )
 
@@ -61,11 +46,12 @@ fun SdUiScreen2(
     LaunchedEffect(true) {
         scope.launch {
             viewModel.initialize()?.collect {
-
+                println("iniciou a tela")
             }
         }
         scope.launch {
             viewModel.navigateOnSuccess.collect {
+                println("pegou as infos da tela")
                 it?.run { navHostController.navigate(SdUiDestination2(this)) }
             }
         }
@@ -73,17 +59,47 @@ fun SdUiScreen2(
 }
 
 @Composable
+fun a() {
+    Text("salve")
+}
+
+@Composable
+fun b() {
+    Column {
+        Text("vish")
+    }
+}
+
+@Composable
+fun c() {
+    Column {
+        Text("vish2")
+    }
+}
+
+@Composable
 private fun SdUiUI(
     components: List<Component>,
-    loaderState: StateFlow<LoaderState>,
+    //loaderState: StateFlow<LoaderState>,
     navHostController: NavHostController
 ) {
-    Loader(loaderState)
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-        components.forEach { it.getComponent(navHostController).invoke(this) }
+    Column(Modifier.fillMaxSize()) {
+        //Loader(loaderState)
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Blue)
+                .weight(1f)
+        ) {
+            println("starting lazy")
+            itemsIndexed(components) { _, component ->
+                println(component::class)
+                //component.getComponent(navHostController).invoke(this@LazyColumn)
+            }
+        }
+
+
     }
+
+
 }

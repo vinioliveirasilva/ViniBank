@@ -34,7 +34,7 @@ class AllTrueValidator(
         }
     }
 
-    override fun shutdown() {
+    override fun close() {
         scope.cancel()
     }
 

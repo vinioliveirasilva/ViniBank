@@ -50,7 +50,7 @@ fun Loader(state: StateFlow<LoaderState>, content: @Composable () -> Unit = {}) 
 }
 
 @Composable
-private fun LoaderContent() = Box(
+fun LoaderContent() = Box(
     modifier = Modifier
         .size(76.dp)
         .background(

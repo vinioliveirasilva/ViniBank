@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 class ComponentStateManager(
     val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
-) {
+) : AutoCloseable {
     private val states = mutableMapOf<String, MutableStateFlow<Any?>>()
 
     fun <T> registerState(id: String, data: T) {
@@ -22,5 +22,9 @@ class ComponentStateManager(
 
     fun <T> updateState(id: String, data: T) {
         states[id]?.value = data
+    }
+
+    override fun close() {
+        states.clear()
     }
 }

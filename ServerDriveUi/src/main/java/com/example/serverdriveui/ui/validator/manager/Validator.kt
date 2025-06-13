@@ -1,6 +1,5 @@
 package com.example.serverdriveui.ui.validator.manager
 
-interface Validator {
+interface Validator : AutoCloseable {
     fun initialize()
-    fun shutdown()
 }

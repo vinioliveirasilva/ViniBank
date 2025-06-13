@@ -2,9 +2,9 @@ package com.example.serverdriveui.ui.component.manager
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -68,7 +68,7 @@ class ComponentManager(private val koinScope: Scope) {
 
     private fun unknownComponent() = object : Component {
         @Composable
-        override fun getComponent(navController: NavHostController): @Composable (ColumnScope.() -> Unit) =
+        override fun getComponent(navController: NavHostController): @Composable (LazyListScope.() -> Unit) =
             {
                 Box(
                     modifier = Modifier

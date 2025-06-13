@@ -1,9 +1,8 @@
 package com.example.serverdriveui.ui.component.components
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -34,11 +33,23 @@ class ColumnComponent(
     private val stateManager: ComponentStateManager,
 ) : Component,
     VerticalFillTypeComponentProperty by VerticalFillTypeProperty(dynamicProperties, stateManager),
-    HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(dynamicProperties, stateManager),
+    HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(
+        dynamicProperties,
+        stateManager
+    ),
     VerticalPaddingComponentProperty by VerticalPaddingProperty(dynamicProperties, stateManager),
-    HorizontalPaddingComponentProperty by HorizontalPaddingProperty(dynamicProperties, stateManager),
-    HorizontalAlignmentComponentProperty by HorizontalAlignmentProperty(dynamicProperties, stateManager),
-    VerticalArrangementComponentProperty by VerticalArrangementProperty(dynamicProperties, stateManager),
+    HorizontalPaddingComponentProperty by HorizontalPaddingProperty(
+        dynamicProperties,
+        stateManager
+    ),
+    HorizontalAlignmentComponentProperty by HorizontalAlignmentProperty(
+        dynamicProperties,
+        stateManager
+    ),
+    VerticalArrangementComponentProperty by VerticalArrangementProperty(
+        dynamicProperties,
+        stateManager
+    ),
     WeightComponentModifier by WeightModifier(dynamicProperties, stateManager) {
 
     init {
@@ -46,19 +57,24 @@ class ColumnComponent(
     }
 
     @Composable
-    override fun getComponent(navController: NavHostController): @Composable ColumnScope.() -> Unit =
+    override fun getComponent(navController: NavHostController): @Composable LazyListScope.() -> Unit =
         {
-            Column(
-                verticalArrangement = getVerticalArrangement().asValue(),
-                horizontalAlignment = getHorizontalAlignment().asValue(),
-                modifier = Modifier
-                    .then(Modifier.fillMaxWidth())
-                    .then(Modifier.fillMaxHeight())
-                    .then(horizontalPaddingModifier)
-                    .then(verticalPaddingModifier)
-                    .then(weightModifier)
-            ) {
-                components.forEach { it.getComponent(navController).invoke(this) }
+            val scope = this
+            item {
+                Column(
+                    verticalArrangement = getVerticalArrangement().asValue(),
+                    horizontalAlignment = getHorizontalAlignment().asValue(),
+                    modifier = Modifier
+                        .then(verticalFillTypeModifier)
+                        .then(horizontalFillTypeModifier)
+                        .then(horizontalPaddingModifier)
+                        .then(verticalPaddingModifier)
+                    //.then(this@ColumnComponent.weightModifier)
+                ) {
+                    scope.itemsIndexed(components) { _, component ->
+                        component.getComponent(navController).invoke(scope)
+                    }
+                }
             }
         }
 

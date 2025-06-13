@@ -1,6 +1,6 @@
 package com.example.serverdriveui.ui.component.components.textinput
 
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -57,7 +57,7 @@ data class TextInputComponent(
     @Composable
     override fun getComponent(
         navController: NavHostController
-    ): @Composable ColumnScope.() -> Unit = {
+    ): @Composable LazyListScope.() -> Unit = {
         val text = getText().asValue()
         val isError = getIsError().asValue()
 

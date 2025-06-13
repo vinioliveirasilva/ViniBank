@@ -1,7 +1,7 @@
 package com.example.serverdriveui.ui.component.components
 
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -27,7 +27,7 @@ class SpacerComponent(
     }
 
     @Composable
-    override fun getComponent(navController: NavHostController): @Composable ColumnScope.() -> Unit = {
+    override fun getComponent(navController: NavHostController): @Composable LazyListScope.() -> Unit = {
         Spacer(modifier = Modifier.then(sizeModifier))
     }
 

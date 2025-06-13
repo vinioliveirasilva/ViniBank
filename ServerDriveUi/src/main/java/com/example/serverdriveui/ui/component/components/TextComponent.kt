@@ -1,6 +1,6 @@
 package com.example.serverdriveui.ui.component.components
 
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -42,7 +42,7 @@ data class TextComponent(
     }
 
     @Composable
-    override fun getComponent(navController: NavHostController): @Composable ColumnScope.() -> Unit =
+    override fun getComponent(navController: NavHostController): @Composable LazyListScope.() -> Unit =
         {
             val text = getText().asValue()
             val textAlign = getTextAlign().asValue()

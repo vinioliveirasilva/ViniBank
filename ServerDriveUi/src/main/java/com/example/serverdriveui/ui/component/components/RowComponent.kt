@@ -1,8 +1,8 @@
 package com.example.serverdriveui.ui.component.components
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -45,7 +45,9 @@ class RowComponent(
     }
 
     @Composable
-    override fun getComponent(navController: NavHostController): @Composable ColumnScope.() -> Unit = {
+    override fun getComponent(navController: NavHostController): @Composable LazyListScope.() -> Unit = {
+
+        val scope = this
         Row(
             verticalAlignment = getVerticalAlignment().asValue(),
             horizontalArrangement = getHorizontalArrangement().asValue(),
@@ -54,9 +56,11 @@ class RowComponent(
                 .then(verticalFillTypeModifier)
                 .then(horizontalPaddingModifier)
                 .then(verticalPaddingModifier)
-                .then(weightModifier)
+                //.then(weightModifier)
         ) {
-            components.forEach { Column { it.getComponent(navController).invoke(this) } }
+            itemsIndexed(components) {_, component ->
+                component.getComponent(navController).invoke(scope)
+            }
         }
     }
 

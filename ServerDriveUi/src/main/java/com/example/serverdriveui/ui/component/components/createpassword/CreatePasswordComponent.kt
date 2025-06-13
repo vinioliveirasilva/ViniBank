@@ -1,7 +1,7 @@
 package com.example.serverdriveui.ui.component.components.createpassword
 
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -55,7 +55,7 @@ class CreatePasswordComponent(
     }
 
     @Composable
-    override fun getComponent(navController: NavHostController): @Composable ColumnScope.() -> Unit =
+    override fun getComponent(navController: NavHostController): @Composable LazyListScope.() -> Unit =
         {
             val passwordStated by viewModel.uiState.collectAsStateWithLifecycle()
             val confirmPassFocusRequester = remember { FocusRequester() }

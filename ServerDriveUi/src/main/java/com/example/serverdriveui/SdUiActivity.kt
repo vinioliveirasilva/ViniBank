@@ -18,16 +18,13 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.router.routes.SdUiRouteDataParser
 import com.example.serverdriveui.service.model.ScreenModel
-import com.example.serverdriveui.ui.validator.manager.Validator
 import com.google.gson.Gson
-import com.vini.designsystem.compose.loader.Loader
-import com.vini.designsystem.compose.loader.LoaderState
+import com.vini.designsystem.compose.dialog.NonDismissibleDialog
+import com.vini.designsystem.compose.loader.LoaderContent
 import com.vini.designsystem.compose.theme.ViniBankTheme
 import com.vini.designsystem.compose.view.BaseComposeActivity
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import org.koin.android.ext.android.getKoin
 import org.koin.androidx.compose.scope.KoinActivityScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -63,19 +60,22 @@ class SdUiActivity : BaseComposeActivity() {
                         val scope = rememberCoroutineScope()
 
                         LaunchedEffect(true) {
+                            println("LaunchedEffect")
                             scope.launch {
                                 vm.navigateOnSuccess.collect {
-                                    it?.run {
-                                        navController.navigate(this) {
-                                            popUpTo(LoaderDestination) {
-                                                inclusive = true
-                                            }
+                                    println("navigateSuccess")
+                                    navController.navigate(it) {
+                                        popUpTo(LoaderDestination) {
+                                            saveState = false
+                                            inclusive = true
                                         }
+                                        restoreState = true
                                     }
                                 }
                             }
                         }
 
+                        println("criando navHost")
                         NavHost(
                             navController = navController,
                             startDestination = LoaderDestination
@@ -84,17 +84,13 @@ class SdUiActivity : BaseComposeActivity() {
                                 exitTransition = { ExitTransition.None },
                                 popExitTransition = { ExitTransition.None }
                             ) {
-                                Column(Modifier.fillMaxSize().background(Color.White)) {
-                                    Loader(MutableStateFlow(LoaderState(visible = true)))
-                                }
-                            }
 
-                            composable<SdUiDestination> {
-                                val routeData = it.toRoute<SdUiDestination>()
-                                SdUiScreen(
-                                    model = routeData.toModel(),
-                                    navHostController = navController
-                                )
+                                println("loader")
+                                Column(Modifier
+                                    .fillMaxSize()
+                                    .background(Color.White)) {
+                                    NonDismissibleDialog { LoaderContent() }
+                                }
                             }
 
                             composable<SdUiDestination2>(
@@ -104,6 +100,7 @@ class SdUiActivity : BaseComposeActivity() {
                                 exitTransition = { ExitTransition.None },
                                 popExitTransition = { ExitTransition.None },
                             ) {
+                                println("iniciando composicao")
                                 val routeData = it.toRoute<SdUiDestination2>()
                                 SdUiScreen2(
                                     model = routeData.screenData,
@@ -116,21 +113,6 @@ class SdUiActivity : BaseComposeActivity() {
             }
         }
     }
-
-    private fun SdUiDestination.toModel() = SdUiModel(
-        flowId = flowId,
-        screenId = screenId,
-        screenData = screenData,
-        lastScreenId = lastScreenId
-    )
-
-    override fun onDestroy() {
-        super.onDestroy()
-        getKoin().getAll<Validator>().forEach {
-            it.shutdown()
-        }
-    }
-
 
     inline fun <reified T : Any> serializableType(
         isNullableAllowed: Boolean = false,

@@ -1,8 +1,7 @@
 package com.example.serverdriveui.ui.component.components
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -37,7 +36,7 @@ data class LottieAnimationComponent(
     }
 
     @Composable
-    override fun getComponent(navController: NavHostController): @Composable ColumnScope.() -> Unit =
+    override fun getComponent(navController: NavHostController): @Composable LazyListScope.() -> Unit =
         {
             val composition by rememberLottieComposition(getLottieAnimationSpec().asValue())
 
@@ -68,7 +67,7 @@ data class LottieAnimationComponent(
 @Composable
 fun LottieAnimationComponentPreview() {
     val navHostController = NavHostController(LocalContext.current)
-    Column(modifier = Modifier.fillMaxSize()) {
+    //Column(modifier = Modifier.fillMaxSize()) {
         LottieAnimationComponent(
             listOf(
                 PropertyModel(
@@ -85,6 +84,6 @@ fun LottieAnimationComponentPreview() {
             ComponentStateManager()
         )
             .getComponent(navController = navHostController)
-            .invoke(this)
-    }
+            //.invoke(this)
+    //}
 }
