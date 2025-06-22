@@ -10,6 +10,7 @@ class CreatePasswordViewModel : ViewModel() {
 
     private val _uiState = MutableStateFlow(CreatePasswordState())
     val uiState: StateFlow<CreatePasswordState> = _uiState.asStateFlow()
+
     fun onEvent(event: CreatePasswordEvent) = when (event) {
         is CreatePasswordEvent.DoOnPasswordChange -> updatePassword(event)
         is CreatePasswordEvent.DoOnConfirmPasswordChange -> updateConfirmPassword(event)

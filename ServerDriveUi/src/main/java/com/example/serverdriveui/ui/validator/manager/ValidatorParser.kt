@@ -1,14 +1,19 @@
 package com.example.serverdriveui.ui.validator.manager
 
 import com.example.serverdriveui.service.model.ValidatorModel
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import org.koin.core.parameter.parametersOf
+import org.koin.core.qualifier.named
+import org.koin.core.scope.Scope
 
-class ValidatorParser(private val validationManager: ValidatorManager) {
-    fun parse(model: ValidatorModel?): Validator {
-        return validationManager.getValidator(model)
+class ValidatorParser(private val koinScope: Scope) {
+    fun parse(model: JsonObject): List<Validator> {
+        return (model.getAsJsonArray("validator") ?: return emptyList()).map {
+            Gson().fromJson(it, ValidatorModel::class.java)
+        }.map { validator ->
+            koinScope.getOrNull<Validator>(named(validator.type)) { parametersOf(validator) }
+                ?: throw IllegalArgumentException("Validator not found")
+        }
     }
-
-    //fun parse(actionModel: ActionModel?) : Action {
-    //        if (actionModel == null) return actionManager.getAction("", mapOf())
-    //        return actionManager.getAction(actionModel.type, actionModel.data)
-    //    }
 }

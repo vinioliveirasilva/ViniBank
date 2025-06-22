@@ -1,79 +1,73 @@
 package com.example.serverdriveui.ui.component.components
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
-import com.example.serverdriveui.ui.component.manager.Component
-import com.example.serverdriveui.ui.component.properties.dynamic.HorizontalAlignmentComponentProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.HorizontalAlignmentProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.HorizontalFillTypeComponentProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.HorizontalFillTypeProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.HorizontalPaddingComponentProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.HorizontalPaddingProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.VerticalArrangementComponentProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.VerticalArrangementProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.VerticalFillTypeComponentProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.VerticalFillTypeProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.VerticalPaddingComponentProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.VerticalPaddingProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.WeightComponentModifier
-import com.example.serverdriveui.ui.component.properties.dynamic.WeightModifier
+import com.example.serverdriveui.ui.component.manager.ComponentParser
+import com.example.serverdriveui.ui.component.properties.HorizontalAlignmentComponentProperty
+import com.example.serverdriveui.ui.component.properties.HorizontalAlignmentProperty
+import com.example.serverdriveui.ui.component.properties.HorizontalFillTypeComponentProperty
+import com.example.serverdriveui.ui.component.properties.HorizontalFillTypeProperty
+import com.example.serverdriveui.ui.component.properties.HorizontalPaddingComponentProperty
+import com.example.serverdriveui.ui.component.properties.HorizontalPaddingProperty
+import com.example.serverdriveui.ui.component.properties.VerticalArrangementComponentProperty
+import com.example.serverdriveui.ui.component.properties.VerticalArrangementProperty
+import com.example.serverdriveui.ui.component.properties.VerticalFillTypeComponentProperty
+import com.example.serverdriveui.ui.component.properties.VerticalFillTypeProperty
+import com.example.serverdriveui.ui.component.properties.VerticalPaddingComponentProperty
+import com.example.serverdriveui.ui.component.properties.VerticalPaddingProperty
+import com.example.serverdriveui.ui.component.properties.WeightComponentModifier
+import com.example.serverdriveui.ui.component.properties.WeightModifier
 import com.example.serverdriveui.ui.state.ComponentStateManager
-import com.example.serverdriveui.ui.validator.manager.Validator
+import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.asValue
+import com.google.gson.JsonObject
 
 class ColumnComponent(
-    private val dynamicProperties: List<PropertyModel>,
-    private val components: List<Component>,
-    private val validators: List<Validator>,
+    private val model: JsonObject,
+    private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
-) : Component,
-    VerticalFillTypeComponentProperty by VerticalFillTypeProperty(dynamicProperties, stateManager),
+    private val validatorParser: ValidatorParser,
+    private val componentParser: ComponentParser,
+) : BaseComponent(model, validatorParser),
+    VerticalFillTypeComponentProperty by VerticalFillTypeProperty(properties, stateManager),
     HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(
-        dynamicProperties,
+        properties,
         stateManager
     ),
-    VerticalPaddingComponentProperty by VerticalPaddingProperty(dynamicProperties, stateManager),
+    VerticalPaddingComponentProperty by VerticalPaddingProperty(properties, stateManager),
     HorizontalPaddingComponentProperty by HorizontalPaddingProperty(
-        dynamicProperties,
+        properties,
         stateManager
     ),
     HorizontalAlignmentComponentProperty by HorizontalAlignmentProperty(
-        dynamicProperties,
+        properties,
         stateManager
     ),
     VerticalArrangementComponentProperty by VerticalArrangementProperty(
-        dynamicProperties,
+        properties,
         stateManager
     ),
-    WeightComponentModifier by WeightModifier(dynamicProperties, stateManager) {
-
-    init {
-        validators.forEach { it.initialize() }
-    }
+    WeightComponentModifier by WeightModifier(properties, stateManager) {
 
     @Composable
-    override fun getComponent(navController: NavHostController): @Composable LazyListScope.() -> Unit =
+    override fun getComponent(navController: NavHostController): @Composable ColumnScope.() -> Unit =
         {
-            val scope = this
-            item {
-                Column(
-                    verticalArrangement = getVerticalArrangement().asValue(),
-                    horizontalAlignment = getHorizontalAlignment().asValue(),
-                    modifier = Modifier
-                        .then(verticalFillTypeModifier)
-                        .then(horizontalFillTypeModifier)
-                        .then(horizontalPaddingModifier)
-                        .then(verticalPaddingModifier)
-                    //.then(this@ColumnComponent.weightModifier)
-                ) {
-                    scope.itemsIndexed(components) { _, component ->
-                        component.getComponent(navController).invoke(scope)
-                    }
+            Column(
+                verticalArrangement = getVerticalArrangement().asValue(),
+                horizontalAlignment = getHorizontalAlignment().asValue(),
+                modifier = Modifier
+                    .then(verticalFillTypeModifier)
+                    .then(horizontalFillTypeModifier)
+                    .then(horizontalPaddingModifier)
+                    .then(verticalPaddingModifier)
+                    .then(weightModifier)
+            ) {
+                componentParser.parse(model).forEach {
+                    it.getComponent(navController).invoke(this)
                 }
             }
         }

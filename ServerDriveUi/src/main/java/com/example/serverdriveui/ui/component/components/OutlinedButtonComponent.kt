@@ -1,6 +1,6 @@
 package com.example.serverdriveui.ui.component.components
 
-import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -8,46 +8,49 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
-import com.example.serverdriveui.ui.actions.manager.Action
-import com.example.serverdriveui.ui.component.manager.Component
-import com.example.serverdriveui.ui.component.properties.dynamic.EnabledComponentProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.EnabledProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.HorizontalFillTypeComponentProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.HorizontalFillTypeProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.HorizontalPaddingComponentProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.HorizontalPaddingProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.TextComponentProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.TextProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.VerticalFillTypeComponentProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.VerticalFillTypeProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.VerticalPaddingComponentProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.VerticalPaddingProperty
+import com.example.serverdriveui.ui.action.manager.ActionParser
+import com.example.serverdriveui.ui.component.properties.EnabledComponentProperty
+import com.example.serverdriveui.ui.component.properties.EnabledProperty
+import com.example.serverdriveui.ui.component.properties.HorizontalFillTypeComponentProperty
+import com.example.serverdriveui.ui.component.properties.HorizontalFillTypeProperty
+import com.example.serverdriveui.ui.component.properties.HorizontalPaddingComponentProperty
+import com.example.serverdriveui.ui.component.properties.HorizontalPaddingProperty
+import com.example.serverdriveui.ui.component.properties.TextComponentProperty
+import com.example.serverdriveui.ui.component.properties.TextProperty
+import com.example.serverdriveui.ui.component.properties.VerticalFillTypeComponentProperty
+import com.example.serverdriveui.ui.component.properties.VerticalFillTypeProperty
+import com.example.serverdriveui.ui.component.properties.VerticalPaddingComponentProperty
+import com.example.serverdriveui.ui.component.properties.VerticalPaddingProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
-import com.example.serverdriveui.ui.validator.manager.Validator
+import com.example.serverdriveui.ui.validator.manager.ValidatorParser
+import com.google.gson.JsonObject
 
 /**
  * A component that renders an [OutlinedButton]. This behaves the same as [ButtonComponent]
  * but uses an outlined style button from Material3.
  */
 data class OutlinedButtonComponent(
-    private val dynamicProperties: List<PropertyModel>,
-    private val validators: List<Validator>,
-    private val action: Action,
+    private val model: JsonObject,
+    private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
-) : Component,
-    TextComponentProperty by TextProperty(dynamicProperties, stateManager),
-    VerticalFillTypeComponentProperty by VerticalFillTypeProperty(dynamicProperties, stateManager),
-    HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(dynamicProperties, stateManager),
-    VerticalPaddingComponentProperty by VerticalPaddingProperty(dynamicProperties, stateManager),
-    HorizontalPaddingComponentProperty by HorizontalPaddingProperty(dynamicProperties, stateManager),
-    EnabledComponentProperty by EnabledProperty(dynamicProperties, stateManager) {
-
-    init {
-        validators.forEach { it.initialize() }
-    }
+    private val validatorParser: ValidatorParser,
+    private val actionParser: ActionParser,
+) : BaseComponent(model, validatorParser),
+    TextComponentProperty by TextProperty(properties, stateManager),
+    VerticalFillTypeComponentProperty by VerticalFillTypeProperty(properties, stateManager),
+    HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(
+        properties,
+        stateManager
+    ),
+    VerticalPaddingComponentProperty by VerticalPaddingProperty(properties, stateManager),
+    HorizontalPaddingComponentProperty by HorizontalPaddingProperty(
+        properties,
+        stateManager
+    ),
+    EnabledComponentProperty by EnabledProperty(properties, stateManager) {
 
     @Composable
-    override fun getComponent(navController: NavHostController): @Composable LazyListScope.() -> Unit =
+    override fun getComponent(navController: NavHostController): @Composable ColumnScope.() -> Unit =
         {
             val isEnabled = getEnabled().collectAsState().value
             OutlinedButton(
@@ -57,7 +60,7 @@ data class OutlinedButtonComponent(
                     .then(verticalFillTypeModifier)
                     .then(horizontalPaddingModifier)
                     .then(verticalPaddingModifier),
-                onClick = { action.execute(navController) },
+                onClick = { actionParser.parse(model).execute(navController) },
                 content = { Text(getText().collectAsState().value) }
             )
         }

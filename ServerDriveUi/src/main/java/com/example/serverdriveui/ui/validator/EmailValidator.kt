@@ -15,7 +15,7 @@ class EmailValidator(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Main),
 ) : Validator {
 
-    val states: MutableMap<String, Boolean> = mutableMapOf()
+    private val states: MutableMap<String, Boolean> = mutableMapOf()
 
     init {
         componentStateManager.registerState<Boolean>(model.id, false)

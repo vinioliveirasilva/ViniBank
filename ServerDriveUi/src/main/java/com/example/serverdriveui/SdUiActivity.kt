@@ -16,7 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.example.router.routes.SdUiRouteDataParser
+import com.example.router.routes.SdUiRouteData.SdUiRouteDataParser
 import com.example.serverdriveui.service.model.ScreenModel
 import com.google.gson.Gson
 import com.vini.designsystem.compose.dialog.NonDismissibleDialog
@@ -31,24 +31,23 @@ import org.koin.core.parameter.parametersOf
 import kotlin.reflect.typeOf
 
 @Serializable
-data object LoaderDestination
+data object LoaderRoute
 
 @Serializable
-data class SdUiDestination(
-    val flowId: String,
-    val screenId: String = "",
-    val screenData: String = "{}",
-    val lastScreenId: String = "",
-)
-
-@Serializable
-data class SdUiDestination2(
-    val screenData: ScreenModel
+data class SdUiRoute(
+    val screenData: String
 )
 
 class SdUiActivity : BaseComposeActivity() {
 
-    private val vm: SdUiActivityViewModel by viewModel { parametersOf(SdUiRouteDataParser(intent).flowId) }
+    private val vm: SdUiActivityViewModel by viewModel {
+        with(SdUiRouteDataParser(intent)) {
+            parametersOf(
+                flowId,
+                screenData
+            )
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,50 +59,42 @@ class SdUiActivity : BaseComposeActivity() {
                         val scope = rememberCoroutineScope()
 
                         LaunchedEffect(true) {
-                            println("LaunchedEffect")
                             scope.launch {
                                 vm.navigateOnSuccess.collect {
-                                    println("navigateSuccess")
                                     navController.navigate(it) {
-                                        popUpTo(LoaderDestination) {
-                                            saveState = false
-                                            inclusive = true
-                                        }
-                                        restoreState = true
+                                        popUpTo(LoaderRoute) { inclusive = true }
                                     }
                                 }
                             }
                         }
 
-                        println("criando navHost")
                         NavHost(
                             navController = navController,
-                            startDestination = LoaderDestination
+                            startDestination = LoaderRoute
                         ) {
-                            composable<LoaderDestination>(
+                            composable<LoaderRoute>(
                                 exitTransition = { ExitTransition.None },
                                 popExitTransition = { ExitTransition.None }
                             ) {
-
-                                println("loader")
-                                Column(Modifier
-                                    .fillMaxSize()
-                                    .background(Color.White)) {
+                                Column(
+                                    Modifier
+                                        .fillMaxSize()
+                                        .background(Color.White)
+                                ) {
                                     NonDismissibleDialog { LoaderContent() }
                                 }
                             }
 
-                            composable<SdUiDestination2>(
+                            composable<SdUiRoute>(
                                 typeMap = mapOf(typeOf<ScreenModel>() to serializableType<ScreenModel>()),
                                 enterTransition = { EnterTransition.None },
                                 popEnterTransition = { EnterTransition.None },
                                 exitTransition = { ExitTransition.None },
                                 popExitTransition = { ExitTransition.None },
                             ) {
-                                println("iniciando composicao")
-                                val routeData = it.toRoute<SdUiDestination2>()
-                                SdUiScreen2(
-                                    model = routeData.screenData,
+                                val routeData = it.toRoute<SdUiRoute>()
+                                SdUiScreen(
+                                    jsonModel = routeData.screenData,
                                     navHostController = navController
                                 )
                             }

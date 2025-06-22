@@ -4,21 +4,20 @@ import com.example.serverdriveui.GlobalStateManager
 import com.example.serverdriveui.SdUiActivity
 import com.example.serverdriveui.SdUiActivityViewModel
 import com.example.serverdriveui.SdUiRepository
-import com.example.serverdriveui.SdUiViewModel2
+import com.example.serverdriveui.SdUiViewModel
 import com.example.serverdriveui.service.SdUiService
 import com.example.serverdriveui.service.model.PropertyModel
-import com.example.serverdriveui.service.model.ScreenModel
 import com.example.serverdriveui.service.model.ValidatorModel
-import com.example.serverdriveui.ui.actions.BackAction
-import com.example.serverdriveui.ui.actions.BusinessSuccessAction
-import com.example.serverdriveui.ui.actions.CloseAction
-import com.example.serverdriveui.ui.actions.ContinueAction
-import com.example.serverdriveui.ui.actions.manager.Action
-import com.example.serverdriveui.ui.actions.manager.ActionManager
-import com.example.serverdriveui.ui.actions.manager.ActionParser
+import com.example.serverdriveui.ui.action.actions.BackAction
+import com.example.serverdriveui.ui.action.actions.BusinessSuccessAction
+import com.example.serverdriveui.ui.action.actions.CloseAction
+import com.example.serverdriveui.ui.action.actions.ContinueAction
+import com.example.serverdriveui.ui.action.manager.Action
+import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.components.ButtonComponent
 import com.example.serverdriveui.ui.component.components.ColumnComponent
 import com.example.serverdriveui.ui.component.components.ElevatedButtonComponent
+import com.example.serverdriveui.ui.component.components.LazyColumnComponent
 import com.example.serverdriveui.ui.component.components.LottieAnimationComponent
 import com.example.serverdriveui.ui.component.components.OutlinedButtonComponent
 import com.example.serverdriveui.ui.component.components.RowComponent
@@ -30,177 +29,250 @@ import com.example.serverdriveui.ui.component.components.createpassword.CreatePa
 import com.example.serverdriveui.ui.component.components.textinput.OutlinedTextInputComponent
 import com.example.serverdriveui.ui.component.components.textinput.TextInputComponent
 import com.example.serverdriveui.ui.component.manager.Component
-import com.example.serverdriveui.ui.component.manager.ComponentManager
 import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.AllTrueValidator
 import com.example.serverdriveui.ui.validator.EmailValidator
 import com.example.serverdriveui.ui.validator.MinLengthValidator
 import com.example.serverdriveui.ui.validator.manager.Validator
-import com.example.serverdriveui.ui.validator.manager.ValidatorManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
+import com.google.gson.JsonObject
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 
+val ServerDriveUiComponents = module {
+    factory<Component>(
+        named(TopAppBarComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        TopAppBarComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = get(),
+            validatorParser = get(),
+            componentParser = get()
+        )
+    }
+
+    factory<Component>(
+        named(SpacerComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        SpacerComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = get(),
+            validatorParser = get()
+        )
+    }
+
+    factory<Component>(
+        named(TextComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        TextComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = get(),
+            validatorParser = get()
+        )
+    }
+
+    factory<Component>(
+        named(OutlinedTextInputComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        OutlinedTextInputComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = get(),
+            validatorParser = get()
+        )
+    }
+
+    factory<Component>(
+        named(ColumnComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ColumnComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = get(),
+            validatorParser = get(),
+            componentParser = get()
+        )
+    }
+
+    factory<Component>(
+        named(RowComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        RowComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = get(),
+            validatorParser = get(),
+            componentParser = get()
+        )
+    }
+
+    factory<Component>(
+        named(LazyColumnComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        LazyColumnComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = get(),
+            validatorParser = get(),
+            componentParser = get()
+        )
+    }
+
+    factory<Component>(
+        named(ButtonComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ButtonComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = get(),
+            validatorParser = get(),
+            actionParser = get()
+        )
+    }
+
+    factory<Component>(
+        named(OutlinedButtonComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        OutlinedButtonComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = get(),
+            validatorParser = get(),
+            actionParser = get()
+        )
+    }
+
+    factory<Component>(
+        named(ElevatedButtonComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ElevatedButtonComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = get(),
+            validatorParser = get(),
+            actionParser = get()
+        )
+    }
+
+    factory<Component>(
+        named(LottieAnimationComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        LottieAnimationComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = get(),
+            validatorParser = get(),
+            actionParser = get()
+        )
+    }
+
+    factory<Component>(
+        named(TextInputComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        TextInputComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = get(),
+            validatorParser = get(),
+        )
+    }
+
+    factory<Component>(
+        named(CreatePasswordComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        CreatePasswordComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = get(),
+            validatorParser = get(),
+            viewModel = get()
+        )
+    }
+
+    viewModelOf(::CreatePasswordViewModel)
+}
+
 val ServerDriveUiModule = module {
+
     single<GlobalStateManager> { GlobalStateManager() }
     single<ComponentStateManager> { ComponentStateManager() }
 
+    //Parsers
+    factory<ComponentParser> { ComponentParser(koinScope = this) }
+    factory<ActionParser> { ActionParser(koinScope = this) }
+    factory<ValidatorParser> { ValidatorParser(koinScope = this) }
+
+    //Validators
+    factory<Validator>(named(MinLengthValidator.IDENTIFIER)) { (model: ValidatorModel) ->
+        MinLengthValidator(
+            model = model,
+            componentStateManager = get()
+        )
+    }
+    factory<Validator>(named(AllTrueValidator.IDENTIFIER)) { (model: ValidatorModel) ->
+        AllTrueValidator(
+            model = model,
+            componentStateManager = get()
+        )
+    }
+    factory<Validator>(named(EmailValidator.IDENTIFIER)) { (model: ValidatorModel) ->
+        EmailValidator(
+            model = model,
+            componentStateManager = get()
+        )
+    }
+
+    //Actions
+    factory<Action>(named(CloseAction.IDENTIFIER)) { (data: Map<String, String>) ->
+        CloseAction(
+            data = data
+        )
+    }
+    factory<Action>(named(ContinueAction.IDENTIFIER)) { (data: Map<String, String>) ->
+        ContinueAction(
+            data = data,
+            stateManager = get(),
+            globalStateManager = get()
+        )
+    }
+    factory<Action>(named(BackAction.IDENTIFIER)) { (data: Map<String, String>) ->
+        BackAction(
+            data = data
+        )
+    }
+    factory<Action>(named(BusinessSuccessAction.IDENTIFIER)) { (data: Map<String, String>) ->
+        BusinessSuccessAction(
+            data = data
+        )
+    }
+
     scope<SdUiActivity> {
         scoped<SdUiService> { get<Retrofit>().create(SdUiService::class.java) }
-        //factory<SdUiService> { SdUiMockService() }
-        factory<SdUiRepository> { SdUiRepository(sdUiService = get(), componentParser = get()) }
-
-        //Parsers
-        factory<ComponentParser> {
-            ComponentParser(
-                componentManager = get(),
-                actionParser = get(),
-                validatorParser = get()
-            )
-        }
-        factory<ActionParser> { ActionParser(actionManager = get()) }
-        factory<ValidatorParser> { ValidatorParser(validationManager = get()) }
-
-        //Managers
-        factory<ComponentManager> { ComponentManager(koinScope = this) } //Corrigir o scope
-        factory<ActionManager> { ActionManager(koinScope = this) }
-        factory<ValidatorManager> { ValidatorManager(koinScope = this) }
-
-        //Components
-        factory<TextComponent> { (dynamicProperties: List<PropertyModel>, action: Action, validators: List<Validator>) ->
-            TextComponent(
-                dynamicProperties,
-                validators,
-                action,
-                get()
-            )
-        }
-        factory<TopAppBarComponent> { (dynamicProperties: List<PropertyModel>, action: Action, validators: List<Validator>) ->
-            TopAppBarComponent(
-                dynamicProperties,
-                validators,
-                action,
-                get()
-            )
-        }
-        factory<TextInputComponent> { (dynamicProperties: List<PropertyModel>, action: Action, validators: List<Validator>) ->
-            TextInputComponent(
-                dynamicProperties,
-                validators,
-                action,
-                get()
-            )
-        }
-        factory<OutlinedTextInputComponent> { (dynamicProperties: List<PropertyModel>, action: Action, validators: List<Validator>) ->
-            OutlinedTextInputComponent(
-                dynamicProperties,
-                validators,
-                action,
-                get()
-            )
-        }
-        factory<SpacerComponent> { (dynamicProperties: List<PropertyModel>, action: Action, validators: List<Validator>) ->
-            SpacerComponent(
-                dynamicProperties,
-                validators,
-                action,
-                get()
-            )
-        }
-        factory<RowComponent> { (dynamicProperties: List<PropertyModel>, innerComponents: List<Component>, validators: List<Validator>) ->
-            RowComponent(
-                dynamicProperties,
-                innerComponents,
-                validators,
-                get()
-            )
-        }
-        factory<ColumnComponent> { (dynamicProperties: List<PropertyModel>, innerComponents: List<Component>, validators: List<Validator>) ->
-            ColumnComponent(
-                dynamicProperties,
-                innerComponents,
-                validators,
-                get()
-            )
-        }
-        factory<ButtonComponent> { (dynamicProperties: List<PropertyModel>, action: Action, validators: List<Validator>) ->
-            ButtonComponent(
-                dynamicProperties,
-                validators,
-                action,
-                get()
-            )
-        }
-        factory<ElevatedButtonComponent> { (dynamicProperties: List<PropertyModel>, action: Action, validators: List<Validator>) ->
-            ElevatedButtonComponent(
-                dynamicProperties,
-                validators,
-                action,
-                get()
-            )
-        }
-        factory<OutlinedButtonComponent> { (dynamicProperties: List<PropertyModel>, action: Action, validators: List<Validator>) ->
-            OutlinedButtonComponent(
-                dynamicProperties,
-                validators,
-                action,
-                get()
-            )
-        }
-        factory<LottieAnimationComponent> { (dynamicProperties: List<PropertyModel>, action: Action, validators: List<Validator>) ->
-            LottieAnimationComponent(
-                dynamicProperties,
-                validators,
-                action,
-                get()
-            )
-        }
-        factory<CreatePasswordComponent> { (dynamicProperties: List<PropertyModel>, action: Action, validators: List<Validator>) ->
-            CreatePasswordComponent(
-                dynamicProperties,
-                validators,
-                get(),
-                get()
-            )
-        }
-        viewModelOf(::CreatePasswordViewModel)
-
-        //Actions
-        factory<CloseAction> { (data: Map<String, String>) -> CloseAction(data) }
-        factory<ContinueAction> { (data: Map<String, String>) ->
-            ContinueAction(
-                data,
-                get(),
-                get()
-            )
-        }
-        factory<BackAction> { (data: Map<String, String>) -> BackAction(data) }
-        factory<BusinessSuccessAction> { (data: Map<String, String>) -> BusinessSuccessAction(data) }
-
-        //Validators
-        factory<MinLengthValidator> { (model: ValidatorModel) -> MinLengthValidator(model, get()) }
-        factory<AllTrueValidator> { (model: ValidatorModel) -> AllTrueValidator(model, get()) }
-        factory<EmailValidator> { (model: ValidatorModel) -> EmailValidator(model, get()) }
+        factory<SdUiRepository> { SdUiRepository(sdUiService = get()) }
 
         //UI
-        viewModel { (flowId: String) ->
+        viewModel { (flowId: String, screenData: String) ->
             SdUiActivityViewModel(
                 flowId = flowId,
+                screenData = screenData,
                 repository = get(),
-                validators = getAll(),
                 globalStateManager = get(),
-                componentStateManager = get(),
             )
         }
-        viewModel { (screenModel: ScreenModel) ->
-            SdUiViewModel2(
-                model = screenModel,
+        viewModel { (jsonModel: String) ->
+            SdUiViewModel(
+                jsonModel = jsonModel,
                 repository = get(),
-                get(),
-                get()
+                componentParser = get(),
+                globalStateManager = get(),
+                componentStateManager = get()
             )
         }
     }

@@ -6,14 +6,14 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ComponentModel(
-    @SerializedName("dynamicProperty")
-    val dynamicProperty: List<PropertyModel> = emptyList(),
     @SerializedName("type")
     val type: String,
+    @SerializedName("properties")
+    val properties: List<PropertyModel> = emptyList(),
     @SerializedName("components")
     val components: List<ComponentModel> = emptyList(),
     @SerializedName("action")
-    val action: ActionModel? = null,
+    val actions: ActionModel? = null,
     @SerializedName("validator")
     val validators: List<ValidatorModel> = emptyList()
 )
