@@ -44,7 +44,7 @@ class CreatePasswordComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val viewModel: CreatePasswordViewModel,
-) : BaseComponent(model, validatorParser),
+) : BaseComponent(model, validatorParser, stateManager),
     ValidPasswordComponentProperty by ValidPasswordProperty(properties, stateManager),
     TextComponentProperty by TextProperty(properties, stateManager),
     VerticalFillTypeComponentProperty by VerticalFillTypeProperty(properties, stateManager),

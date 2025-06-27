@@ -38,7 +38,7 @@ data class TextInputComponent(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser
-) : BaseComponent(model, validatorParser),
+) : BaseComponent(model, validatorParser, stateManager),
     TextComponentProperty by TextProperty(properties, stateManager),
     VerticalFillTypeComponentProperty by VerticalFillTypeProperty(properties, stateManager),
     HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(properties, stateManager),

@@ -1,4 +1,4 @@
-package com.example.serverdriveui.ui.validator
+package com.example.serverdriveui.ui.validator.validators
 
 import android.util.Patterns
 import com.example.serverdriveui.service.model.ValidatorModel

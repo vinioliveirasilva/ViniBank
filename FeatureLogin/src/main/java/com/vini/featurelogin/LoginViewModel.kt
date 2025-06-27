@@ -26,7 +26,7 @@ class LoginViewModel(
     private val _vmEvent = Channel<LoginVMEvent>()
     val vmEvent = _vmEvent.receiveAsFlow()
 
-    private val _uiState = MutableStateFlow(LoginState())
+    private val _uiState = MutableStateFlow(LoginState(email = "123@123.com", pass = "123@123A"))
     val uiState: StateFlow<LoginState> = _uiState.asStateFlow()
 
     private fun doLogin(email: String, pass: String) {

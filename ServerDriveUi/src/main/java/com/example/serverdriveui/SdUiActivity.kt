@@ -7,28 +7,26 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavType
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.router.routes.SdUiRouteData.SdUiRouteDataParser
-import com.example.serverdriveui.service.model.ScreenModel
-import com.google.gson.Gson
 import com.vini.designsystem.compose.dialog.NonDismissibleDialog
 import com.vini.designsystem.compose.loader.LoaderContent
 import com.vini.designsystem.compose.theme.ViniBankTheme
 import com.vini.designsystem.compose.view.BaseComposeActivity
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
-import org.koin.androidx.compose.scope.KoinActivityScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.parameter.parametersOf
-import kotlin.reflect.typeOf
 
 @Serializable
 data object LoaderRoute
@@ -49,62 +47,56 @@ class SdUiActivity : BaseComposeActivity() {
         }
     }
 
+    @OptIn(KoinExperimentalAPI::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        with(SdUiRouteDataParser(intent)) {
-            setContent {
-                KoinActivityScope {
-                    ViniBankTheme {
-                        val navController = rememberNavController()
-                        val scope = rememberCoroutineScope()
+        setContent {
+            println("iniciou o content")
+            ViniBankTheme {
+                println("iniciou o tema")
+                val navController = rememberNavController()
+                val scope = rememberCoroutineScope()
 
-                        LaunchedEffect(true) {
-                            scope.launch {
-                                vm.navigateOnSuccess.collect {
-                                    navController.navigate(it) {
-                                        popUpTo(LoaderRoute) { inclusive = true }
-                                    }
-                                }
-                            }
-                        }
 
-                        NavHost(
-                            navController = navController,
-                            startDestination = LoaderRoute
+                LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
+                    vm.navigateOnSuccess.map {
+                        navController.navigate(it) { popUpTo(LoaderRoute) { inclusive = true } }
+                    }.launchIn(scope)
+                }
+
+                NavHost(
+                    navController = navController,
+                    startDestination = LoaderRoute,
+                    enterTransition = { EnterTransition.None },
+                    popEnterTransition = { EnterTransition.None },
+                    exitTransition = { ExitTransition.None },
+                    popExitTransition = { ExitTransition.None }
+                ) {
+                    composable<LoaderRoute> {
+                        Column(
+                            Modifier
+                                .fillMaxSize()
+                                .background(Color.White)
                         ) {
-                            composable<LoaderRoute>(
-                                exitTransition = { ExitTransition.None },
-                                popExitTransition = { ExitTransition.None }
-                            ) {
-                                Column(
-                                    Modifier
-                                        .fillMaxSize()
-                                        .background(Color.White)
-                                ) {
-                                    NonDismissibleDialog { LoaderContent() }
-                                }
-                            }
-
-                            composable<SdUiRoute>(
-                                typeMap = mapOf(typeOf<ScreenModel>() to serializableType<ScreenModel>()),
-                                enterTransition = { EnterTransition.None },
-                                popEnterTransition = { EnterTransition.None },
-                                exitTransition = { ExitTransition.None },
-                                popExitTransition = { ExitTransition.None },
-                            ) {
-                                val routeData = it.toRoute<SdUiRoute>()
-                                SdUiScreen(
-                                    jsonModel = routeData.screenData,
-                                    navHostController = navController
-                                )
-                            }
+                            NonDismissibleDialog { LoaderContent() }
                         }
+                    }
+
+                    composable<SdUiRoute>//(typeMap = mapOf(typeOf<ScreenModel>() to serializableType<ScreenModel>()))
+                        {
+                        println("iniciou o component")
+                        val routeData = it.toRoute<SdUiRoute>()
+                        SdUiScreen(
+                            jsonModel = routeData.screenData,
+                            navHostController = navController
+                        )
                     }
                 }
             }
         }
     }
 
+    /*
     inline fun <reified T : Any> serializableType(
         isNullableAllowed: Boolean = false,
         json: Gson = Gson(),
@@ -120,4 +112,6 @@ class SdUiActivity : BaseComposeActivity() {
             bundle.putString(key, json.toJson(value))
         }
     }
+
+     */
 }

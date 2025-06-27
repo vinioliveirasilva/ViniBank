@@ -3,8 +3,7 @@ package com.vini.bank.di
 import com.example.auth.AuthModule
 import com.example.network.NetworkModule
 import com.example.router.RouterModule
-import com.example.serverdriveui.di.ServerDriveUiComponents
-import com.example.serverdriveui.di.ServerDriveUiModule
+import com.example.serverdriveui.di.ServerDriverUiModules
 import com.vini.common.CommonModule
 import com.vini.featurehome.HomeModule
 import com.vini.featurelogin.LoginModule
@@ -16,8 +15,7 @@ val FeatureModules = module {
         LoginModule,
         LauncherModule,
         HomeModule,
-        ServerDriveUiModule,
-        ServerDriveUiComponents,
+        ServerDriverUiModules,
     )
 }
 

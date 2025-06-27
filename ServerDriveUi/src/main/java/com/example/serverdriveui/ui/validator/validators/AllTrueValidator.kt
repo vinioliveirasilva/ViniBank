@@ -1,4 +1,4 @@
-package com.example.serverdriveui.ui.validator
+package com.example.serverdriveui.ui.validator.validators
 
 import com.example.serverdriveui.service.model.ValidatorModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
@@ -8,17 +8,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
-class MinLengthValidator(
+class AllTrueValidator(
     private val model: ValidatorModel,
     private val componentStateManager: ComponentStateManager,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Main),
 ) : Validator {
 
     val states: MutableMap<String, Boolean> = mutableMapOf()
-    val minLength: Int = model.data["length"]?.toIntOrNull() ?: 0
 
     init {
-        componentStateManager.registerState<Boolean>(model.id, false)
+        componentStateManager.registerState(model.id, false)
         model.required.forEach {
             states[it] = false
         }
@@ -27,8 +26,8 @@ class MinLengthValidator(
     override fun initialize() {
         model.required.forEach { reqId ->
             scope.launch {
-                componentStateManager.getState<String>(reqId)?.collect { result ->
-                    states[reqId] = result.length >= minLength
+                componentStateManager.getState<Boolean>(reqId)?.collect { result ->
+                    states[reqId] = result
                     validate()
                 }
             }
@@ -47,6 +46,6 @@ class MinLengthValidator(
     }
 
     companion object {
-        const val IDENTIFIER = "minLength"
+        const val IDENTIFIER = "allTrue"
     }
 }

@@ -5,7 +5,7 @@ import android.os.Bundle
 import com.example.router.Route
 import com.example.router.RouteData
 
-class SdUiRoute(override val data: SdUiRouteData? = null) : Route(data) {
+class SdUiRoute(override val data: SdUiRouteData) : Route(data) {
     override val id = "SdUi.SdUiActivity"
 }
 

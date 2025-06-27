@@ -1,7 +1,6 @@
 package com.example.serverdriveui.di
 
 import com.example.serverdriveui.GlobalStateManager
-import com.example.serverdriveui.SdUiActivity
 import com.example.serverdriveui.SdUiActivityViewModel
 import com.example.serverdriveui.SdUiRepository
 import com.example.serverdriveui.SdUiViewModel
@@ -24,21 +23,28 @@ import com.example.serverdriveui.ui.component.components.RowComponent
 import com.example.serverdriveui.ui.component.components.SpacerComponent
 import com.example.serverdriveui.ui.component.components.TextComponent
 import com.example.serverdriveui.ui.component.components.TopAppBarComponent
+import com.example.serverdriveui.ui.component.components.bottomnavigation.BottomNavigationComponent
+import com.example.serverdriveui.ui.component.components.bottomnavigation.NavigationBarItemComponent
 import com.example.serverdriveui.ui.component.components.createpassword.CreatePasswordComponent
 import com.example.serverdriveui.ui.component.components.createpassword.CreatePasswordViewModel
+import com.example.serverdriveui.ui.component.components.icon.IconComponent
+import com.example.serverdriveui.ui.component.components.sdui.SdUiComponent
+import com.example.serverdriveui.ui.component.components.sdui.SdUiComponentViewModel
 import com.example.serverdriveui.ui.component.components.textinput.OutlinedTextInputComponent
 import com.example.serverdriveui.ui.component.components.textinput.TextInputComponent
 import com.example.serverdriveui.ui.component.manager.Component
 import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.state.ComponentStateManager
-import com.example.serverdriveui.ui.validator.AllTrueValidator
-import com.example.serverdriveui.ui.validator.EmailValidator
-import com.example.serverdriveui.ui.validator.MinLengthValidator
 import com.example.serverdriveui.ui.validator.manager.Validator
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
+import com.example.serverdriveui.ui.validator.validators.AllTrueValidator
+import com.example.serverdriveui.ui.validator.validators.EmailValidator
+import com.example.serverdriveui.ui.validator.validators.IntToStringValidator
+import com.example.serverdriveui.ui.validator.validators.MinLengthValidator
 import com.google.gson.JsonObject
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -46,11 +52,11 @@ import retrofit2.Retrofit
 val ServerDriveUiComponents = module {
     factory<Component>(
         named(TopAppBarComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
         TopAppBarComponent(
             model = jsonComponent,
             properties = properties,
-            stateManager = get(),
+            stateManager = componentStateManager,
             validatorParser = get(),
             componentParser = get()
         )
@@ -58,44 +64,44 @@ val ServerDriveUiComponents = module {
 
     factory<Component>(
         named(SpacerComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
         SpacerComponent(
             model = jsonComponent,
             properties = properties,
-            stateManager = get(),
+            stateManager = componentStateManager,
             validatorParser = get()
         )
     }
 
     factory<Component>(
         named(TextComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
         TextComponent(
             model = jsonComponent,
             properties = properties,
-            stateManager = get(),
+            stateManager = componentStateManager,
             validatorParser = get()
         )
     }
 
     factory<Component>(
         named(OutlinedTextInputComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
         OutlinedTextInputComponent(
             model = jsonComponent,
             properties = properties,
-            stateManager = get(),
+            stateManager = componentStateManager,
             validatorParser = get()
         )
     }
 
     factory<Component>(
         named(ColumnComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
         ColumnComponent(
             model = jsonComponent,
             properties = properties,
-            stateManager = get(),
+            stateManager = componentStateManager,
             validatorParser = get(),
             componentParser = get()
         )
@@ -103,11 +109,11 @@ val ServerDriveUiComponents = module {
 
     factory<Component>(
         named(RowComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
         RowComponent(
             model = jsonComponent,
             properties = properties,
-            stateManager = get(),
+            stateManager = componentStateManager,
             validatorParser = get(),
             componentParser = get()
         )
@@ -115,11 +121,11 @@ val ServerDriveUiComponents = module {
 
     factory<Component>(
         named(LazyColumnComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
         LazyColumnComponent(
             model = jsonComponent,
             properties = properties,
-            stateManager = get(),
+            stateManager = componentStateManager,
             validatorParser = get(),
             componentParser = get()
         )
@@ -127,11 +133,11 @@ val ServerDriveUiComponents = module {
 
     factory<Component>(
         named(ButtonComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
         ButtonComponent(
             model = jsonComponent,
             properties = properties,
-            stateManager = get(),
+            stateManager = componentStateManager,
             validatorParser = get(),
             actionParser = get()
         )
@@ -139,11 +145,11 @@ val ServerDriveUiComponents = module {
 
     factory<Component>(
         named(OutlinedButtonComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
         OutlinedButtonComponent(
             model = jsonComponent,
             properties = properties,
-            stateManager = get(),
+            stateManager = componentStateManager,
             validatorParser = get(),
             actionParser = get()
         )
@@ -151,11 +157,11 @@ val ServerDriveUiComponents = module {
 
     factory<Component>(
         named(ElevatedButtonComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
         ElevatedButtonComponent(
             model = jsonComponent,
             properties = properties,
-            stateManager = get(),
+            stateManager = componentStateManager,
             validatorParser = get(),
             actionParser = get()
         )
@@ -163,11 +169,11 @@ val ServerDriveUiComponents = module {
 
     factory<Component>(
         named(LottieAnimationComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
         LottieAnimationComponent(
             model = jsonComponent,
             properties = properties,
-            stateManager = get(),
+            stateManager = componentStateManager,
             validatorParser = get(),
             actionParser = get()
         )
@@ -175,105 +181,178 @@ val ServerDriveUiComponents = module {
 
     factory<Component>(
         named(TextInputComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
         TextInputComponent(
             model = jsonComponent,
             properties = properties,
-            stateManager = get(),
+            stateManager = componentStateManager,
             validatorParser = get(),
         )
     }
 
     factory<Component>(
         named(CreatePasswordComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
         CreatePasswordComponent(
             model = jsonComponent,
             properties = properties,
-            stateManager = get(),
+            stateManager = componentStateManager,
             validatorParser = get(),
             viewModel = get()
         )
     }
 
     viewModelOf(::CreatePasswordViewModel)
+
+
+    factory<Component>(
+        named(SdUiComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
+        val internalStateManager: ComponentStateManager = get()
+        SdUiComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = componentStateManager,
+            validatorParser = get(),
+            viewModel = get { parametersOf(internalStateManager) }
+        )
+    }
+
+    viewModel { (componentStateManager: ComponentStateManager) ->
+        SdUiComponentViewModel(
+            repository = get(),
+            componentParser = get(),
+            componentStateManager = componentStateManager
+        )
+    }
+
+    factory<Component>(
+        named(BottomNavigationComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
+        BottomNavigationComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = componentStateManager,
+            validatorParser = get(),
+            componentParser = get(),
+        )
+    }
+
+    factory<Component>(
+        named(NavigationBarItemComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
+        NavigationBarItemComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = componentStateManager,
+            validatorParser = get(),
+            componentParser = get(),
+        )
+    }
+
+    factory<Component>(
+        named(IconComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
+        IconComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = componentStateManager,
+            validatorParser = get(),
+        )
+    }
 }
 
 val ServerDriveUiModule = module {
 
     single<GlobalStateManager> { GlobalStateManager() }
-    single<ComponentStateManager> { ComponentStateManager() }
+    factory<ComponentStateManager> { ComponentStateManager() }
 
     //Parsers
     factory<ComponentParser> { ComponentParser(koinScope = this) }
     factory<ActionParser> { ActionParser(koinScope = this) }
     factory<ValidatorParser> { ValidatorParser(koinScope = this) }
 
-    //Validators
-    factory<Validator>(named(MinLengthValidator.IDENTIFIER)) { (model: ValidatorModel) ->
-        MinLengthValidator(
-            model = model,
-            componentStateManager = get()
-        )
-    }
-    factory<Validator>(named(AllTrueValidator.IDENTIFIER)) { (model: ValidatorModel) ->
-        AllTrueValidator(
-            model = model,
-            componentStateManager = get()
-        )
-    }
-    factory<Validator>(named(EmailValidator.IDENTIFIER)) { (model: ValidatorModel) ->
-        EmailValidator(
-            model = model,
-            componentStateManager = get()
+    single<SdUiRepository> { SdUiRepository(sdUiService = get()) }
+    single<SdUiService> { get<Retrofit>().create(SdUiService::class.java) }
+
+    //UI
+    viewModel { (flowId: String, screenData: String) ->
+        SdUiActivityViewModel(
+            flowId = flowId,
+            screenData = screenData,
+            repository = get(),
+            globalStateManager = get(),
         )
     }
 
-    //Actions
-    factory<Action>(named(CloseAction.IDENTIFIER)) { (data: Map<String, String>) ->
+    viewModel { (jsonModel: String) ->
+        SdUiViewModel(
+            jsonModel = jsonModel,
+            repository = get(),
+            componentParser = get(),
+            globalStateManager = get(),
+            componentStateManager = get()
+        )
+    }
+}
+
+val ServerDriveUiValidators = module {
+    factory<Validator>(named(MinLengthValidator.IDENTIFIER)) { (model: ValidatorModel, componentStateManager: ComponentStateManager) ->
+        MinLengthValidator(
+            model = model,
+            componentStateManager = componentStateManager
+        )
+    }
+    factory<Validator>(named(AllTrueValidator.IDENTIFIER)) { (model: ValidatorModel, componentStateManager: ComponentStateManager) ->
+        AllTrueValidator(
+            model = model,
+            componentStateManager = componentStateManager
+        )
+    }
+    factory<Validator>(named(EmailValidator.IDENTIFIER)) { (model: ValidatorModel, componentStateManager: ComponentStateManager) ->
+        EmailValidator(
+            model = model,
+            componentStateManager = componentStateManager
+        )
+    }
+    factory<Validator>(named(IntToStringValidator.IDENTIFIER)) { (model: ValidatorModel, componentStateManager: ComponentStateManager) ->
+        IntToStringValidator(
+            model = model,
+            componentStateManager = componentStateManager
+        )
+    }
+}
+
+val ServerDriveUiActions = module {
+    factory<Action>(named(CloseAction.IDENTIFIER)) { (data: Map<String, String>, _: ComponentStateManager) ->
         CloseAction(
             data = data
         )
     }
-    factory<Action>(named(ContinueAction.IDENTIFIER)) { (data: Map<String, String>) ->
+    factory<Action>(named(ContinueAction.IDENTIFIER)) { (data: Map<String, String>, componentStateManager: ComponentStateManager) ->
         ContinueAction(
             data = data,
-            stateManager = get(),
+            stateManager = componentStateManager,
             globalStateManager = get()
         )
     }
-    factory<Action>(named(BackAction.IDENTIFIER)) { (data: Map<String, String>) ->
+    factory<Action>(named(BackAction.IDENTIFIER)) { (data: Map<String, String>, _: ComponentStateManager) ->
         BackAction(
             data = data
         )
     }
-    factory<Action>(named(BusinessSuccessAction.IDENTIFIER)) { (data: Map<String, String>) ->
+    factory<Action>(named(BusinessSuccessAction.IDENTIFIER)) { (data: Map<String, String>, _: ComponentStateManager) ->
         BusinessSuccessAction(
             data = data
         )
     }
+}
 
-    scope<SdUiActivity> {
-        scoped<SdUiService> { get<Retrofit>().create(SdUiService::class.java) }
-        factory<SdUiRepository> { SdUiRepository(sdUiService = get()) }
-
-        //UI
-        viewModel { (flowId: String, screenData: String) ->
-            SdUiActivityViewModel(
-                flowId = flowId,
-                screenData = screenData,
-                repository = get(),
-                globalStateManager = get(),
-            )
-        }
-        viewModel { (jsonModel: String) ->
-            SdUiViewModel(
-                jsonModel = jsonModel,
-                repository = get(),
-                componentParser = get(),
-                globalStateManager = get(),
-                componentStateManager = get()
-            )
-        }
-    }
+val ServerDriverUiModules = module {
+    includes(
+        ServerDriveUiModule,
+        ServerDriveUiComponents,
+        ServerDriveUiValidators,
+        ServerDriveUiActions,
+    )
 }

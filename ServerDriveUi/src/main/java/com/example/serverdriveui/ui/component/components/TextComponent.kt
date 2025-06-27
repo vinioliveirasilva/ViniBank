@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
-import com.example.serverdriveui.ui.component.manager.Component
 import com.example.serverdriveui.ui.component.properties.HorizontalFillTypeComponentProperty
 import com.example.serverdriveui.ui.component.properties.HorizontalFillTypeProperty
 import com.example.serverdriveui.ui.component.properties.HorizontalPaddingComponentProperty
@@ -29,7 +28,7 @@ data class TextComponent(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser
-) : BaseComponent(model, validatorParser),
+) : BaseComponent(model, validatorParser, stateManager),
     TextComponentProperty by TextProperty(properties, stateManager),
     VerticalFillTypeComponentProperty by VerticalFillTypeProperty(properties, stateManager),
     HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(properties, stateManager),

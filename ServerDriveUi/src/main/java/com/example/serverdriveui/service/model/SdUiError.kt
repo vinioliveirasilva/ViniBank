@@ -1,6 +1,5 @@
 package com.example.serverdriveui.service.model
 
-import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 
 data class SdUiError(
@@ -9,5 +8,5 @@ data class SdUiError(
     @SerializedName("code")
     val code: Int,
     @SerializedName("screen")
-    val screen: JsonObject,
+    val screen: String,
 )

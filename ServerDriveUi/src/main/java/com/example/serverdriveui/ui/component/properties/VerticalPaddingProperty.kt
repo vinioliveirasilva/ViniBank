@@ -7,41 +7,22 @@ import androidx.compose.ui.unit.dp
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.asValue
-import com.vini.common.runWhen
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
 
 data class VerticalPaddingProperty(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager
-) : BasePropertyData(properties, "paddingVertical"), VerticalPaddingComponentProperty {
-
-    private val parsedValue = propertyValue?.toInt() ?: 0
-    private lateinit var stateFlow: MutableStateFlow<Int>
-
-    init {
-        propertyId.runWhen(
-            isNull = { stateFlow = MutableStateFlow<Int>(parsedValue) },
-            notNull = { stateManager.registerState<Int>(it, parsedValue) }
-        )
-    }
-
+) : VerticalPaddingComponentProperty,
+    BasePropertyData<Int>(
+        stateManager = stateManager,
+        properties = properties,
+        propertyName = "paddingVertical",
+        propertyValueTransformation = { it.toInt() },
+        defaultPropertyValue = 0
+    ) {
     override val verticalPaddingModifier: Modifier
         @Composable
-        get() = Modifier.padding(vertical = getVerticalPadding().asValue().dp)
+        get() = Modifier.padding(vertical = getValue().asValue().dp)
 
-    override fun getVerticalPadding(): StateFlow<Int> {
-        return propertyId.runWhen(
-            isNull = { stateFlow },
-            notNull = { stateManager.getState<Int>(it) ?: stateFlow }
-        )
-    }
-
-    override fun setVerticalPadding(padding: Int) {
-        propertyId.runWhen(
-            isNull = { stateFlow.update { padding } },
-            notNull = { stateManager.updateState<Int>(it, padding) }
-        )
-    }
+    override fun getVerticalPadding() = getValue()
+    override fun setVerticalPadding(padding: Int) = setValue(padding)
 }

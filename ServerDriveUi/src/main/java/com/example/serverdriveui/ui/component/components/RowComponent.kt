@@ -33,7 +33,7 @@ class RowComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
-) : BaseComponent(model, validatorParser),
+) : BaseComponent(model, validatorParser, stateManager),
     VerticalFillTypeComponentProperty by VerticalFillTypeProperty(properties, stateManager),
     HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(properties, stateManager),
     VerticalPaddingComponentProperty by VerticalPaddingProperty(properties, stateManager),
@@ -55,7 +55,7 @@ class RowComponent(
                 .then(weightModifier)
         ) {
             Column {
-                componentParser.parse(model).forEach {
+                componentParser.parse(data = model, componentStateManager = stateManager).forEach {
                     it.getComponent(navController).invoke(this)
                 }
             }

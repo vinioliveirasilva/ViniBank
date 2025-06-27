@@ -23,7 +23,7 @@ data class TopAppBarComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
-) : BaseComponent(model, validatorParser),
+) : BaseComponent(model, validatorParser, stateManager),
     HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(properties, stateManager) {
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -34,17 +34,28 @@ data class TopAppBarComponent(
                 modifier = Modifier
                     .then(horizontalFillTypeModifier),
                 title = {
-                    componentParser.parse(model).forEach {
+                    componentParser.parse(
+                        data = model,
+                        componentStateManager = stateManager
+                    ).forEach {
                         it.getComponent(navController).invoke(this)
                     }
                 },
                 navigationIcon = {
-                    componentParser.parse(model, "navigationIcons").forEach {
+                    componentParser.parse(
+                        data = model,
+                        componentTag = "navigationIcons",
+                        componentStateManager = stateManager
+                    ).forEach {
                         it.getComponent(navController).invoke(this)
                     }
                 },
                 actions = {
-                    componentParser.parse(model, "actionIcons").forEach {
+                    componentParser.parse(
+                        data = model,
+                        componentTag = "actionIcons",
+                        componentStateManager = stateManager
+                    ).forEach {
                         Column {
                             it.getComponent(navController).invoke(this)
                         }
@@ -62,52 +73,42 @@ data class TopAppBarComponent(
 @Composable
 fun TopAppBarComponentPreview() {
     val jsonModel = """
-        {
+            "type": "topAppBar",
+            "properties": [
+            ],
             "components": [
                 {
-                    "type": "topAppBar",
+                    "type": "text",
                     "properties": [
                         {
                             "name": "text",
                             "value": "Salve"
                         }
-                    ],
-                    "components": [
+                    ]
+                }
+            ],
+            "navigationIcons": [
+                {
+                    "type": "button",
+                    "properties": [
                         {
-                            "type": "text",
-                            "properties": [
-                                {
-                                    "name": "text",
-                                    "value": "Salve"
-                                }
-                            ]
+                            "name": "text",
+                            "value": "Salve"
                         }
-                    ],
-                    "navigationIcons": [
+                    ]
+                }
+            ],
+            "actionIcons": [
+                {
+                    "type": "button",
+                    "properties": [
                         {
-                            "type": "button",
-                            "properties": [
-                                {
-                                    "name": "text",
-                                    "value": "Salve"
-                                }
-                            ]
-                        }
-                    ],
-                    "actionIcons": [
-                        {
-                            "type": "button",
-                            "properties": [
-                                {
-                                    "name": "text",
-                                    "value": "Salve"
-                                }
-                            ]
+                            "name": "text",
+                            "value": "Salve"
                         }
                     ]
                 }
             ]
-        }
     """
 
     SdUiComponentPreview(jsonModel)

@@ -31,7 +31,7 @@ class LazyColumnComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
-) : BaseComponent(model, validatorParser),
+) : BaseComponent(model, validatorParser, stateManager),
     HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(
         properties,
         stateManager
@@ -63,7 +63,7 @@ class LazyColumnComponent(
                     .then(verticalPaddingModifier)
                     .then(weightModifier)
             ) {
-                componentParser.parse(model).forEach {
+                componentParser.parse(data = model, componentStateManager = stateManager).forEach {
                     item {
                         Column {
                             it.getComponent(navController).invoke(this)

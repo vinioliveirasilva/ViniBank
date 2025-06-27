@@ -9,8 +9,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.ui.component.manager.Component
 import com.vini.designsystem.compose.loader.Loader
@@ -42,9 +40,13 @@ fun SdUiScreen(
         navHostController
     )
 
+    /*
+
     LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
 
     }
+
+     */
 
     LaunchedEffect(true) {
         scope.launch {
@@ -59,13 +61,14 @@ fun SdUiScreen(
 }
 
 @Composable
-private fun SdUiUI(
+fun SdUiUI(
     components: List<Component>,
     loaderState: StateFlow<LoaderState>,
     navHostController: NavHostController
 ) {
-    Loader(loaderState)
+    println("recomposicao")
     Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
+        Loader(loaderState)
         components.forEach { it.getComponent(navHostController).invoke(this@Column) }
     }
 }

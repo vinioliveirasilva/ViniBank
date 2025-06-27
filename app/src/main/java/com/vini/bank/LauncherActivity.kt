@@ -15,8 +15,9 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.router.FeatureRouter
-import com.example.router.routes.HomeRoute
 import com.example.router.routes.LoginRoute
+import com.example.router.routes.SdUiRoute
+import com.example.router.routes.SdUiRouteData
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
@@ -45,7 +46,9 @@ class LauncherActivity : BaseComposeActivity() {
         observe(viewModel.event, ::handleEvent)
 
         setContent {
-            Row(modifier = Modifier.fillMaxSize().background(Color.White)) {
+            Row(modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)) {
                 val composition by rememberLottieComposition(
                     LottieCompositionSpec.RawRes(
                         com.vini.designsystem.R.raw.lottie_launcher
@@ -90,7 +93,7 @@ class LauncherActivity : BaseComposeActivity() {
     }
 
     private fun handleEvent(event: LauncherUIEvent) = when (event) {
-        is LauncherUIEvent.OpenHome -> featureRouter.navigateAndFinish(HomeRoute())
+        is LauncherUIEvent.OpenHome -> featureRouter.navigateAndFinish(SdUiRoute(SdUiRouteData.StartAsDefault(flowId = "Home")))
         is LauncherUIEvent.OpenLogin -> featureRouter.navigate(LoginRoute(), loginLauncher)
         is LauncherUIEvent.Finish -> finish()
     }

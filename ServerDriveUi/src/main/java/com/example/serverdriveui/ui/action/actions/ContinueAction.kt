@@ -35,7 +35,10 @@ class ContinueAction(
                 stateManager.getState<String>(requestData.key)?.value.orEmpty()
             )
         }
-        globalStateManager.updateState(CONTINUE_EFFECT_ID, SdUiDestinationModel(flowId, nextScreenId, screenData.toString(), currentScreenId))
+        globalStateManager.updateState(
+            CONTINUE_EFFECT_ID,
+            SdUiDestinationModel(flowId, nextScreenId, screenData.toString(), currentScreenId)
+        )
     }
 
     companion object {

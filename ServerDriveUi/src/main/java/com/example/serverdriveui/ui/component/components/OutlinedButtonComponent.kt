@@ -35,7 +35,7 @@ data class OutlinedButtonComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, validatorParser),
+) : BaseComponent(model, validatorParser, stateManager),
     TextComponentProperty by TextProperty(properties, stateManager),
     VerticalFillTypeComponentProperty by VerticalFillTypeProperty(properties, stateManager),
     HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(
@@ -60,7 +60,12 @@ data class OutlinedButtonComponent(
                     .then(verticalFillTypeModifier)
                     .then(horizontalPaddingModifier)
                     .then(verticalPaddingModifier),
-                onClick = { actionParser.parse(model).execute(navController) },
+                onClick = {
+                    actionParser.parse(
+                        componentJsonModel = model,
+                        componentStateManager = stateManager
+                    ).execute(navController)
+                },
                 content = { Text(getText().collectAsState().value) }
             )
         }

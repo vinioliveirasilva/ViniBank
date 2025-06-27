@@ -17,7 +17,7 @@ class SpacerComponent(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser
-) : BaseComponent(model, validatorParser),
+) : BaseComponent(model, validatorParser, stateManager),
     SizeComponentModifier by SizeModifier(properties, stateManager) {
 
     @Composable

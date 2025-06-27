@@ -2,9 +2,7 @@ package com.example.serverdriveui.service.model
 
 
 import com.google.gson.annotations.SerializedName
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class PropertyModel(
     @SerializedName("name")
     val name: String,
@@ -12,4 +10,8 @@ data class PropertyModel(
     val value: String,
     @SerializedName("id")
     val id: String = "",
-)
+) {
+    override fun toString(): String {
+        return """{"name": $name , "value": "$value", "id": "$id"}"""
+    }
+}
