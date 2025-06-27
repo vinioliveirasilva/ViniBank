@@ -11,11 +11,13 @@ import com.example.serverdriveui.ui.action.actions.BackAction
 import com.example.serverdriveui.ui.action.actions.BusinessSuccessAction
 import com.example.serverdriveui.ui.action.actions.CloseAction
 import com.example.serverdriveui.ui.action.actions.ContinueAction
+import com.example.serverdriveui.ui.action.actions.NavigateAction
 import com.example.serverdriveui.ui.action.manager.Action
 import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.components.ButtonComponent
 import com.example.serverdriveui.ui.component.components.ColumnComponent
 import com.example.serverdriveui.ui.component.components.ElevatedButtonComponent
+import com.example.serverdriveui.ui.component.components.IconButtonComponent
 import com.example.serverdriveui.ui.component.components.LazyColumnComponent
 import com.example.serverdriveui.ui.component.components.LottieAnimationComponent
 import com.example.serverdriveui.ui.component.components.OutlinedButtonComponent
@@ -260,6 +262,19 @@ val ServerDriveUiComponents = module {
             validatorParser = get(),
         )
     }
+
+    factory<Component>(
+        named(IconButtonComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
+        IconButtonComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = componentStateManager,
+            validatorParser = get(),
+            componentParser = get(),
+            actionParser = get(),
+        )
+    }
 }
 
 val ServerDriveUiModule = module {
@@ -344,6 +359,13 @@ val ServerDriveUiActions = module {
     factory<Action>(named(BusinessSuccessAction.IDENTIFIER)) { (data: Map<String, String>, _: ComponentStateManager) ->
         BusinessSuccessAction(
             data = data
+        )
+    }
+    factory<Action>(named(NavigateAction.IDENTIFIER)) { (data: Map<String, String>, componentStateManager: ComponentStateManager) ->
+        NavigateAction(
+            data = data,
+            stateManager = componentStateManager,
+            featureRouter = get()
         )
     }
 }

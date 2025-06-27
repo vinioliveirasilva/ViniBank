@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
 
 class SdUiActivityViewModel(
     private val flowId: String,
@@ -25,22 +24,18 @@ class SdUiActivityViewModel(
     init {
         addCloseable(globalStateManager)
 
-        viewModelScope.launch {
-            globalStateManager.registerState(CONTINUE_EFFECT_ID)
-        }
+        globalStateManager.registerState(CONTINUE_EFFECT_ID)
 
-        viewModelScope.launch {
-            repository
-                .getScreen(
-                    SdUiModel(
-                        flowId = flowId,
-                        screenData = screenData,
-                    )
+        repository
+            .getScreen(
+                SdUiModel(
+                    flowId = flowId,
+                    screenData = screenData,
                 )
-                .catch { emit(it.message.orEmpty()) }
-                .map { _successNavigation.send(SdUiRoute(screenData = it)) }
-                .flowOn(Dispatchers.IO)
-                .launchIn(viewModelScope)
-        }
+            )
+            .catch { emit(it.message.orEmpty()) }
+            .map { _successNavigation.send(SdUiRoute(screenData = it)) }
+            .flowOn(Dispatchers.IO)
+            .launchIn(viewModelScope)
     }
 }

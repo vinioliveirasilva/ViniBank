@@ -12,15 +12,17 @@ import com.google.gson.JsonObject
 import com.vini.designsystem.compose.loader.LoaderComponent
 import com.vini.designsystem.compose.loader.LoaderComponentViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class SdUiComponentViewModel(
     private val repository: SdUiRepository,
@@ -30,28 +32,35 @@ class SdUiComponentViewModel(
 
     val components: MutableStateFlow<List<Component>> = MutableStateFlow(emptyList())
 
-    fun initialize(flowId: String, screenId: String, screenData: String) {
-        viewModelScope.launch {
-            repository
-                .getScreen(
-                    SdUiModel(
-                        flowId = flowId,
-                        screenId = screenId,
-                        screenData = screenData,
-                    )
+    init {
+        addCloseable(componentStateManager)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun initialize(flowId: Flow<String>, screenId: Flow<String>, screenData: String) {
+        //TODO cancel repository call if screenId or flowId changes
+        combineTransform(flowId, screenId) { flow, screen ->
+            repository.getScreen(
+                SdUiModel(
+                    flowId = flow,
+                    screenId = screen,
+                    screenData = screenData,
                 )
+            )
                 .catch { emit(it.message.orEmpty()) }
-                .map { response ->
-                    val components1 = componentParser.parse(
+                .onStart { showLoader() }
+                .onCompletion { hideLoader() }
+                .collect { emit(it) }
+        }
+            .map { response ->
+                components.update {
+                    componentParser.parse(
                         data = Gson().fromJson(response, JsonObject::class.java),
                         componentStateManager = componentStateManager
                     )
-                    components.update { components1 }
                 }
-                .onStart { showLoader() }
-                .onCompletion { hideLoader() }
-                .flowOn(Dispatchers.IO)
-                .launchIn(viewModelScope)
-        }
+            }
+            .flowOn(Dispatchers.IO)
+            .launchIn(viewModelScope)
     }
 }

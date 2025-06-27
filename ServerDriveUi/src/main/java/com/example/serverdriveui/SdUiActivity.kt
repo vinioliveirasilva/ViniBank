@@ -51,9 +51,7 @@ class SdUiActivity : BaseComposeActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            println("iniciou o content")
             ViniBankTheme {
-                println("iniciou o tema")
                 val navController = rememberNavController()
                 val scope = rememberCoroutineScope()
 
@@ -84,7 +82,6 @@ class SdUiActivity : BaseComposeActivity() {
 
                     composable<SdUiRoute>//(typeMap = mapOf(typeOf<ScreenModel>() to serializableType<ScreenModel>()))
                         {
-                        println("iniciou o component")
                         val routeData = it.toRoute<SdUiRoute>()
                         SdUiScreen(
                             jsonModel = routeData.screenData,

@@ -66,7 +66,6 @@ fun SdUiUI(
     loaderState: StateFlow<LoaderState>,
     navHostController: NavHostController
 ) {
-    println("recomposicao")
     Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
         Loader(loaderState)
         components.forEach { it.getComponent(navHostController).invoke(this@Column) }
