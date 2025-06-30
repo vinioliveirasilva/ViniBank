@@ -1,6 +1,5 @@
 package com.example.serverdriveui.ui.component.components.textinput
 
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -12,20 +11,12 @@ import com.example.serverdriveui.ui.component.properties.ErrorComponentProperty
 import com.example.serverdriveui.ui.component.properties.ErrorMessageComponentProperty
 import com.example.serverdriveui.ui.component.properties.ErrorMessageProperty
 import com.example.serverdriveui.ui.component.properties.ErrorProperty
-import com.example.serverdriveui.ui.component.properties.HorizontalFillTypeComponentProperty
-import com.example.serverdriveui.ui.component.properties.HorizontalFillTypeProperty
-import com.example.serverdriveui.ui.component.properties.HorizontalPaddingComponentProperty
-import com.example.serverdriveui.ui.component.properties.HorizontalPaddingProperty
 import com.example.serverdriveui.ui.component.properties.KeyboardOptionsComponentProperty
 import com.example.serverdriveui.ui.component.properties.KeyboardOptionsProperty
 import com.example.serverdriveui.ui.component.properties.LabelComponentProperty
 import com.example.serverdriveui.ui.component.properties.LabelProperty
 import com.example.serverdriveui.ui.component.properties.TextComponentProperty
 import com.example.serverdriveui.ui.component.properties.TextProperty
-import com.example.serverdriveui.ui.component.properties.VerticalFillTypeComponentProperty
-import com.example.serverdriveui.ui.component.properties.VerticalFillTypeProperty
-import com.example.serverdriveui.ui.component.properties.VerticalPaddingComponentProperty
-import com.example.serverdriveui.ui.component.properties.VerticalPaddingProperty
 import com.example.serverdriveui.ui.component.properties.VisualTransformationComponentProperty
 import com.example.serverdriveui.ui.component.properties.VisualTransformationProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
@@ -38,12 +29,8 @@ data class TextInputComponent(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser
-) : BaseComponent(model, validatorParser, stateManager),
+) : BaseComponent(model, properties, stateManager, validatorParser),
     TextComponentProperty by TextProperty(properties, stateManager),
-    VerticalFillTypeComponentProperty by VerticalFillTypeProperty(properties, stateManager),
-    HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(properties, stateManager),
-    VerticalPaddingComponentProperty by VerticalPaddingProperty(properties, stateManager),
-    HorizontalPaddingComponentProperty by HorizontalPaddingProperty(properties, stateManager),
     LabelComponentProperty by LabelProperty(properties, stateManager),
     VisualTransformationComponentProperty by VisualTransformationProperty(properties, stateManager),
     KeyboardOptionsComponentProperty by KeyboardOptionsProperty(properties, stateManager),
@@ -51,9 +38,10 @@ data class TextInputComponent(
     ErrorMessageComponentProperty by ErrorMessageProperty(properties, stateManager) {
 
     @Composable
-    override fun getComponent(
-        navController: NavHostController
-    ): @Composable ColumnScope.() -> Unit = {
+    override fun getInternalComponent(
+        navController: NavHostController,
+        modifier: Modifier,
+    ): @Composable () -> Unit = {
         val text = getText().asValue()
         val isError = getIsError().asValue()
 
@@ -69,11 +57,7 @@ data class TextInputComponent(
                 setIsError(false)
                 setText(it)
             },
-            modifier = Modifier
-                .then(horizontalFillTypeModifier)
-                .then(verticalFillTypeModifier)
-                .then(horizontalPaddingModifier)
-                .then(verticalPaddingModifier)
+            modifier = modifier
         )
     }
 

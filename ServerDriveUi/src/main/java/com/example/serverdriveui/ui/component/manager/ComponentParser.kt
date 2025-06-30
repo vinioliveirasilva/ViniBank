@@ -2,7 +2,6 @@ package com.example.serverdriveui.ui.component.manager
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
@@ -46,18 +45,21 @@ class ComponentParser(
     }
 
     private fun unknownComponent() = object : Component {
+        override val internalModifier: Modifier
+            @Composable
+            get() = Modifier
+
         @Composable
-        override fun getComponent(navController: NavHostController): @Composable (ColumnScope.() -> Unit) =
-            {
-                Box(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .background(Color.Red)
-                        .padding(5.dp)
-                        .background(Color.White)
-                ) {
-                    Text("Componente desconhecido")
-                }
+        override fun getComponent(navController: NavHostController): @Composable (() -> Unit) = {
+            Box(
+                modifier = Modifier
+                    .size(100.dp)
+                    .background(Color.Red)
+                    .padding(5.dp)
+                    .background(Color.White)
+            ) {
+                Text("Componente desconhecido")
             }
+        }
     }
 }

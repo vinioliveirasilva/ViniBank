@@ -1,7 +1,5 @@
 package com.example.serverdriveui.ui.component.components
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -11,8 +9,6 @@ import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
-import com.example.serverdriveui.ui.component.properties.HorizontalFillTypeComponentProperty
-import com.example.serverdriveui.ui.component.properties.HorizontalFillTypeProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.google.gson.JsonObject
@@ -23,46 +19,45 @@ data class TopAppBarComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
-) : BaseComponent(model, validatorParser, stateManager),
-    HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(properties, stateManager) {
+) : BaseComponent(model, properties, stateManager, validatorParser) {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    override fun getComponent(navController: NavHostController): @Composable ColumnScope.() -> Unit =
-        {
-            CenterAlignedTopAppBar(
-                modifier = Modifier
-                    .then(horizontalFillTypeModifier),
-                title = {
-                    componentParser.parse(
-                        data = model,
-                        componentStateManager = stateManager
-                    ).forEach {
-                        it.getComponent(navController).invoke(this)
-                    }
-                },
-                navigationIcon = {
-                    componentParser.parse(
-                        data = model,
-                        componentTag = "navigationIcons",
-                        componentStateManager = stateManager
-                    ).forEach {
-                        it.getComponent(navController).invoke(this)
-                    }
-                },
-                actions = {
-                    componentParser.parse(
-                        data = model,
-                        componentTag = "actionIcons",
-                        componentStateManager = stateManager
-                    ).forEach {
-                        Column {
-                            it.getComponent(navController).invoke(this)
-                        }
-                    }
+    override fun getInternalComponent(
+        navController: NavHostController,
+        modifier: Modifier,
+    ): @Composable () -> Unit = {
+        CenterAlignedTopAppBar(
+            modifier = Modifier
+                .then(horizontalFillTypeModifier),
+            title = {
+                componentParser.parse(
+                    data = model,
+                    componentStateManager = stateManager
+                ).forEach {
+                    it.getComponent(navController).invoke()
                 }
-            )
-        }
+            },
+            navigationIcon = {
+                componentParser.parse(
+                    data = model,
+                    componentTag = "navigationIcons",
+                    componentStateManager = stateManager
+                ).forEach {
+                    it.getComponent(navController).invoke()
+                }
+            },
+            actions = {
+                componentParser.parse(
+                    data = model,
+                    componentTag = "actionIcons",
+                    componentStateManager = stateManager
+                ).forEach {
+                    it.getComponentAsRow(navController).invoke(this)
+                }
+            }
+        )
+    }
 
     companion object {
         const val IDENTIFIER = "topAppBar"

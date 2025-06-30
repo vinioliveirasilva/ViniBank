@@ -1,8 +1,6 @@
-package com.example.serverdriveui.ui.component.components.bottomnavigation
+package com.example.serverdriveui.ui.component.components.navigationbar
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -11,8 +9,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.component.components.BaseComponent
-import com.example.serverdriveui.ui.component.components.bottomnavigation.properties.BottomNavigationDestinationComponent
-import com.example.serverdriveui.ui.component.components.bottomnavigation.properties.BottomNavigationDestinationProperty
+import com.example.serverdriveui.ui.component.components.navigationbar.properties.NavigationDestinationComponent
+import com.example.serverdriveui.ui.component.components.navigationbar.properties.NavigationDestinationProperty
 import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
 import com.example.serverdriveui.ui.state.ComponentStateManager
@@ -20,42 +18,41 @@ import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.google.gson.JsonObject
 import org.json.JSONObject
 
-class BottomNavigationComponent(
+class NavigationBarComponent(
     private val model: JsonObject,
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
-) : BaseComponent(model, validatorParser, stateManager),
-    BottomNavigationDestinationComponent by BottomNavigationDestinationProperty(
+) : BaseComponent(model, properties, stateManager, validatorParser),
+    NavigationDestinationComponent by NavigationDestinationProperty(
         properties,
         stateManager
     ) {
     @Composable
-    override fun getComponent(navController: NavHostController): @Composable (ColumnScope.() -> Unit) =
+    override fun getInternalComponent(
+        navController: NavHostController,
+        modifier: Modifier
+    ): @Composable (() -> Unit) =
         {
             val destinations = componentParser.parse(model, componentStateManager = stateManager)
             val selectedDestination = getSelectedDestination().collectAsState().value
 
-            BackHandler(
-                enabled = selectedDestination != FIRST_DESTINATION_INDEX
-            ) {
+            BackHandler(enabled = selectedDestination != FIRST_DESTINATION_INDEX) {
                 setSelectedDestination(FIRST_DESTINATION_INDEX)
             }
 
             BottomAppBar(
                 content = {
                     destinations.forEach {
-                        Column(Modifier.weight(1f)) {
-                            it.getComponent(navController).invoke(this)
-                        }
+                        it.getComponentAsRow(navController).invoke(this)
                     }
                 }
             )
         }
 
     companion object {
-        const val IDENTIFIER = "bottomNavigation"
+        const val IDENTIFIER = "navigationBar"
         private const val FIRST_DESTINATION_INDEX = 0
     }
 }
@@ -65,7 +62,7 @@ class BottomNavigationComponent(
 fun BottomNavigationComponentPreview() {
     val bottomNavigation = JSONObject(
         mapOf(
-            "type" to "bottomNavigation",
+            "type" to "navigationBar",
             "properties" to listOf(
                 mapOf(
                     "name" to "selectedDestination",
@@ -78,6 +75,7 @@ fun BottomNavigationComponentPreview() {
                     "type" to "navigationBarItem",
                     "properties" to listOf(
                         mapOf("name" to "index", "value" to "0"),
+                        mapOf("name" to "weight", "value" to "1"),
                         mapOf(
                             "name" to "selectedDestination",
                             "value" to "0",
@@ -113,6 +111,7 @@ fun BottomNavigationComponentPreview() {
                     "type" to "navigationBarItem",
                     "properties" to listOf(
                         mapOf("name" to "index", "value" to "1"),
+                        mapOf("name" to "weight", "value" to "1"),
                         mapOf(
                             "name" to "selectedDestination",
                             "value" to "1",
@@ -148,6 +147,7 @@ fun BottomNavigationComponentPreview() {
                     "type" to "navigationBarItem",
                     "properties" to listOf(
                         mapOf("name" to "index", "value" to "2"),
+                        mapOf("name" to "weight", "value" to "1"),
                         mapOf(
                             "name" to "selectedDestination",
                             "value" to "2",
@@ -191,7 +191,11 @@ fun BottomNavigationComponentPreview() {
                 mapOf(
                     "type" to "text",
                     "properties" to listOf(
-                        mapOf("name" to "text", "value" to "Home", "id" to "bottomNavigation.selectedDestinationTitle")
+                        mapOf(
+                            "name" to "text",
+                            "value" to "Home",
+                            "id" to "bottomNavigation.selectedDestinationTitle"
+                        )
                     )
                 )
             )
@@ -209,7 +213,11 @@ fun BottomNavigationComponentPreview() {
                 mapOf(
                     "type" to "text",
                     "properties" to listOf(
-                        mapOf("name" to "text", "value" to "Salve", "id" to "bottomNavigation.selectedDestinationString")
+                        mapOf(
+                            "name" to "text",
+                            "value" to "Salve",
+                            "id" to "bottomNavigation.selectedDestinationString"
+                        )
                     )
                 )
             ),

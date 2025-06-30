@@ -1,54 +1,41 @@
-package com.example.serverdriveui.ui.component.components.icon
+package com.example.serverdriveui.ui.component.components.divider
 
-import androidx.compose.material3.Icon
+import androidx.compose.material3.DividerDefaults
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.component.components.BaseComponent
-import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
+import com.example.serverdriveui.ui.component.properties.SizeComponentModifier
+import com.example.serverdriveui.ui.component.properties.SizeModifier
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
+import com.example.serverdriveui.util.asValue
 import com.google.gson.JsonObject
 
-class IconComponent(
+class VerticalDividerComponent(
     private val model: JsonObject,
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
-    private val validatorParser: ValidatorParser,
+    private val validatorParser: ValidatorParser
 ) : BaseComponent(model, properties, stateManager, validatorParser),
-    IconNameComponent by IconNameProperty(properties, stateManager) {
+    SizeComponentModifier by SizeModifier(properties, stateManager) {
 
     @Composable
     override fun getInternalComponent(
         navController: NavHostController,
-        modifier: Modifier,
+        modifier: Modifier
     ): @Composable () -> Unit = {
-        Icon(
+        VerticalDivider(
             modifier = modifier,
-            imageVector = icon, contentDescription = null
+            thickness = getSize().asValue()?.dp ?: DividerDefaults.Thickness
         )
     }
 
     companion object {
-        const val IDENTIFIER = "icon"
+        const val IDENTIFIER = "verticalDivider"
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun IconComponentPreview() {
-
-    SdUiComponentPreview(
-        """
-            "type": "icon",
-            "properties": [
-                {
-                    "name": "icon",
-                    "value": "RightArrow"
-                }
-            ]
-        """
-    )
-}

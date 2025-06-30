@@ -25,11 +25,13 @@ import com.example.serverdriveui.ui.component.components.RowComponent
 import com.example.serverdriveui.ui.component.components.SpacerComponent
 import com.example.serverdriveui.ui.component.components.TextComponent
 import com.example.serverdriveui.ui.component.components.TopAppBarComponent
-import com.example.serverdriveui.ui.component.components.bottomnavigation.BottomNavigationComponent
-import com.example.serverdriveui.ui.component.components.bottomnavigation.NavigationBarItemComponent
 import com.example.serverdriveui.ui.component.components.createpassword.CreatePasswordComponent
 import com.example.serverdriveui.ui.component.components.createpassword.CreatePasswordViewModel
+import com.example.serverdriveui.ui.component.components.divider.HorizontalDividerComponent
+import com.example.serverdriveui.ui.component.components.divider.VerticalDividerComponent
 import com.example.serverdriveui.ui.component.components.icon.IconComponent
+import com.example.serverdriveui.ui.component.components.navigationbar.NavigationBarComponent
+import com.example.serverdriveui.ui.component.components.navigationbar.NavigationBarItemComponent
 import com.example.serverdriveui.ui.component.components.sdui.SdUiComponent
 import com.example.serverdriveui.ui.component.components.sdui.SdUiComponentViewModel
 import com.example.serverdriveui.ui.component.components.textinput.OutlinedTextInputComponent
@@ -105,7 +107,8 @@ val ServerDriveUiComponents = module {
             properties = properties,
             stateManager = componentStateManager,
             validatorParser = get(),
-            componentParser = get()
+            componentParser = get(),
+            actionParser = get()
         )
     }
 
@@ -117,7 +120,8 @@ val ServerDriveUiComponents = module {
             properties = properties,
             stateManager = componentStateManager,
             validatorParser = get(),
-            componentParser = get()
+            componentParser = get(),
+            actionParser = get(),
         )
     }
 
@@ -229,9 +233,9 @@ val ServerDriveUiComponents = module {
     }
 
     factory<Component>(
-        named(BottomNavigationComponent.IDENTIFIER)
+        named(NavigationBarComponent.IDENTIFIER)
     ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        BottomNavigationComponent(
+        NavigationBarComponent(
             model = jsonComponent,
             properties = properties,
             stateManager = componentStateManager,
@@ -249,6 +253,39 @@ val ServerDriveUiComponents = module {
             stateManager = componentStateManager,
             validatorParser = get(),
             componentParser = get(),
+        )
+    }
+
+    factory<Component>(
+        named(HorizontalDividerComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
+        HorizontalDividerComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = componentStateManager,
+            validatorParser = get(),
+        )
+    }
+
+    factory<Component>(
+        named(HorizontalDividerComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
+        HorizontalDividerComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = componentStateManager,
+            validatorParser = get(),
+        )
+    }
+
+    factory<Component>(
+        named(VerticalDividerComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
+        VerticalDividerComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = componentStateManager,
+            validatorParser = get(),
         )
     }
 

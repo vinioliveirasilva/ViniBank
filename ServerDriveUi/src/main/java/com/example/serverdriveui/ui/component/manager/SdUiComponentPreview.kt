@@ -32,7 +32,7 @@ fun SdUiComponentPreview(componentModel: String) {
                 componentParser.parse(
                     data = Gson().fromJson(baseComponent, JsonObject::class.java),
                     componentStateManager = componentStateManager
-                ).forEach { it.getComponent(navController).invoke(this) }
+                ).forEach { it.getComponentAsColumn(navController).invoke(this) }
             }
         }
     }
@@ -55,7 +55,7 @@ fun SdUiComponentPreview(jsonObject: JSONObject) {
                 componentParser.parse(
                     data = Gson().fromJson(baseComponent, JsonObject::class.java),
                     componentStateManager = componentStateManager
-                ).forEach { it.getComponent(navController).invoke(this) }
+                ).forEach { it.getComponentAsColumn(navController).invoke(this) }
             }
         }
     }

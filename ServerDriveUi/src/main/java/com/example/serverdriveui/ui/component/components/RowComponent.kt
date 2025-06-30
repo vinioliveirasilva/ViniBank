@@ -1,27 +1,17 @@
 package com.example.serverdriveui.ui.component.components
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
+import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.component.properties.HorizontalArrangementComponentProperty
 import com.example.serverdriveui.ui.component.properties.HorizontalArrangementProperty
-import com.example.serverdriveui.ui.component.properties.HorizontalFillTypeComponentProperty
-import com.example.serverdriveui.ui.component.properties.HorizontalFillTypeProperty
-import com.example.serverdriveui.ui.component.properties.HorizontalPaddingComponentProperty
-import com.example.serverdriveui.ui.component.properties.HorizontalPaddingProperty
 import com.example.serverdriveui.ui.component.properties.VerticalAlignmentComponentProperty
 import com.example.serverdriveui.ui.component.properties.VerticalAlignmentProperty
-import com.example.serverdriveui.ui.component.properties.VerticalFillTypeComponentProperty
-import com.example.serverdriveui.ui.component.properties.VerticalFillTypeProperty
-import com.example.serverdriveui.ui.component.properties.VerticalPaddingComponentProperty
-import com.example.serverdriveui.ui.component.properties.VerticalPaddingProperty
-import com.example.serverdriveui.ui.component.properties.WeightComponentModifier
-import com.example.serverdriveui.ui.component.properties.WeightModifier
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.asValue
@@ -33,31 +23,29 @@ class RowComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
-) : BaseComponent(model, validatorParser, stateManager),
-    VerticalFillTypeComponentProperty by VerticalFillTypeProperty(properties, stateManager),
-    HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(properties, stateManager),
-    VerticalPaddingComponentProperty by VerticalPaddingProperty(properties, stateManager),
-    HorizontalPaddingComponentProperty by HorizontalPaddingProperty(properties, stateManager),
+    private val actionParser: ActionParser,
+) : BaseComponent(model, properties, stateManager, validatorParser),
     VerticalAlignmentComponentProperty by VerticalAlignmentProperty(properties, stateManager),
-    HorizontalArrangementComponentProperty by HorizontalArrangementProperty(properties, stateManager),
-    WeightComponentModifier by WeightModifier(properties, stateManager) {
+    HorizontalArrangementComponentProperty by HorizontalArrangementProperty(
+        properties,
+        stateManager
+    ) {
 
     @Composable
-    override fun getComponent(navController: NavHostController): @Composable ColumnScope.() -> Unit = {
+    override fun getInternalComponent(
+        navController: NavHostController,
+        modifier: Modifier,
+    ): @Composable () -> Unit = {
+        val action = actionParser.parse(model, componentStateManager = stateManager)
+        val actionModifier = action?.let { Modifier.clickable { action.execute(navController) } } ?: Modifier
+
         Row(
             verticalAlignment = getVerticalAlignment().asValue(),
             horizontalArrangement = getHorizontalArrangement().asValue(),
-            modifier = Modifier
-                .then(horizontalFillTypeModifier)
-                .then(verticalFillTypeModifier)
-                .then(horizontalPaddingModifier)
-                .then(verticalPaddingModifier)
-                .then(weightModifier)
+            modifier = modifier.then(actionModifier)
         ) {
-            Column {
-                componentParser.parse(data = model, componentStateManager = stateManager).forEach {
-                    it.getComponent(navController).invoke(this)
-                }
+            componentParser.parse(data = model, componentStateManager = stateManager).forEach {
+                it.getComponentAsRow(navController).invoke(this)
             }
         }
     }

@@ -29,14 +29,14 @@ open class BasePropertyData<T>(
     fun getValue() : StateFlow<T> {
         return propertyId.runWhen(
             isNull = { stateFlow },
-            notNull = { stateManager.getState<T>(it) ?: stateFlow }
+            notNull = { stateManager.getState(it) ?: stateFlow }
         )
     }
 
     fun setValue(value: T) {
         propertyId.runWhen(
             isNull = { stateFlow.update { value } },
-            notNull = { stateManager.updateState<T>(it, value) }
+            notNull = { stateManager.updateState(it, value) }
         )
     }
 }

@@ -17,7 +17,7 @@ data class HorizontalFillTypeProperty(
         properties = properties,
         propertyName = "horizontalFillType",
         propertyValueTransformation = { it.toHorizontalFillType() },
-        defaultPropertyValue = Wrap
+        defaultPropertyValue = HorizontalFillType.None
     ) {
 
     override val horizontalFillTypeModifier: Modifier

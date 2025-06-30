@@ -1,8 +1,8 @@
-package com.example.serverdriveui.ui.component.components.bottomnavigation.properties
+package com.example.serverdriveui.ui.component.components.navigationbar.properties
 
 import kotlinx.coroutines.flow.StateFlow
 
-interface BottomNavigationDestinationComponent {
+interface NavigationDestinationComponent {
     fun getSelectedDestination(): StateFlow<Int>
     fun setSelectedDestination(index: Int)
 }

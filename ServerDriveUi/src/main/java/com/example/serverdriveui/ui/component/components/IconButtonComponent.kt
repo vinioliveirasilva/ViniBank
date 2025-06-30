@@ -1,8 +1,8 @@
 package com.example.serverdriveui.ui.component.components
 
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.action.manager.ActionParser
@@ -18,21 +18,23 @@ class IconButtonComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, validatorParser, stateManager) {
+) : BaseComponent(model, properties, stateManager, validatorParser) {
 
     @Composable
-    override fun getComponent(navController: NavHostController): @Composable ColumnScope.() -> Unit =
-        {
+    override fun getInternalComponent(
+        navController: NavHostController,
+        modifier: Modifier
+    ): @Composable () -> Unit = {
             IconButton(
                 onClick = {
                     actionParser.parse(
                         componentJsonModel = model,
                         componentStateManager = stateManager
-                    ).execute(navController)
+                    )?.execute(navController)
                 }
             ) {
                 componentParser.parse(data = model, componentStateManager = stateManager).forEach {
-                    it.getComponent(navController).invoke(this)
+                    it.getComponent(navController).invoke()
                 }
             }
         }

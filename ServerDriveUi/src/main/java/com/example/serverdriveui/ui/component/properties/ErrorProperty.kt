@@ -11,7 +11,7 @@ data class ErrorProperty(
         stateManager = stateManager,
         properties = properties,
         propertyName = "isError",
-        propertyValueTransformation = { it.toBoolean() == true },
+        propertyValueTransformation = { it.toBoolean() },
         defaultPropertyValue = false
     ) {
     override fun getIsError() = getValue()

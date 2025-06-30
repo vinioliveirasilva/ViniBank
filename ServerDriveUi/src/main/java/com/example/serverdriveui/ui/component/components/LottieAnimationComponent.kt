@@ -1,6 +1,5 @@
 package com.example.serverdriveui.ui.component.components
 
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,15 +23,17 @@ data class LottieAnimationComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, validatorParser, stateManager),
+) : BaseComponent(model, properties, stateManager, validatorParser),
     LottieAnimationDataComponentProperty by LottieAnimationDataProperty(
         properties,
         stateManager
     ) {
 
     @Composable
-    override fun getComponent(navController: NavHostController): @Composable ColumnScope.() -> Unit =
-        {
+    override fun getInternalComponent(
+        navController: NavHostController,
+        modifier: Modifier,
+    ): @Composable () -> Unit = {
             val composition by rememberLottieComposition(getLottieAnimationSpec().asValue())
 
             val progress by animateLottieCompositionAsState(
@@ -42,7 +43,7 @@ data class LottieAnimationComponent(
             )
 
             LottieAnimation(
-                modifier = Modifier.fillMaxSize(),
+                modifier = modifier.fillMaxSize(),
                 composition = composition,
                 progress = { progress },
             )
@@ -51,7 +52,7 @@ data class LottieAnimationComponent(
                 actionParser.parse(
                     componentJsonModel = model,
                     componentStateManager = stateManager
-                ).execute(navController)
+                )?.execute(navController)
             }
         }
 

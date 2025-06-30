@@ -1,13 +1,13 @@
-package com.example.serverdriveui.ui.component.components.bottomnavigation.properties
+package com.example.serverdriveui.ui.component.components.navigationbar.properties
 
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.component.properties.BasePropertyData
 import com.example.serverdriveui.ui.state.ComponentStateManager
 
-class BottomNavigationDestinationIndexProperty(
+class NavigationDestinationIndexProperty(
     properties: Map<String, PropertyModel>,
     stateManager: ComponentStateManager
-) : BottomNavigationDestinationIndexComponent, BasePropertyData<Int>(
+) : NavigationDestinationIndexComponent, BasePropertyData<Int>(
     stateManager = stateManager,
     properties = properties,
     propertyName = "index",

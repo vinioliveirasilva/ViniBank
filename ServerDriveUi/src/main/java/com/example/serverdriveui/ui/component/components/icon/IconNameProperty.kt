@@ -1,6 +1,7 @@
 package com.example.serverdriveui.ui.component.components.icon
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBackIosNew
@@ -35,7 +36,7 @@ class IconNameProperty(
         get() = getValue().asValue()
 }
 
-private val IconLibrary = mapOf<String, ImageVector>(
+private val IconLibrary = mapOf(
     "Home" to Icons.Default.Home,
     "HomeOutline" to Icons.Outlined.Home,
     "Payment" to Icons.Filled.Payment,
@@ -45,4 +46,5 @@ private val IconLibrary = mapOf<String, ImageVector>(
     "User" to Icons.Default.AccountCircle,
     "Logout" to Icons.AutoMirrored.Filled.Logout,
     "LeftArrow" to Icons.Default.ArrowBackIosNew,
+    "RightArrow" to Icons.AutoMirrored.Filled.ArrowForwardIos,
 )

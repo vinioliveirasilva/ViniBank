@@ -9,13 +9,16 @@ sealed class HorizontalFillType(val identifier: String, val modifier: Modifier) 
     object Half : HorizontalFillType("Half", Modifier.fillMaxWidth(.5f))
     object Quarter : HorizontalFillType("Quarter", Modifier.fillMaxWidth(.25f))
     object Wrap : HorizontalFillType("Wrap", Modifier.wrapContentWidth())
+    object None : HorizontalFillType("", Modifier)
+
 
     companion object {
         fun String?.toHorizontalFillType(): HorizontalFillType = when (this) {
             Max.identifier -> Max
             Half.identifier -> Half
             Quarter.identifier -> Quarter
-            else -> Wrap
+            Wrap.identifier -> Wrap
+            else -> None
         }
     }
 }

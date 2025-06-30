@@ -16,7 +16,7 @@ data class VerticalFillTypeProperty(
         properties = properties,
         propertyName = "verticalFillType",
         propertyValueTransformation = { it.toVerticalFillType() },
-        defaultPropertyValue = VerticalFillType.Wrap
+        defaultPropertyValue = VerticalFillType.None
     ) {
     override val verticalFillTypeModifier: Modifier
         @Composable

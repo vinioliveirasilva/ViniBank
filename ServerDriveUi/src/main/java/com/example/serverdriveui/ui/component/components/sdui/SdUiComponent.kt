@@ -2,8 +2,6 @@ package com.example.serverdriveui.ui.component.components.sdui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,7 +24,7 @@ class SdUiComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val viewModel: SdUiComponentViewModel,
-) : BaseComponent(model, validatorParser, stateManager),
+) : BaseComponent(model, properties, stateManager, validatorParser),
     FlowIdentifierComponent by FlowIdentifierProperty(properties, stateManager),
     StageIdentifierComponent by StageIdentifierProperty(properties, stateManager) {
 
@@ -39,18 +37,16 @@ class SdUiComponent(
     }
 
     @Composable
-    override fun getComponent(navController: NavHostController): @Composable (ColumnScope.() -> Unit) =
+    override fun getInternalComponent(navController: NavHostController, modifier: Modifier): @Composable (() -> Unit) =
         {
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
+                modifier = modifier,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
                 Loader2(viewModel.loaderState) {
                     viewModel.components.asValue().forEach {
-                        it.getComponent(navController).invoke(this)
+                        it.getComponentAsColumn(navController).invoke(this)
                     }
                 }
             }
