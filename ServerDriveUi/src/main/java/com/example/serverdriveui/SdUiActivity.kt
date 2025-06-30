@@ -55,7 +55,6 @@ class SdUiActivity : BaseComposeActivity() {
                 val navController = rememberNavController()
                 val scope = rememberCoroutineScope()
 
-
                 LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
                     vm.navigateOnSuccess.map {
                         navController.navigate(it) { popUpTo(LoaderRoute) { inclusive = true } }
@@ -80,8 +79,7 @@ class SdUiActivity : BaseComposeActivity() {
                         }
                     }
 
-                    composable<SdUiRoute>//(typeMap = mapOf(typeOf<ScreenModel>() to serializableType<ScreenModel>()))
-                        {
+                    composable<SdUiRoute> {//(typeMap = mapOf(typeOf<ScreenModel>() to serializableType<ScreenModel>()))
                         val routeData = it.toRoute<SdUiRoute>()
                         SdUiScreen(
                             jsonModel = routeData.screenData,

@@ -22,21 +22,20 @@ import org.koin.core.scope.Scope
 class ComponentParser(
     private val koinScope: Scope
 ) {
-
     fun parse(
         data: JsonObject,
         componentTag: String = "components",
         componentStateManager: ComponentStateManager
     ): List<Component> {
-        return data.getAsJsonArray(componentTag).or(emptyList()).map {
-            val properties = it.asJsonObject.getAsJsonArray("properties").map {
-                Gson().fromJson(it, PropertyModel::class.java)
-            }.associateBy { it.name }
-            val componentType = it.asJsonObject.get("type").asString
+        return data.getAsJsonArray(componentTag).or(emptyList()).map { dataAsJson ->
+            val properties = dataAsJson.asJsonObject.getAsJsonArray("properties").map { property ->
+                Gson().fromJson(property, PropertyModel::class.java)
+            }.associateBy { propertyModel -> propertyModel.name }
+            val componentType = dataAsJson.asJsonObject.get("type").asString
 
             koinScope.getOrNull<Component>(named(componentType)) {
                 parametersOf(
-                    it,
+                    dataAsJson,
                     properties,
                     componentStateManager
                 )

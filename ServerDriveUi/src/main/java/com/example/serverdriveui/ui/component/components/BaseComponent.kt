@@ -28,23 +28,14 @@ import com.google.gson.JsonObject
 open class BaseComponent(
     model: JsonObject,
     properties: Map<String, PropertyModel>,
-    componentStateManager: ComponentStateManager,
+    stateManager: ComponentStateManager,
     validatorParser: ValidatorParser,
 ) : Component, InternalComponent,
-    VerticalFillTypeComponentProperty by VerticalFillTypeProperty(
-        properties,
-        componentStateManager
-    ),
-    HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(
-        properties,
-        componentStateManager
-    ),
-    VerticalPaddingComponentProperty by VerticalPaddingProperty(properties, componentStateManager),
-    HorizontalPaddingComponentProperty by HorizontalPaddingProperty(
-        properties,
-        componentStateManager
-    ),
-    WeightComponentModifier by WeightModifier(properties, componentStateManager) {
+    VerticalFillTypeComponentProperty by VerticalFillTypeProperty(properties, stateManager),
+    HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(properties, stateManager),
+    VerticalPaddingComponentProperty by VerticalPaddingProperty(properties, stateManager),
+    HorizontalPaddingComponentProperty by HorizontalPaddingProperty(properties, stateManager),
+    WeightComponentModifier by WeightModifier(properties, stateManager) {
 
     override val internalModifier: Modifier
         @Composable
@@ -55,7 +46,7 @@ open class BaseComponent(
             .then(verticalPaddingModifier)
 
     init {
-        validatorParser.parse(model, componentStateManager)
+        validatorParser.parse(model, stateManager)
             .forEach { validator -> validator.initialize() }
     }
 
@@ -86,7 +77,8 @@ open class BaseComponent(
     ): @Composable (ColumnScope.() -> Unit) = {
         getInternalComponent(
             navController,
-            Modifier.then(horizontalFillTypeModifier)
+            Modifier
+                .then(horizontalFillTypeModifier)
                 .then(verticalFillTypeModifier)
                 .then(horizontalPaddingModifier)
                 .then(verticalPaddingModifier)

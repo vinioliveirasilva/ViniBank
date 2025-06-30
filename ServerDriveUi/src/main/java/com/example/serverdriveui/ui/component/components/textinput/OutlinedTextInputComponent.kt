@@ -23,16 +23,12 @@ import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.asValue
 import com.google.gson.JsonObject
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 data class OutlinedTextInputComponent(
     private val model: JsonObject,
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
-    private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) : BaseComponent(model, properties, stateManager, validatorParser),
     TextComponentProperty by TextProperty(properties, stateManager),
     LabelComponentProperty by LabelProperty(properties, stateManager),
@@ -41,13 +37,6 @@ data class OutlinedTextInputComponent(
     ErrorComponentProperty by ErrorProperty(properties, stateManager),
     ErrorMessageComponentProperty by ErrorMessageProperty(properties, stateManager) {
 
-        init {
-            println("iniciou o component de input")
-            scope.launch {
-                println(getIsError().value)
-            }
-        }
-
     @Composable
     override fun getInternalComponent(
         navController: NavHostController,
@@ -55,8 +44,6 @@ data class OutlinedTextInputComponent(
     ): @Composable () -> Unit = {
         val text = getText().asValue()
         val isError = getIsError().asValue()
-
-        println("reconstruiu o component de input")
 
         OutlinedTextField(
             keyboardOptions = getKeyboardOptions().asValue(),

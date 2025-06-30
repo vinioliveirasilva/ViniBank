@@ -14,6 +14,7 @@ import com.vini.designsystem.compose.loader.LoaderComponentViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapConcat
@@ -22,6 +23,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 
 class SdUiViewModel(
     jsonModel: String,
@@ -58,15 +60,22 @@ class SdUiViewModel(
                     )
                 )
                 .catch { error ->
+                    delay(1000)
                     val errorFeedback =
-                        Gson().fromJson<SdUiError>(
+                        Gson().fromJson(
                             error.message?.split("Network call failed: 400 ")?.last().orEmpty(),
                             SdUiError::class.java
                         )
-                    components.value = componentParser.parse(
-                        data = JsonParser.parseString(errorFeedback.screen).asJsonObject,
-                        componentStateManager = componentStateManager
-                    )
+                    componentStateManager.apply {
+                        shouldUpdate = true
+                        updatedStates.clear()
+                    }
+                    components.update {
+                        componentParser.parse(
+                            data = JsonParser.parseString(errorFeedback.screen).asJsonObject,
+                            componentStateManager = componentStateManager
+                        )
+                    }
                 }
                 .onStart { showLoader() }
                 .onCompletion { hideLoader() }

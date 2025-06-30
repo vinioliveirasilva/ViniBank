@@ -8,11 +8,21 @@ import kotlinx.coroutines.flow.StateFlow
 class ComponentStateManager(
     val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) : AutoCloseable {
+
+    //TODO Corrigir gambiarra
+    var shouldUpdate = false
+    val updatedStates = mutableListOf<String>()
     private val states = mutableMapOf<String, MutableStateFlow<Any?>>()
 
     fun <T> registerState(id: String, data: T) {
-        if (states.containsKey(id)) return
-        states[id] = MutableStateFlow(data)
+        when {
+            shouldUpdate && states.containsKey(id) && updatedStates.contains(id).not() -> {
+                updateState(id, data)
+                updatedStates.add(id)
+            }
+            states.containsKey(id) -> return
+            else -> states[id] = MutableStateFlow(data)
+        }
     }
 
     @Suppress("UNCHECKED_CAST")
