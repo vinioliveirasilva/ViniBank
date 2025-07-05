@@ -1,15 +1,8 @@
 package com.example.serverdriveui.ui.component.components
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Checkbox
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.component.properties.SizeComponentModifier
@@ -36,27 +29,5 @@ class SpacerComponent(
 
     companion object {
         const val IDENTIFIER = "spacer"
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun abc() {
-    var isChecked = remember { mutableStateOf(false) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(true) {
-                isChecked.value = !isChecked.value
-                println("salve")
-            }
-    ) {
-        Checkbox(
-            checked = isChecked.value,
-            onCheckedChange = {
-            }
-        )
     }
 }

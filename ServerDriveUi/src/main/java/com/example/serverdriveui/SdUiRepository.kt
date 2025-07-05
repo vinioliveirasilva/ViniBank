@@ -4,7 +4,6 @@ import com.example.serverdriveui.service.SdUiService
 import com.example.serverdriveui.service.model.SdUiRequest
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -44,7 +43,6 @@ class SdUiRepository(
     }
 
     private fun Flow<String>.abc(model: SdUiModel) = map {
-        delay(1000)
         val screenModel = Gson().fromJson<ScreenModel>(it, ScreenModel::class.java)
 
         if(screenModel.shouldCache) {

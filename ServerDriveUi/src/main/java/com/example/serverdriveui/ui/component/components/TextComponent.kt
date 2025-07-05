@@ -11,6 +11,7 @@ import com.example.serverdriveui.ui.component.properties.TextComponentProperty
 import com.example.serverdriveui.ui.component.properties.TextProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
+import com.example.serverdriveui.util.StringUtil.toAnnotatedStringFromHtml
 import com.example.serverdriveui.util.asValue
 import com.google.gson.JsonObject
 
@@ -34,7 +35,7 @@ data class TextComponent(
         Text(
             textAlign = textAlign,
             modifier = modifier,
-            text = text
+            text = text.toAnnotatedStringFromHtml()
         )
     }
 

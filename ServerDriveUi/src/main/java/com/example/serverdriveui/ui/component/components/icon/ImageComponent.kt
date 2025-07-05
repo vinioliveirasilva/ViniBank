@@ -1,6 +1,6 @@
 package com.example.serverdriveui.ui.component.components.icon
 
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -19,7 +19,7 @@ import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.google.gson.JsonObject
 
-class IconComponent(
+class ImageComponent(
     private val model: JsonObject,
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
@@ -35,12 +35,12 @@ class IconComponent(
         modifier: Modifier,
     ): @Composable () -> Unit = {
         icon?.let {
-            Icon(
+            Image(
                 modifier = modifier.then(sizeModifier),
                 imageVector = it, contentDescription = null
             )
         } ?: drawableIcon?.let {
-            Icon(
+            Image(
                 modifier = modifier.then(sizeModifier),
                 painter = painterResource(it), contentDescription = null
             )
@@ -48,7 +48,7 @@ class IconComponent(
     }
 
     companion object {
-        const val IDENTIFIER = "icon"
+        const val IDENTIFIER = "image"
     }
 }
 
@@ -58,11 +58,11 @@ private fun IconComponentPreview() {
 
     SdUiComponentPreview(
         """
-            "type": "icon",
+            "type": "image",
             "properties": [
                 {
-                    "name": "icon",
-                    "value": "Payment"
+                    "name": "iconDrawable",
+                    "value": "Mastercard"
                 },
                 {
                     "name": "size",

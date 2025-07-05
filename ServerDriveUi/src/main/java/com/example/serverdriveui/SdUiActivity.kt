@@ -79,7 +79,7 @@ class SdUiActivity : BaseComposeActivity() {
                         }
                     }
 
-                    composable<SdUiRoute> {//(typeMap = mapOf(typeOf<ScreenModel>() to serializableType<ScreenModel>()))
+                    composable<SdUiRoute> {
                         val routeData = it.toRoute<SdUiRoute>()
                         SdUiScreen(
                             jsonModel = routeData.screenData,
@@ -92,6 +92,9 @@ class SdUiActivity : BaseComposeActivity() {
     }
 
     /*
+    (typeMap = mapOf(typeOf<ScreenModel>() to serializableType<ScreenModel>()))
+
+
     inline fun <reified T : Any> serializableType(
         isNullableAllowed: Boolean = false,
         json: Gson = Gson(),

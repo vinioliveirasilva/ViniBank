@@ -12,26 +12,35 @@ import com.example.serverdriveui.ui.action.actions.BusinessSuccessAction
 import com.example.serverdriveui.ui.action.actions.CloseAction
 import com.example.serverdriveui.ui.action.actions.ContinueAction
 import com.example.serverdriveui.ui.action.actions.NavigateAction
+import com.example.serverdriveui.ui.action.actions.ToBooleanAction
+import com.example.serverdriveui.ui.action.actions.ToIntAction
 import com.example.serverdriveui.ui.action.manager.Action
 import com.example.serverdriveui.ui.action.manager.ActionParser
-import com.example.serverdriveui.ui.component.components.ButtonComponent
+import com.example.serverdriveui.ui.component.components.BoxComponent
+import com.example.serverdriveui.ui.component.components.CardComponent
 import com.example.serverdriveui.ui.component.components.ColumnComponent
-import com.example.serverdriveui.ui.component.components.ElevatedButtonComponent
-import com.example.serverdriveui.ui.component.components.IconButtonComponent
 import com.example.serverdriveui.ui.component.components.LazyColumnComponent
+import com.example.serverdriveui.ui.component.components.LazyRowComponent
 import com.example.serverdriveui.ui.component.components.LottieAnimationComponent
-import com.example.serverdriveui.ui.component.components.OutlinedButtonComponent
 import com.example.serverdriveui.ui.component.components.RowComponent
+import com.example.serverdriveui.ui.component.components.SnackBarComponent
 import com.example.serverdriveui.ui.component.components.SpacerComponent
 import com.example.serverdriveui.ui.component.components.TextComponent
 import com.example.serverdriveui.ui.component.components.TopAppBarComponent
+import com.example.serverdriveui.ui.component.components.button.ButtonComponent
+import com.example.serverdriveui.ui.component.components.button.ElevatedButtonComponent
+import com.example.serverdriveui.ui.component.components.button.IconButtonComponent
+import com.example.serverdriveui.ui.component.components.button.OutlinedButtonComponent
 import com.example.serverdriveui.ui.component.components.createpassword.CreatePasswordComponent
 import com.example.serverdriveui.ui.component.components.createpassword.CreatePasswordViewModel
+import com.example.serverdriveui.ui.component.components.dialog.DialogComponent
 import com.example.serverdriveui.ui.component.components.divider.HorizontalDividerComponent
 import com.example.serverdriveui.ui.component.components.divider.VerticalDividerComponent
 import com.example.serverdriveui.ui.component.components.icon.IconComponent
+import com.example.serverdriveui.ui.component.components.icon.ImageComponent
 import com.example.serverdriveui.ui.component.components.navigationbar.NavigationBarComponent
 import com.example.serverdriveui.ui.component.components.navigationbar.NavigationBarItemComponent
+import com.example.serverdriveui.ui.component.components.pager.HorizontalPagerComponent
 import com.example.serverdriveui.ui.component.components.sdui.SdUiComponent
 import com.example.serverdriveui.ui.component.components.sdui.SdUiComponentViewModel
 import com.example.serverdriveui.ui.component.components.textinput.OutlinedTextInputComponent
@@ -74,6 +83,18 @@ val ServerDriveUiComponents = module {
             properties = properties,
             stateManager = componentStateManager,
             validatorParser = get()
+        )
+    }
+
+    factory<Component>(
+        named(DialogComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
+        DialogComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = componentStateManager,
+            validatorParser = get(),
+            componentParser = get(),
         )
     }
 
@@ -126,9 +147,46 @@ val ServerDriveUiComponents = module {
     }
 
     factory<Component>(
+        named(BoxComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
+        BoxComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = componentStateManager,
+            validatorParser = get(),
+            componentParser = get(),
+            actionParser = get(),
+        )
+    }
+
+    factory<Component>(
         named(LazyColumnComponent.IDENTIFIER)
     ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
         LazyColumnComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = componentStateManager,
+            validatorParser = get(),
+            componentParser = get()
+        )
+    }
+
+    factory<Component>(
+        named(LazyRowComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
+        LazyRowComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = componentStateManager,
+            validatorParser = get(),
+            componentParser = get()
+        )
+    }
+
+    factory<Component>(
+        named(HorizontalPagerComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
+        HorizontalPagerComponent(
             model = jsonComponent,
             properties = properties,
             stateManager = componentStateManager,
@@ -145,6 +203,19 @@ val ServerDriveUiComponents = module {
             properties = properties,
             stateManager = componentStateManager,
             validatorParser = get(),
+            actionParser = get()
+        )
+    }
+
+    factory<Component>(
+        named(CardComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
+        CardComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = componentStateManager,
+            validatorParser = get(),
+            componentParser = get(),
             actionParser = get()
         )
     }
@@ -301,9 +372,33 @@ val ServerDriveUiComponents = module {
     }
 
     factory<Component>(
+        named(ImageComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
+        ImageComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = componentStateManager,
+            validatorParser = get(),
+        )
+    }
+
+    factory<Component>(
         named(IconButtonComponent.IDENTIFIER)
     ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
         IconButtonComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = componentStateManager,
+            validatorParser = get(),
+            componentParser = get(),
+            actionParser = get(),
+        )
+    }
+
+    factory<Component>(
+        named(SnackBarComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
+        SnackBarComponent(
             model = jsonComponent,
             properties = properties,
             stateManager = componentStateManager,
@@ -403,6 +498,18 @@ val ServerDriveUiActions = module {
             data = data,
             stateManager = componentStateManager,
             featureRouter = get()
+        )
+    }
+    factory<Action>(named(ToBooleanAction.IDENTIFIER)) { (data: Map<String, String>, componentStateManager: ComponentStateManager) ->
+        ToBooleanAction(
+            data = data,
+            stateManager = componentStateManager,
+        )
+    }
+    factory<Action>(named(ToIntAction.IDENTIFIER)) { (data: Map<String, String>, componentStateManager: ComponentStateManager) ->
+        ToIntAction(
+            data = data,
+            stateManager = componentStateManager,
         )
     }
 }

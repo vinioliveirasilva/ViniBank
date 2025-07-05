@@ -14,7 +14,6 @@ import com.vini.designsystem.compose.loader.LoaderComponentViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapConcat
@@ -60,7 +59,6 @@ class SdUiViewModel(
                     )
                 )
                 .catch { error ->
-                    delay(1000)
                     val errorFeedback =
                         Gson().fromJson(
                             error.message?.split("Network call failed: 400 ")?.last().orEmpty(),

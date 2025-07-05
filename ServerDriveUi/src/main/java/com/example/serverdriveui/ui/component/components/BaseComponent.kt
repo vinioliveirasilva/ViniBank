@@ -11,6 +11,8 @@ import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.component.manager.Component
 import com.example.serverdriveui.ui.component.manager.InternalComponent
+import com.example.serverdriveui.ui.component.properties.HeightComponentProperty
+import com.example.serverdriveui.ui.component.properties.HeightProperty
 import com.example.serverdriveui.ui.component.properties.HorizontalFillTypeComponentProperty
 import com.example.serverdriveui.ui.component.properties.HorizontalFillTypeProperty
 import com.example.serverdriveui.ui.component.properties.HorizontalPaddingComponentProperty
@@ -21,6 +23,8 @@ import com.example.serverdriveui.ui.component.properties.VerticalPaddingComponen
 import com.example.serverdriveui.ui.component.properties.VerticalPaddingProperty
 import com.example.serverdriveui.ui.component.properties.WeightComponentModifier
 import com.example.serverdriveui.ui.component.properties.WeightModifier
+import com.example.serverdriveui.ui.component.properties.WidthComponentProperty
+import com.example.serverdriveui.ui.component.properties.WidthProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.google.gson.JsonObject
@@ -35,6 +39,8 @@ open class BaseComponent(
     HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(properties, stateManager),
     VerticalPaddingComponentProperty by VerticalPaddingProperty(properties, stateManager),
     HorizontalPaddingComponentProperty by HorizontalPaddingProperty(properties, stateManager),
+    HeightComponentProperty by HeightProperty(properties, stateManager),
+    WidthComponentProperty by WidthProperty(properties, stateManager),
     WeightComponentModifier by WeightModifier(properties, stateManager) {
 
     override val internalModifier: Modifier
@@ -44,6 +50,8 @@ open class BaseComponent(
             .then(verticalFillTypeModifier)
             .then(horizontalPaddingModifier)
             .then(verticalPaddingModifier)
+            .then(heightModifier)
+            .then(widthModifier)
 
     init {
         validatorParser.parse(model, stateManager)
@@ -77,11 +85,7 @@ open class BaseComponent(
     ): @Composable (ColumnScope.() -> Unit) = {
         getInternalComponent(
             navController,
-            Modifier
-                .then(horizontalFillTypeModifier)
-                .then(verticalFillTypeModifier)
-                .then(horizontalPaddingModifier)
-                .then(verticalPaddingModifier)
+            internalModifier
                 .then(weightModifier)
         ).invoke()
     }

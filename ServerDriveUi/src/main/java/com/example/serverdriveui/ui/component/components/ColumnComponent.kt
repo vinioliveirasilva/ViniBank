@@ -40,7 +40,7 @@ class ColumnComponent(
         modifier: Modifier
     ): @Composable () -> Unit = {
             val action = actionParser.parse(model, componentStateManager = stateManager)
-            val actionModifier = action?.let { Modifier.clickable { action.execute(navController) } } ?: Modifier
+            val actionModifier = Modifier.clickable(action != null) { action?.execute(navController) }
 
             Column(
                 verticalArrangement = getVerticalArrangement().asValue(),

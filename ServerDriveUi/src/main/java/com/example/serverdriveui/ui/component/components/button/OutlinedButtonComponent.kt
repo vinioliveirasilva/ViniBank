@@ -1,4 +1,4 @@
-package com.example.serverdriveui.ui.component.components
+package com.example.serverdriveui.ui.component.components.button
 
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.action.manager.ActionParser
+import com.example.serverdriveui.ui.component.components.BaseComponent
 import com.example.serverdriveui.ui.component.properties.EnabledComponentProperty
 import com.example.serverdriveui.ui.component.properties.EnabledProperty
 import com.example.serverdriveui.ui.component.properties.TextComponentProperty
