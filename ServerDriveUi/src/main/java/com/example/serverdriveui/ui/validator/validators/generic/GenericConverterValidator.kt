@@ -21,7 +21,7 @@ open class GenericConverterValidator<Input, Output>(
             scope.launch {
                 componentStateManager.getState<Input>(reqId)?.collect { result ->
                     val converted = parsedData[result] ?: defaultOutput
-                    componentStateManager.registerState<Output>(model.id, converted)
+                    componentStateManager.registerState(model.id, converted)
                     validate(converted)
                 }
             }

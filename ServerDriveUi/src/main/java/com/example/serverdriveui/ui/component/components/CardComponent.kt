@@ -33,7 +33,7 @@ data class CardComponent(
         Card(
             modifier = modifier.clickable(enabled = hasAction) { action?.execute(navController) },
         ) {
-            componentParser.parse(model, componentStateManager = stateManager).forEach {
+            componentParser.parseList(model, componentStateManager = stateManager).forEach {
                 it.getComponentAsColumn(navController).invoke(this)
             }
         }

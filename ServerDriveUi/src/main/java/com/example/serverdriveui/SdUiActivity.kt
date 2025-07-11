@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.router.FeatureRouter
 import com.example.router.routes.SdUiRouteData.SdUiRouteDataParser
 import com.vini.designsystem.compose.dialog.NonDismissibleDialog
 import com.vini.designsystem.compose.loader.LoaderContent
@@ -24,8 +25,8 @@ import com.vini.designsystem.compose.view.BaseComposeActivity
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.parameter.parametersOf
 
 @Serializable
@@ -38,6 +39,8 @@ data class SdUiRoute(
 
 class SdUiActivity : BaseComposeActivity() {
 
+    private val featureRouter: FeatureRouter by inject { parametersOf(this) }
+
     private val vm: SdUiActivityViewModel by viewModel {
         with(SdUiRouteDataParser(intent)) {
             parametersOf(
@@ -47,7 +50,6 @@ class SdUiActivity : BaseComposeActivity() {
         }
     }
 
-    @OptIn(KoinExperimentalAPI::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -58,6 +60,10 @@ class SdUiActivity : BaseComposeActivity() {
                 LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
                     vm.navigateOnSuccess.map {
                         navController.navigate(it) { popUpTo(LoaderRoute) { inclusive = true } }
+                    }.launchIn(scope)
+
+                    vm.navigateOnSuccess1.map {
+                        featureRouter.navigate(it)
                     }.launchIn(scope)
                 }
 

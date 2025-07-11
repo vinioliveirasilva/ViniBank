@@ -10,6 +10,8 @@ import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.component.components.BaseComponent
 import com.example.serverdriveui.ui.component.components.sdui.properties.FlowIdentifierComponent
 import com.example.serverdriveui.ui.component.components.sdui.properties.FlowIdentifierProperty
+import com.example.serverdriveui.ui.component.components.sdui.properties.ScreenDataComponent
+import com.example.serverdriveui.ui.component.components.sdui.properties.ScreenDataProperty
 import com.example.serverdriveui.ui.component.components.sdui.properties.StageIdentifierComponent
 import com.example.serverdriveui.ui.component.components.sdui.properties.StageIdentifierProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
@@ -26,13 +28,14 @@ class SdUiComponent(
     private val viewModel: SdUiComponentViewModel,
 ) : BaseComponent(model, properties, stateManager, validatorParser),
     FlowIdentifierComponent by FlowIdentifierProperty(properties, stateManager),
+    ScreenDataComponent by ScreenDataProperty(properties, stateManager),
     StageIdentifierComponent by StageIdentifierProperty(properties, stateManager) {
 
     init {
         viewModel.initialize(
             flowId = getFlowIdentifier(),
             screenId = getStageIdentifier(),
-            screenData = "{}"
+            screenData = getScreenData()
         )
     }
 

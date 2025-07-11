@@ -36,21 +36,21 @@ class DialogComponent(
         if (getIsVisible().asValue()) {
             AlertDialog(
                 icon = {
-                    componentParser.parse(
+                    componentParser.parseList(
                         model,
                         componentStateManager = stateManager,
                         componentTag = "icon"
                     ).forEach { it.getComponent(navController).invoke() }
                 },
                 title = {
-                    componentParser.parse(
+                    componentParser.parseList(
                         model,
                         componentStateManager = stateManager,
                         componentTag = "title"
                     ).forEach { it.getComponent(navController).invoke() }
                 },
                 text = {
-                    componentParser.parse(
+                    componentParser.parseList(
                         model,
                         componentStateManager = stateManager,
                         componentTag = "text"

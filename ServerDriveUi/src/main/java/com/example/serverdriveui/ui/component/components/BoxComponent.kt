@@ -31,14 +31,14 @@ class BoxComponent(
         modifier: Modifier
     ): @Composable () -> Unit = {
         val action = actionParser.parse(model, componentStateManager = stateManager)
-        val actionModifier = modifier.clickable(action != null) { action?.execute(navController) }
+        val actionModifier = action?.let { Modifier.clickable{ it.execute(navController) } } ?: Modifier
 
         Box(
             modifier = modifier
                 .then(actionModifier),
             contentAlignment = getContentAlignment().asValue(),
         ) {
-            componentParser.parse(data = model, componentStateManager = stateManager).forEach {
+            componentParser.parseList(data = model, componentStateManager = stateManager).forEach {
                 it.getComponent(navController).invoke()
             }
         }

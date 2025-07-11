@@ -5,7 +5,7 @@ import com.example.network.retrofit.DHExchangePartner
 import com.example.network.retrofit.EncodeProvider
 import com.example.network.retrofit.asHex
 import okhttp3.Interceptor
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
@@ -125,7 +125,7 @@ class CryptoInterceptor(
     }
 
     private fun readBody(result: Response): String? {
-        val responseBody = result.body()
+        val responseBody = result.body
         val source = responseBody?.source()
         source?.request(Long.MAX_VALUE)
         val buffer = source?.buffer
@@ -136,14 +136,14 @@ class CryptoInterceptor(
     private fun readBody(request: Request): String {
         val newReq = request.newBuilder().build()
         val buffer = Buffer()
-        newReq.body()?.writeTo(buffer)
+        newReq.body?.writeTo(buffer)
 
         return buffer.readUtf8().orEmpty()
     }
 
     private companion object {
-        val JSON_MEDIA_TYPE = MediaType.parse("application/json")
-        val TEXT_MEDIA_TYPE = MediaType.parse("text/plain")
+        val JSON_MEDIA_TYPE = "application/json".toMediaTypeOrNull()
+        val TEXT_MEDIA_TYPE = "text/plain".toMediaTypeOrNull()
         const val EMPTY_JSON = "{}"
 
         object Header {

@@ -46,7 +46,7 @@ class LazyRowComponent(
             modifier = modifier,
             state = state,
         ) {
-            componentParser.parse(data = model, componentStateManager = stateManager).forEach {
+            componentParser.parseList(data = model, componentStateManager = stateManager).forEach {
                 it.getComponentLazyListScope(navController).invoke(this)
             }
         }

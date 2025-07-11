@@ -44,7 +44,7 @@ class RowComponent(
             horizontalArrangement = getHorizontalArrangement().asValue(),
             modifier = modifier.then(actionModifier)
         ) {
-            componentParser.parse(data = model, componentStateManager = stateManager).forEach {
+            componentParser.parseList(data = model, componentStateManager = stateManager).forEach {
                 it.getComponentAsRow(navController).invoke(this)
             }
         }

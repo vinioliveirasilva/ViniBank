@@ -35,7 +35,7 @@ class NavigationBarComponent(
         modifier: Modifier
     ): @Composable (() -> Unit) =
         {
-            val destinations = componentParser.parse(model, componentStateManager = stateManager)
+            val destinations = componentParser.parseList(model, componentStateManager = stateManager)
             val selectedDestination = getSelectedDestination().collectAsState().value
 
             BackHandler(enabled = selectedDestination != FIRST_DESTINATION_INDEX) {

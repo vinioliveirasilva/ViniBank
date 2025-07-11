@@ -36,6 +36,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.retrofit.converter.scalar)
+    implementation(libs.logging.interceptor)
     implementation(libs.okhttp)
 
     implementation(libs.koin)

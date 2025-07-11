@@ -33,7 +33,7 @@ class SdUiViewModel(
 ) : ViewModel(), LoaderComponent by LoaderComponentViewModel() {
 
     val components: MutableStateFlow<List<Component>> = MutableStateFlow(
-        componentParser.parse(
+        componentParser.parseList(
             data = Gson().fromJson(jsonModel, JsonObject::class.java),
             componentStateManager = componentStateManager
         )
@@ -69,7 +69,7 @@ class SdUiViewModel(
                         updatedStates.clear()
                     }
                     components.update {
-                        componentParser.parse(
+                        componentParser.parseList(
                             data = JsonParser.parseString(errorFeedback.screen).asJsonObject,
                             componentStateManager = componentStateManager
                         )

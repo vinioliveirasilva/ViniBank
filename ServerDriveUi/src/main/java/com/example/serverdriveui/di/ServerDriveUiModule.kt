@@ -16,6 +16,7 @@ import com.example.serverdriveui.ui.action.actions.ToBooleanAction
 import com.example.serverdriveui.ui.action.actions.ToIntAction
 import com.example.serverdriveui.ui.action.manager.Action
 import com.example.serverdriveui.ui.action.manager.ActionParser
+import com.example.serverdriveui.ui.component.components.BottomSheetComponent
 import com.example.serverdriveui.ui.component.components.BoxComponent
 import com.example.serverdriveui.ui.component.components.CardComponent
 import com.example.serverdriveui.ui.component.components.ColumnComponent
@@ -38,6 +39,7 @@ import com.example.serverdriveui.ui.component.components.divider.HorizontalDivid
 import com.example.serverdriveui.ui.component.components.divider.VerticalDividerComponent
 import com.example.serverdriveui.ui.component.components.icon.IconComponent
 import com.example.serverdriveui.ui.component.components.icon.ImageComponent
+import com.example.serverdriveui.ui.component.components.map.GoogleMapsComponent
 import com.example.serverdriveui.ui.component.components.navigationbar.NavigationBarComponent
 import com.example.serverdriveui.ui.component.components.navigationbar.NavigationBarItemComponent
 import com.example.serverdriveui.ui.component.components.pager.HorizontalPagerComponent
@@ -52,6 +54,7 @@ import com.example.serverdriveui.ui.validator.manager.Validator
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.ui.validator.validators.AllTrueValidator
 import com.example.serverdriveui.ui.validator.validators.EmailValidator
+import com.example.serverdriveui.ui.validator.validators.IntToDynamicComponentValidator
 import com.example.serverdriveui.ui.validator.validators.IntToStringValidator
 import com.example.serverdriveui.ui.validator.validators.MinLengthValidator
 import com.google.gson.JsonObject
@@ -90,6 +93,18 @@ val ServerDriveUiComponents = module {
         named(DialogComponent.IDENTIFIER)
     ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
         DialogComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = componentStateManager,
+            validatorParser = get(),
+            componentParser = get(),
+        )
+    }
+
+    factory<Component>(
+        named(BottomSheetComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
+        BottomSheetComponent(
             model = jsonComponent,
             properties = properties,
             stateManager = componentStateManager,
@@ -407,6 +422,17 @@ val ServerDriveUiComponents = module {
             actionParser = get(),
         )
     }
+
+    factory<Component>(
+        named(GoogleMapsComponent.IDENTIFIER)
+    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
+        GoogleMapsComponent(
+            model = jsonComponent,
+            properties = properties,
+            stateManager = componentStateManager,
+            validatorParser = get(),
+        )
+    }
 }
 
 val ServerDriveUiModule = module {
@@ -422,7 +448,7 @@ val ServerDriveUiModule = module {
     single<SdUiRepository> { SdUiRepository(sdUiService = get()) }
     single<SdUiService> { get<Retrofit>().create(SdUiService::class.java) }
 
-    //UI
+    //UIs
     viewModel { (flowId: String, screenData: String) ->
         SdUiActivityViewModel(
             flowId = flowId,
@@ -468,6 +494,13 @@ val ServerDriveUiValidators = module {
             componentStateManager = componentStateManager
         )
     }
+    factory<Validator>(named(IntToDynamicComponentValidator.IDENTIFIER)) { (model: ValidatorModel, componentStateManager: ComponentStateManager) ->
+        IntToDynamicComponentValidator(
+            model = model,
+            componentStateManager = componentStateManager,
+            componentParser = get()
+        )
+    }
 }
 
 val ServerDriveUiActions = module {
@@ -497,7 +530,7 @@ val ServerDriveUiActions = module {
         NavigateAction(
             data = data,
             stateManager = componentStateManager,
-            featureRouter = get()
+            globalStateManager = get()
         )
     }
     factory<Action>(named(ToBooleanAction.IDENTIFIER)) { (data: Map<String, String>, componentStateManager: ComponentStateManager) ->

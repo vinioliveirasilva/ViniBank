@@ -39,7 +39,7 @@ class HorizontalPagerComponent(
         modifier: Modifier
     ): @Composable () -> Unit = {
 
-        val components = componentParser.parse(data = model, componentStateManager = stateManager)
+        val components = componentParser.parseList(data = model, componentStateManager = stateManager)
         val currentPage = getCurrentPage().asValue()
         val pagerState = rememberPagerState(
             pageCount = { components.size },

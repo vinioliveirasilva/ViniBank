@@ -34,7 +34,7 @@ class IconButtonComponent(
                     )?.execute(navController)
                 }
             ) {
-                componentParser.parse(data = model, componentStateManager = stateManager).forEach {
+                componentParser.parseList(data = model, componentStateManager = stateManager).forEach {
                     it.getComponent(navController).invoke()
                 }
             }

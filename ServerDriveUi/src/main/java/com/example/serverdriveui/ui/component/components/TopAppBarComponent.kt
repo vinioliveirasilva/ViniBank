@@ -31,7 +31,7 @@ data class TopAppBarComponent(
             modifier = Modifier
                 .then(horizontalFillTypeModifier),
             title = {
-                componentParser.parse(
+                componentParser.parseList(
                     data = model,
                     componentStateManager = stateManager
                 ).forEach {
@@ -39,7 +39,7 @@ data class TopAppBarComponent(
                 }
             },
             navigationIcon = {
-                componentParser.parse(
+                componentParser.parseList(
                     data = model,
                     componentTag = "navigationIcons",
                     componentStateManager = stateManager
@@ -48,7 +48,7 @@ data class TopAppBarComponent(
                 }
             },
             actions = {
-                componentParser.parse(
+                componentParser.parseList(
                     data = model,
                     componentTag = "actionIcons",
                     componentStateManager = stateManager

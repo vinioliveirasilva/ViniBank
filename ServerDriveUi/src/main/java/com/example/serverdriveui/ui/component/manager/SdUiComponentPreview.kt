@@ -29,7 +29,7 @@ fun SdUiComponentPreview(componentModel: String) {
         }""".trimIndent()
         ViniBankTheme {
             Column {
-                componentParser.parse(
+                componentParser.parseList(
                     data = Gson().fromJson(baseComponent, JsonObject::class.java),
                     componentStateManager = componentStateManager
                 ).forEach { it.getComponentAsColumn(navController).invoke(this) }
@@ -52,7 +52,7 @@ fun SdUiComponentPreview(jsonObject: JSONObject) {
         }""".trimIndent()
         ViniBankTheme {
             Column {
-                componentParser.parse(
+                componentParser.parseList(
                     data = Gson().fromJson(baseComponent, JsonObject::class.java),
                     componentStateManager = componentStateManager
                 ).forEach { it.getComponentAsColumn(navController).invoke(this) }

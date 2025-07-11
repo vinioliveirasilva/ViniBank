@@ -45,14 +45,14 @@ class NavigationBarItemComponent(
             selected = selected,
             onClick = { setSelectedDestination(index) },
             icon = {
-                componentParser.parse(
+                componentParser.parseList(
                     model,
                     componentTag,
                     componentStateManager = stateManager
                 ).forEach { it.getComponent(navController).invoke() }
             },
             label = {
-                componentParser.parse(model, componentStateManager = stateManager)
+                componentParser.parseList(model, componentStateManager = stateManager)
                     .forEach { it.getComponent(navController).invoke() }
             }
         )

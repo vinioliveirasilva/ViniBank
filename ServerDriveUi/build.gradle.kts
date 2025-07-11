@@ -79,6 +79,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     //Other
+    implementation("com.google.maps.android:maps-compose:5+")
+    implementation("com.google.maps.android:maps-compose-utils:5+")
+    implementation("com.google.maps.android:maps-compose-widgets:5+")
     //implementation(libs.koin.androidx.compose)
 
     implementation(libs.androidx.core.ktx)

@@ -31,30 +31,37 @@ class SdUiComponentViewModel(
 ) : ViewModel(), LoaderComponent by LoaderComponentViewModel() {
 
     val components: MutableStateFlow<List<Component>> = MutableStateFlow(emptyList())
+    private var lastScreenId: String = ""
 
     init {
         addCloseable(componentStateManager)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun initialize(flowId: Flow<String>, screenId: Flow<String>, screenData: String) {
+    fun initialize(flowId: Flow<String>, screenId: Flow<String>, screenData: Flow<String>) {
         //TODO cancel repository call if screenId or flowId changes
-        combineTransform(flowId, screenId) { flow, screen ->
+        combineTransform(flowId, screenId, screenData) { flow, screen, screenData ->
+            println(screenData)
             repository.getScreen(
                 SdUiModel(
-                    flowId = flow,
-                    screenId = screen,
+                    flow = flow,
+                    toScreen = screen,
                     screenData = screenData,
+                    fromScreen = lastScreenId
                 )
             )
                 .catch { emit(it.message.orEmpty()) }
+                .map {
+                    lastScreenId = screen
+                    it
+                }
                 .onStart { showLoader() }
                 .onCompletion { hideLoader() }
                 .collect { emit(it) }
         }
             .map { response ->
                 components.update {
-                    componentParser.parse(
+                    componentParser.parseList(
                         data = Gson().fromJson(response, JsonObject::class.java),
                         componentStateManager = componentStateManager
                     )

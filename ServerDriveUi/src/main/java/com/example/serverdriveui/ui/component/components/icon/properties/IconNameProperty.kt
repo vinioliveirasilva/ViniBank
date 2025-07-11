@@ -1,16 +1,16 @@
 package com.example.serverdriveui.ui.component.components.icon.properties
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.automirrored.filled.ReceiptLong
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
@@ -28,6 +28,8 @@ import androidx.compose.material.icons.filled.PersonSearch
 import androidx.compose.material.icons.filled.Receipt
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.ShoppingBag
+import androidx.compose.material.icons.filled.SupervisorAccount
 import androidx.compose.material.icons.outlined.AttachMoney
 import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material.icons.outlined.Home
@@ -84,8 +86,8 @@ private val IconLibrary: Map<String, ImageVector>
         "MoreVert" to Icons.Default.MoreVert,
         "ArrowDropDown" to Icons.Default.ArrowDropDown,
         "ArrowDropUp" to Icons.Default.ArrowDropUp,
-        "ArrowForward" to Icons.Default.ArrowForward,
-        "ArrowBack" to Icons.Default.ArrowBack,
+        "ArrowForward" to Icons.AutoMirrored.Filled.ArrowForward,
+        "ArrowBack" to Icons.AutoMirrored.Filled.ArrowBack,
         "Theme" to Icons.Default.DarkMode,
         "Lock" to Icons.Default.Lock,
         "PersonSearch" to Icons.Default.PersonSearch,
@@ -93,4 +95,6 @@ private val IconLibrary: Map<String, ImageVector>
         "ReceiptLong" to Icons.AutoMirrored.Filled.ReceiptLong,
         "Warning" to Icons.Outlined.Warning,
         "Money" to Icons.Outlined.AttachMoney,
+        "ShoppingBag" to Icons.Filled.ShoppingBag,
+        "SupervisorAccount" to Icons.Filled.SupervisorAccount,
     )

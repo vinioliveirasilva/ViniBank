@@ -39,9 +39,9 @@ class LazyColumnComponent(
         LazyColumn(
             verticalArrangement = getVerticalArrangement().asValue(),
             horizontalAlignment = getHorizontalAlignment().asValue(),
-            modifier = modifier
+            modifier = modifier,
         ) {
-            componentParser.parse(data = model, componentStateManager = stateManager).forEach {
+            componentParser.parseList(data = model, componentStateManager = stateManager).forEach {
                 it.getComponentLazyListScope(navController).invoke(this)
             }
         }

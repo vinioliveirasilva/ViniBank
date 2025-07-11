@@ -22,7 +22,7 @@ import org.koin.core.scope.Scope
 class ComponentParser(
     private val koinScope: Scope
 ) {
-    fun parse(
+    fun parseList(
         data: JsonObject,
         componentTag: String = "components",
         componentStateManager: ComponentStateManager
@@ -43,7 +43,27 @@ class ComponentParser(
         }
     }
 
-    private fun unknownComponent() = object : Component {
+    fun parse(
+        data: JsonObject,
+        componentStateManager: ComponentStateManager
+    ): Component {
+        return data.asJsonObject.let { dataAsJson ->
+            val properties = dataAsJson.asJsonObject.getAsJsonArray("properties").map { property ->
+                Gson().fromJson(property, PropertyModel::class.java)
+            }.associateBy { propertyModel -> propertyModel.name }
+            val componentType = dataAsJson.asJsonObject.get("type").asString
+
+            koinScope.getOrNull<Component>(named(componentType)) {
+                parametersOf(
+                    dataAsJson,
+                    properties,
+                    componentStateManager
+                )
+            } ?: unknownComponent()
+        }
+    }
+
+    fun unknownComponent() = object : Component {
         override val internalModifier: Modifier
             @Composable
             get() = Modifier
