@@ -20,7 +20,7 @@ import com.example.serverdriveui.ui.component.properties.VerticalAlignmentProper
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.asValue
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 
 class HorizontalPagerComponent(
     private val model: JsonObject,
@@ -39,7 +39,7 @@ class HorizontalPagerComponent(
         modifier: Modifier
     ): @Composable () -> Unit = {
 
-        val components = componentParser.parseList(data = model, componentStateManager = stateManager)
+        val components = componentParser.parseList(data = model)
         val currentPage = getCurrentPage().asValue()
         val pagerState = rememberPagerState(
             pageCount = { components.size },

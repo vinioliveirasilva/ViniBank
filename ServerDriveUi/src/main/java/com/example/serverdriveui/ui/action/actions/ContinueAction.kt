@@ -5,39 +5,40 @@ import com.example.serverdriveui.GlobalStateManager
 import com.example.serverdriveui.SdUiDestinationModel
 import com.example.serverdriveui.ui.action.manager.Action
 import com.example.serverdriveui.ui.state.ComponentStateManager
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
-import com.vini.common.or
+import com.example.serverdriveui.util.JsonUtil.asString
+import com.example.serverdriveui.util.JsonUtil.getAsMap
+import com.example.serverdriveui.util.JsonUtil.getAsString
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 
 class ContinueAction(
-    val data: Map<String, String>,
+    val data: JsonObject,
     private val stateManager: ComponentStateManager,
     private val globalStateManager: GlobalStateManager,
 ) : Action {
-
-    private val nextScreenId = data["nextScreenId"].orEmpty()
-    private val currentScreenId = data["currentScreenId"].orEmpty()
-    private val flowId = data["flowId"].orEmpty()
-
-    private val screenData = data["screenData"]?.let {
-        JsonParser.parseString(it)
-    }?.asJsonObject.or(JsonObject())
-
-    private val screenRequestData = data["screenRequestData"]?.let {
-        JsonParser.parseString(it)
-    }?.asJsonObject?.asMap().orEmpty()
-
     override fun execute(navController: NavHostController) {
+        val newScreenData = buildJsonObject {
+            data.getAsMap("screenData").forEach {
+                put(it.key, it.value)
+            }
 
-        screenRequestData.forEach { requestData ->
-            screenData.addProperty(
-                requestData.value.asString,
-                stateManager.getState<String>(requestData.key)?.value.orEmpty()
-            )
+            data.getAsMap("screenRequestData").forEach { requestData ->
+                put(
+                    requestData.value.asString(),
+                    stateManager.getState<String>(requestData.key)?.value.orEmpty()
+                )
+            }
         }
+
         globalStateManager.updateState(
-            CONTINUE_EFFECT_ID,
-            SdUiDestinationModel(flowId, nextScreenId, screenData.toString(), currentScreenId)
+            id = CONTINUE_EFFECT_ID,
+            data = SdUiDestinationModel(
+                flowId = data.getAsString("flowId"),
+                screenId = data.getAsString("nextScreenId"),
+                screenData = newScreenData,
+                lastScreenId = data.getAsString("currentScreenId")
+            )
         )
     }
 

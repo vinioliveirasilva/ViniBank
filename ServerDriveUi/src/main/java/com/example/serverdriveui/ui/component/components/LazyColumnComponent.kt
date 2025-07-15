@@ -13,7 +13,7 @@ import com.example.serverdriveui.ui.component.properties.VerticalArrangementProp
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.asValue
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 
 class LazyColumnComponent(
     private val model: JsonObject,
@@ -41,7 +41,7 @@ class LazyColumnComponent(
             horizontalAlignment = getHorizontalAlignment().asValue(),
             modifier = modifier,
         ) {
-            componentParser.parseList(data = model, componentStateManager = stateManager).forEach {
+            componentParser.parseList(data = model).forEach {
                 it.getComponentLazyListScope(navController).invoke(this)
             }
         }

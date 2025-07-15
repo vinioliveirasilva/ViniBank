@@ -1,13 +1,9 @@
 package com.example.serverdriveui.ui.state
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class ComponentStateManager(
-    val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
-) : AutoCloseable {
+class ComponentStateManager() : AutoCloseable {
 
     //TODO Corrigir gambiarra
     var shouldUpdate = false
@@ -20,13 +16,14 @@ class ComponentStateManager(
                 updateState(id, data)
                 updatedStates.add(id)
             }
+
             states.containsKey(id) -> return
             else -> states[id] = MutableStateFlow(data)
         }
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getState(id: String) : StateFlow<T>? {
+    fun <T> getState(id: String): StateFlow<T>? {
         return states[id] as? StateFlow<T>
     }
 

@@ -14,7 +14,7 @@ import com.example.serverdriveui.ui.component.properties.VerticalAlignmentProper
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.asValue
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 
 class LazyRowComponent(
     private val model: JsonObject,
@@ -46,7 +46,7 @@ class LazyRowComponent(
             modifier = modifier,
             state = state,
         ) {
-            componentParser.parseList(data = model, componentStateManager = stateManager).forEach {
+            componentParser.parseList(data = model).forEach {
                 it.getComponentLazyListScope(navController).invoke(this)
             }
         }

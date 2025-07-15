@@ -17,7 +17,7 @@ import com.example.serverdriveui.ui.component.components.sdui.properties.StageId
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.asValue
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 import com.vini.designsystem.compose.loader.Loader2
 
 class SdUiComponent(

@@ -13,7 +13,7 @@ import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.StringUtil.toAnnotatedStringFromHtml
 import com.example.serverdriveui.util.asValue
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 
 data class TextComponent(
     private val model: JsonObject,

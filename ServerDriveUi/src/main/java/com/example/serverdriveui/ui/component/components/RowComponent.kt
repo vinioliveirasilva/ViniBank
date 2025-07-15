@@ -15,7 +15,7 @@ import com.example.serverdriveui.ui.component.properties.VerticalAlignmentProper
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.asValue
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 
 class RowComponent(
     private val model: JsonObject,
@@ -36,7 +36,7 @@ class RowComponent(
         navController: NavHostController,
         modifier: Modifier,
     ): @Composable () -> Unit = {
-        val action = actionParser.parse(model, componentStateManager = stateManager)
+        val action = actionParser.parse(model)
         val actionModifier = action?.let { Modifier.clickable { action.execute(navController) } } ?: Modifier
 
         Row(
@@ -44,7 +44,7 @@ class RowComponent(
             horizontalArrangement = getHorizontalArrangement().asValue(),
             modifier = modifier.then(actionModifier)
         ) {
-            componentParser.parseList(data = model, componentStateManager = stateManager).forEach {
+            componentParser.parseList(data = model).forEach {
                 it.getComponentAsRow(navController).invoke(this)
             }
         }

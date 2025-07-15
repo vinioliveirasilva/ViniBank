@@ -10,6 +10,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        mavenLocal()
     }
 }
 
@@ -23,3 +24,4 @@ include(":Router")
 include(":Network")
 include(":Auth")
 include(":ServerDriveUi")
+include(":DesignSystemSdUi")

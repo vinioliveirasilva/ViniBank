@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    kotlin("plugin.serialization") version "2.1.20"
 }
 
 android {
@@ -41,7 +42,7 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
 
     implementation(libs.koin)
-    implementation(libs.gson)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.core.ktx)
     testImplementation(libs.junit)
 }

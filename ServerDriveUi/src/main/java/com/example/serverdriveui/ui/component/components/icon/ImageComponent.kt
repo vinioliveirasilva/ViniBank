@@ -17,7 +17,7 @@ import com.example.serverdriveui.ui.component.properties.SizeComponentModifier
 import com.example.serverdriveui.ui.component.properties.SizeModifier
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 
 class ImageComponent(
     private val model: JsonObject,
@@ -56,19 +56,19 @@ class ImageComponent(
 @Composable
 private fun IconComponentPreview() {
 
-    SdUiComponentPreview(
-        """
-            "type": "image",
-            "properties": [
-                {
-                    "name": "iconDrawable",
-                    "value": "Mastercard"
-                },
-                {
-                    "name": "size",
-                    "value": "48"
-                }
-            ]
-        """
-    )
+//    SdUiComponentPreview(
+//        """
+//            "type": "image",
+//            "properties": [
+//                {
+//                    "name": "iconDrawable",
+//                    "value": "Mastercard"
+//                },
+//                {
+//                    "name": "size",
+//                    "value": "48"
+//                }
+//            ]
+//        """
+//    )
 }

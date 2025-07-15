@@ -11,7 +11,7 @@ import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 
 data class TopAppBarComponent(
     private val model: JsonObject,
@@ -32,8 +32,7 @@ data class TopAppBarComponent(
                 .then(horizontalFillTypeModifier),
             title = {
                 componentParser.parseList(
-                    data = model,
-                    componentStateManager = stateManager
+                    data = model
                 ).forEach {
                     it.getComponent(navController).invoke()
                 }
@@ -41,8 +40,7 @@ data class TopAppBarComponent(
             navigationIcon = {
                 componentParser.parseList(
                     data = model,
-                    componentTag = "navigationIcons",
-                    componentStateManager = stateManager
+                    componentTag = "navigationIcons"
                 ).forEach {
                     it.getComponent(navController).invoke()
                 }
@@ -50,8 +48,7 @@ data class TopAppBarComponent(
             actions = {
                 componentParser.parseList(
                     data = model,
-                    componentTag = "actionIcons",
-                    componentStateManager = stateManager
+                    componentTag = "actionIcons"
                 ).forEach {
                     it.getComponentAsRow(navController).invoke(this)
                 }
@@ -106,5 +103,5 @@ fun TopAppBarComponentPreview() {
             ]
     """
 
-    SdUiComponentPreview(jsonModel)
+    //SdUiComponentPreview(jsonModel)
 }

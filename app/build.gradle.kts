@@ -77,9 +77,6 @@ dependencies {
     implementation(project(":DesignSystem"))
     implementation(project(":ServerDriveUi"))
 
-
-    implementation(libs.gson)
-
     implementation(libs.koin)
 
     //Compose

@@ -17,7 +17,8 @@ import com.example.serverdriveui.ui.component.properties.TextComponentProperty
 import com.example.serverdriveui.ui.component.properties.TextProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.google.gson.JsonObject
+import com.vini.designsystemsdui.button
+import kotlinx.serialization.json.JsonObject
 
 data class ButtonComponent(
     private val model: JsonObject,
@@ -38,10 +39,7 @@ data class ButtonComponent(
             enabled = getEnabled().collectAsState().value,
             modifier = modifier,
             onClick = {
-                actionParser.parse(
-                    componentJsonModel = model,
-                    componentStateManager = stateManager
-                )?.execute(navController)
+                actionParser.parse(model)?.execute(navController)
             },
             content = { Text(getText().collectAsState().value) },
         )
@@ -55,16 +53,8 @@ data class ButtonComponent(
 
 @Preview(showBackground = true)
 @Composable
-fun ButtonComponentPreview() {
-    val jsonModel = """
-        "type": "button",
-        "properties": [
-            {
-                "name": "text",
-                "value": "Salve"
-            }
-        ]
-    """
-
-    SdUiComponentPreview(jsonModel)
+private fun Preview() {
+    SdUiComponentPreview(
+        button(text = "salve")
+    )
 }

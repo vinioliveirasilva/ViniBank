@@ -1,14 +1,17 @@
 package com.example.serverdriveui.service.model
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 
+@Serializable
 data class SdUiRequest(
-    @SerializedName("flow")
+    @SerialName("flow")
     val flow: String,
-    @SerializedName("fromScreen")
+    @SerialName("fromScreen")
     val fromScreen: String,
-    @SerializedName("toScreen")
+    @SerialName("toScreen")
     val toScreen: String,
-    @SerializedName("screenData")
-    val screenData: String,
+    @SerialName("screenData")
+    val screenData: JsonObject,
 )

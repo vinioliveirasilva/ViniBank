@@ -13,7 +13,7 @@ import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 import com.google.maps.android.compose.DefaultMapUiSettings
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker

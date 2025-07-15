@@ -15,7 +15,7 @@ import com.example.serverdriveui.ui.component.properties.TextComponentProperty
 import com.example.serverdriveui.ui.component.properties.TextProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 
 /**
  * A component that renders an [ElevatedButton]. This behaves the same as [ButtonComponent]
@@ -42,8 +42,7 @@ data class ElevatedButtonComponent(
                 modifier = modifier,
                 onClick = {
                     actionParser.parse(
-                        componentJsonModel = model,
-                        componentStateManager = stateManager
+                        model = model
                     )?.execute(navController)
                 },
                 content = { Text(getText().collectAsState().value) }

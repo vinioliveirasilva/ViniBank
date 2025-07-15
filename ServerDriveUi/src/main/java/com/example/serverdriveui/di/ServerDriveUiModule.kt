@@ -1,6 +1,7 @@
 package com.example.serverdriveui.di
 
 import com.example.serverdriveui.GlobalStateManager
+import com.example.serverdriveui.SdUiActivity
 import com.example.serverdriveui.SdUiActivityViewModel
 import com.example.serverdriveui.SdUiRepository
 import com.example.serverdriveui.SdUiViewModel
@@ -57,493 +58,517 @@ import com.example.serverdriveui.ui.validator.validators.EmailValidator
 import com.example.serverdriveui.ui.validator.validators.IntToDynamicComponentValidator
 import com.example.serverdriveui.ui.validator.validators.IntToStringValidator
 import com.example.serverdriveui.ui.validator.validators.MinLengthValidator
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
-import org.koin.core.parameter.parametersOf
+import org.koin.core.Koin
 import org.koin.core.qualifier.named
+import org.koin.core.scope.Scope
 import org.koin.dsl.module
 import retrofit2.Retrofit
 
+const val scopeName = "scopeName"
+
+fun Koin.getNewScope(name: String, scopeToLink: Scope?): Scope {
+    println("criando um novo scopo")
+    return getOrCreateScope(name, named(scopeName)).apply {
+        scopeToLink?.let { linkTo(it) }
+    }
+}
+
 val ServerDriveUiComponents = module {
-    factory<Component>(
-        named(TopAppBarComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        TopAppBarComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-            componentParser = get()
-        )
-    }
+    scope(named(scopeName)) {
+        factory<Component>(
+            named(TopAppBarComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            TopAppBarComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+                componentParser = get()
+            )
+        }
 
-    factory<Component>(
-        named(SpacerComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        SpacerComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get()
-        )
-    }
+        factory<Component>(
+            named(SpacerComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            SpacerComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get()
+            )
+        }
 
-    factory<Component>(
-        named(DialogComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        DialogComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-            componentParser = get(),
-        )
-    }
+        factory<Component>(
+            named(DialogComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            DialogComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+                componentParser = get(),
+            )
+        }
 
-    factory<Component>(
-        named(BottomSheetComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        BottomSheetComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-            componentParser = get(),
-        )
-    }
+        factory<Component>(
+            named(BottomSheetComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            BottomSheetComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+                componentParser = get(),
+            )
+        }
 
-    factory<Component>(
-        named(TextComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        TextComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get()
-        )
-    }
+        factory<Component>(
+            named(TextComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            TextComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get()
+            )
+        }
 
-    factory<Component>(
-        named(OutlinedTextInputComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        OutlinedTextInputComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get()
-        )
-    }
+        factory<Component>(
+            named(OutlinedTextInputComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            OutlinedTextInputComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get()
+            )
+        }
 
-    factory<Component>(
-        named(ColumnComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        ColumnComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-            componentParser = get(),
-            actionParser = get()
-        )
-    }
+        factory<Component>(
+            named(ColumnComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            ColumnComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+                componentParser = get(),
+                actionParser = get()
+            )
+        }
 
-    factory<Component>(
-        named(RowComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        RowComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-            componentParser = get(),
-            actionParser = get(),
-        )
-    }
+        factory<Component>(
+            named(RowComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            RowComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+                componentParser = get(),
+                actionParser = get(),
+            )
+        }
 
-    factory<Component>(
-        named(BoxComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        BoxComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-            componentParser = get(),
-            actionParser = get(),
-        )
-    }
+        factory<Component>(
+            named(BoxComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            BoxComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+                componentParser = get(),
+                actionParser = get(),
+            )
+        }
 
-    factory<Component>(
-        named(LazyColumnComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        LazyColumnComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-            componentParser = get()
-        )
-    }
+        factory<Component>(
+            named(LazyColumnComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            LazyColumnComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+                componentParser = get()
+            )
+        }
 
-    factory<Component>(
-        named(LazyRowComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        LazyRowComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-            componentParser = get()
-        )
-    }
+        factory<Component>(
+            named(LazyRowComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            LazyRowComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+                componentParser = get()
+            )
+        }
 
-    factory<Component>(
-        named(HorizontalPagerComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        HorizontalPagerComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-            componentParser = get()
-        )
-    }
+        factory<Component>(
+            named(HorizontalPagerComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            HorizontalPagerComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+                componentParser = get()
+            )
+        }
 
-    factory<Component>(
-        named(ButtonComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        ButtonComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-            actionParser = get()
-        )
-    }
+        factory<Component>(
+            named(ButtonComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            ButtonComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+                actionParser = get()
+            )
+        }
 
-    factory<Component>(
-        named(CardComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        CardComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-            componentParser = get(),
-            actionParser = get()
-        )
-    }
+        factory<Component>(
+            named(CardComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            CardComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+                componentParser = get(),
+                actionParser = get()
+            )
+        }
 
-    factory<Component>(
-        named(OutlinedButtonComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        OutlinedButtonComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-            actionParser = get()
-        )
-    }
+        factory<Component>(
+            named(OutlinedButtonComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            OutlinedButtonComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+                actionParser = get()
+            )
+        }
 
-    factory<Component>(
-        named(ElevatedButtonComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        ElevatedButtonComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-            actionParser = get()
-        )
-    }
+        factory<Component>(
+            named(ElevatedButtonComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            ElevatedButtonComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+                actionParser = get()
+            )
+        }
 
-    factory<Component>(
-        named(LottieAnimationComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        LottieAnimationComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-            actionParser = get()
-        )
-    }
+        factory<Component>(
+            named(LottieAnimationComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            LottieAnimationComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+                actionParser = get()
+            )
+        }
 
-    factory<Component>(
-        named(TextInputComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        TextInputComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-        )
-    }
+        factory<Component>(
+            named(TextInputComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            TextInputComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+            )
+        }
 
-    factory<Component>(
-        named(CreatePasswordComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        CreatePasswordComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-            viewModel = get()
-        )
-    }
+        factory<Component>(
+            named(CreatePasswordComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            CreatePasswordComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+                viewModel = get()
+            )
+        }
 
-    viewModelOf(::CreatePasswordViewModel)
+        viewModelOf(::CreatePasswordViewModel)
 
 
-    factory<Component>(
-        named(SdUiComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        val internalStateManager: ComponentStateManager = get()
-        SdUiComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-            viewModel = get { parametersOf(internalStateManager) }
-        )
-    }
+        factory<Component>(
+            named(SdUiComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            SdUiComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+                viewModel = get()
+            )
+        }
 
-    viewModel { (componentStateManager: ComponentStateManager) ->
-        SdUiComponentViewModel(
-            repository = get(),
-            componentParser = get(),
-            componentStateManager = componentStateManager
-        )
-    }
+        viewModel {
+            SdUiComponentViewModel(
+                repository = get(),
+                componentParser = get(),
+            )
+        }
 
-    factory<Component>(
-        named(NavigationBarComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        NavigationBarComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-            componentParser = get(),
-        )
-    }
+        factory<Component>(
+            named(NavigationBarComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            NavigationBarComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+                componentParser = get(),
+            )
+        }
 
-    factory<Component>(
-        named(NavigationBarItemComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        NavigationBarItemComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-            componentParser = get(),
-        )
-    }
+        factory<Component>(
+            named(NavigationBarItemComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            NavigationBarItemComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+                componentParser = get(),
+            )
+        }
 
-    factory<Component>(
-        named(HorizontalDividerComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        HorizontalDividerComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-        )
-    }
+        factory<Component>(
+            named(HorizontalDividerComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            HorizontalDividerComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+            )
+        }
 
-    factory<Component>(
-        named(HorizontalDividerComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        HorizontalDividerComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-        )
-    }
+        factory<Component>(
+            named(HorizontalDividerComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            HorizontalDividerComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+            )
+        }
 
-    factory<Component>(
-        named(VerticalDividerComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        VerticalDividerComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-        )
-    }
+        factory<Component>(
+            named(VerticalDividerComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            VerticalDividerComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+            )
+        }
 
-    factory<Component>(
-        named(IconComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        IconComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-        )
-    }
+        factory<Component>(
+            named(IconComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            IconComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+            )
+        }
 
-    factory<Component>(
-        named(ImageComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        ImageComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-        )
-    }
+        factory<Component>(
+            named(ImageComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            ImageComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+            )
+        }
 
-    factory<Component>(
-        named(IconButtonComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        IconButtonComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-            componentParser = get(),
-            actionParser = get(),
-        )
-    }
+        factory<Component>(
+            named(IconButtonComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            IconButtonComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+                componentParser = get(),
+                actionParser = get(),
+            )
+        }
 
-    factory<Component>(
-        named(SnackBarComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        SnackBarComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-            componentParser = get(),
-            actionParser = get(),
-        )
-    }
+        factory<Component>(
+            named(SnackBarComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            SnackBarComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+                componentParser = get(),
+                actionParser = get(),
+            )
+        }
 
-    factory<Component>(
-        named(GoogleMapsComponent.IDENTIFIER)
-    ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, componentStateManager: ComponentStateManager) ->
-        GoogleMapsComponent(
-            model = jsonComponent,
-            properties = properties,
-            stateManager = componentStateManager,
-            validatorParser = get(),
-        )
+        factory<Component>(
+            named(GoogleMapsComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            GoogleMapsComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+            )
+        }
     }
 }
 
 val ServerDriveUiModule = module {
+    scope<SdUiActivity> {
+        scoped<ComponentStateManager> { ComponentStateManager() }
+        scoped<GlobalStateManager> { GlobalStateManager() }
+        viewModel { (flowId: String, screenData: JsonObject) ->
+            SdUiActivityViewModel(
+                flowId = flowId,
+                screenData = screenData,
+                repository = get(),
+                globalStateManager = get(),
+                closables = listOf(
+                    get<GlobalStateManager>(),
+                    get<ComponentStateManager>(),
+                )
+            )
+        }
+    }
 
-    single<GlobalStateManager> { GlobalStateManager() }
-    factory<ComponentStateManager> { ComponentStateManager() }
+    scope(named(scopeName)) {
+        viewModel { (jsonModel: JsonObject) ->
+            SdUiViewModel(
+                jsonModel = jsonModel,
+                repository = get(),
+                componentParser = get(),
+                globalStateManager = get(),
+                componentStateManager = get(),
+                closables = listOf(
+                    get<ActionParser>(),
+                    get<ComponentParser>(),
+                    get<ValidatorParser>(),
+                    AutoCloseable { close() }
+                )
+            )
+        }
 
-    //Parsers
-    factory<ComponentParser> { ComponentParser(koinScope = this) }
-    factory<ActionParser> { ActionParser(koinScope = this) }
-    factory<ValidatorParser> { ValidatorParser(koinScope = this) }
+        //Parsers
+        scoped<ActionParser> { ActionParser(koinScope = this) }
+        scoped<ComponentParser> { ComponentParser(koinScope = this) }
+        scoped<ValidatorParser> { ValidatorParser(koinScope = this) }
+    }
 
     single<SdUiRepository> { SdUiRepository(sdUiService = get()) }
     single<SdUiService> { get<Retrofit>().create(SdUiService::class.java) }
-
-    //UIs
-    viewModel { (flowId: String, screenData: String) ->
-        SdUiActivityViewModel(
-            flowId = flowId,
-            screenData = screenData,
-            repository = get(),
-            globalStateManager = get(),
-        )
-    }
-
-    viewModel { (jsonModel: String) ->
-        SdUiViewModel(
-            jsonModel = jsonModel,
-            repository = get(),
-            componentParser = get(),
-            globalStateManager = get(),
-            componentStateManager = get()
-        )
-    }
 }
 
 val ServerDriveUiValidators = module {
-    factory<Validator>(named(MinLengthValidator.IDENTIFIER)) { (model: ValidatorModel, componentStateManager: ComponentStateManager) ->
-        MinLengthValidator(
-            model = model,
-            componentStateManager = componentStateManager
-        )
-    }
-    factory<Validator>(named(AllTrueValidator.IDENTIFIER)) { (model: ValidatorModel, componentStateManager: ComponentStateManager) ->
-        AllTrueValidator(
-            model = model,
-            componentStateManager = componentStateManager
-        )
-    }
-    factory<Validator>(named(EmailValidator.IDENTIFIER)) { (model: ValidatorModel, componentStateManager: ComponentStateManager) ->
-        EmailValidator(
-            model = model,
-            componentStateManager = componentStateManager
-        )
-    }
-    factory<Validator>(named(IntToStringValidator.IDENTIFIER)) { (model: ValidatorModel, componentStateManager: ComponentStateManager) ->
-        IntToStringValidator(
-            model = model,
-            componentStateManager = componentStateManager
-        )
-    }
-    factory<Validator>(named(IntToDynamicComponentValidator.IDENTIFIER)) { (model: ValidatorModel, componentStateManager: ComponentStateManager) ->
-        IntToDynamicComponentValidator(
-            model = model,
-            componentStateManager = componentStateManager,
-            componentParser = get()
-        )
+    scope(named(scopeName)) {
+        factory<Validator>(named(MinLengthValidator.IDENTIFIER)) { (model: ValidatorModel) ->
+            MinLengthValidator(
+                model = model,
+                componentStateManager = get(),
+            )
+        }
+        factory<Validator>(named(AllTrueValidator.IDENTIFIER)) { (model: ValidatorModel) ->
+            AllTrueValidator(
+                model = model,
+                componentStateManager = get(),
+            )
+        }
+        factory<Validator>(named(EmailValidator.IDENTIFIER)) { (model: ValidatorModel) ->
+            EmailValidator(
+                model = model,
+                componentStateManager = get(),
+            )
+        }
+        factory<Validator>(named(IntToStringValidator.IDENTIFIER)) { (model: ValidatorModel) ->
+            IntToStringValidator(
+                model = model,
+                componentStateManager = get(),
+            )
+        }
+        factory<Validator>(named(IntToDynamicComponentValidator.IDENTIFIER)) { (model: ValidatorModel) ->
+            IntToDynamicComponentValidator(
+                model = model,
+                componentStateManager = get(),
+                componentParser = get()
+            )
+        }
     }
 }
 
 val ServerDriveUiActions = module {
-    factory<Action>(named(CloseAction.IDENTIFIER)) { (data: Map<String, String>, _: ComponentStateManager) ->
-        CloseAction(
-            data = data
-        )
-    }
-    factory<Action>(named(ContinueAction.IDENTIFIER)) { (data: Map<String, String>, componentStateManager: ComponentStateManager) ->
-        ContinueAction(
-            data = data,
-            stateManager = componentStateManager,
-            globalStateManager = get()
-        )
-    }
-    factory<Action>(named(BackAction.IDENTIFIER)) { (data: Map<String, String>, _: ComponentStateManager) ->
-        BackAction(
-            data = data
-        )
-    }
-    factory<Action>(named(BusinessSuccessAction.IDENTIFIER)) { (data: Map<String, String>, _: ComponentStateManager) ->
-        BusinessSuccessAction(
-            data = data
-        )
-    }
-    factory<Action>(named(NavigateAction.IDENTIFIER)) { (data: Map<String, String>, componentStateManager: ComponentStateManager) ->
-        NavigateAction(
-            data = data,
-            stateManager = componentStateManager,
-            globalStateManager = get()
-        )
-    }
-    factory<Action>(named(ToBooleanAction.IDENTIFIER)) { (data: Map<String, String>, componentStateManager: ComponentStateManager) ->
-        ToBooleanAction(
-            data = data,
-            stateManager = componentStateManager,
-        )
-    }
-    factory<Action>(named(ToIntAction.IDENTIFIER)) { (data: Map<String, String>, componentStateManager: ComponentStateManager) ->
-        ToIntAction(
-            data = data,
-            stateManager = componentStateManager,
-        )
+    scope(named(scopeName)) {
+        factory<Action>(named(CloseAction.IDENTIFIER)) { (data: JsonObject) ->
+            CloseAction(
+                data = data
+            )
+        }
+        factory<Action>(named(ContinueAction.IDENTIFIER)) { (data: JsonObject) ->
+            ContinueAction(
+                data = data,
+                stateManager = get(),
+                globalStateManager = get(),
+            )
+        }
+        factory<Action>(named(BackAction.IDENTIFIER)) { (data: JsonObject) ->
+            BackAction(
+                data = data
+            )
+        }
+        factory<Action>(named(BusinessSuccessAction.IDENTIFIER)) { (data: JsonObject) ->
+            BusinessSuccessAction(
+                data = data
+            )
+        }
+        factory<Action>(named(NavigateAction.IDENTIFIER)) { (data: JsonObject) ->
+            NavigateAction(
+                data = data,
+                globalStateManager = get()
+            )
+        }
+        factory<Action>(named(ToBooleanAction.IDENTIFIER)) { (data: JsonObject) ->
+            ToBooleanAction(
+                data = data,
+                stateManager = get(),
+            )
+        }
+        factory<Action>(named(ToIntAction.IDENTIFIER)) { (data: JsonObject) ->
+            ToIntAction(
+                data = data,
+                stateManager = get(),
+            )
+        }
     }
 }
 

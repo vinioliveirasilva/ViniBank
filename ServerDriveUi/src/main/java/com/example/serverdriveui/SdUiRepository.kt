@@ -2,38 +2,41 @@ package com.example.serverdriveui
 
 import com.example.serverdriveui.service.SdUiService
 import com.example.serverdriveui.service.model.SdUiRequest
-import com.google.gson.Gson
-import com.google.gson.annotations.SerializedName
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.decodeFromJsonElement
 
+@Serializable
 private data class ScreenModel(
-    @SerializedName("shouldCache")
+    @SerialName("shouldCache")
     val shouldCache: Boolean = true,
-    @SerializedName("flow")
+    @SerialName("flow")
     val flow: String,
-    @SerializedName("stage")
+    @SerialName("stage")
     val stage: String,
-    @SerializedName("template")
+    @SerialName("template")
     val template: String,
-    @SerializedName("version")
+    @SerialName("version")
     val version: String,
 )
 
 class SdUiRepository(
     private val sdUiService: SdUiService,
 ) {
-    private val cache = mutableMapOf<String, String>()
+    private val cache = mutableMapOf<String, JsonObject>()
 
     fun getScreen(
         model: SdUiModel
-    ): Flow<String> {
+    ): Flow<JsonObject> {
         val identifier = with(model) { "$flow/$toScreen" }
         val hasCache = cache.containsKey(identifier)
         if (hasCache) {
-            return cache[identifier]?.let { flowOf(it) }
+            return cache[identifier]?.let { flowOf(it).abc() }
                 ?: sdUiService.getScreenModel(
                     request = model.toSdUiRequest()
                 ).abc()
@@ -44,9 +47,8 @@ class SdUiRepository(
         ).abc()
     }
 
-    private fun Flow<String>.abc() = map {
-        delay(1000)
-        val model = Gson().fromJson(it, ScreenModel::class.java)
+    private fun Flow<JsonObject>.abc() = map {
+        val model = Json { ignoreUnknownKeys = true }.decodeFromJsonElement<ScreenModel>(it)
         val identifier = with(model) { "$flow/$stage" }
         if (model.shouldCache) {
             cache[identifier] = it

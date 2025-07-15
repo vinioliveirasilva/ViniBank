@@ -15,7 +15,7 @@ import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 import org.json.JSONObject
 
 class NavigationBarComponent(
@@ -35,7 +35,7 @@ class NavigationBarComponent(
         modifier: Modifier
     ): @Composable (() -> Unit) =
         {
-            val destinations = componentParser.parseList(model, componentStateManager = stateManager)
+            val destinations = componentParser.parseList(model)
             val selectedDestination = getSelectedDestination().collectAsState().value
 
             BackHandler(enabled = selectedDestination != FIRST_DESTINATION_INDEX) {
@@ -262,5 +262,5 @@ fun BottomNavigationComponentPreview() {
         )
     )
 
-    SdUiComponentPreview(jsonObject = screen)
+    //SdUiComponentPreview(jsonObject = screen)
 }

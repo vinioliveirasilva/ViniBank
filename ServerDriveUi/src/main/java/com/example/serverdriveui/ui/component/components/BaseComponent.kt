@@ -27,7 +27,7 @@ import com.example.serverdriveui.ui.component.properties.WidthComponentProperty
 import com.example.serverdriveui.ui.component.properties.WidthProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 
 open class BaseComponent(
     model: JsonObject,
@@ -43,6 +43,10 @@ open class BaseComponent(
     WidthComponentProperty by WidthProperty(properties, stateManager),
     WeightComponentModifier by WeightModifier(properties, stateManager) {
 
+    init {
+        validatorParser.parse(model).forEach { validator -> validator.initialize() }
+    }
+
     override val internalModifier: Modifier
         @Composable
         get() = Modifier
@@ -52,11 +56,6 @@ open class BaseComponent(
             .then(verticalPaddingModifier)
             .then(heightModifier)
             .then(widthModifier)
-
-    init {
-        validatorParser.parse(model, stateManager)
-            .forEach { validator -> validator.initialize() }
-    }
 
     @Composable
     override fun getComponent(navController: NavHostController): @Composable (() -> Unit) = {

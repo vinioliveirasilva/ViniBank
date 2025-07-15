@@ -15,7 +15,7 @@ import com.example.serverdriveui.ui.component.properties.LottieAnimationDataProp
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.asValue
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 
 data class LottieAnimationComponent(
     private val model: JsonObject,
@@ -50,8 +50,7 @@ data class LottieAnimationComponent(
 
             if (progress == ANIMATION_FINISHED) {
                 actionParser.parse(
-                    componentJsonModel = model,
-                    componentStateManager = stateManager
+                    model = model
                 )?.execute(navController)
             }
         }

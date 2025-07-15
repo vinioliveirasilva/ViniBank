@@ -2,9 +2,8 @@ package com.vini.storage
 
 import android.content.Context
 import androidx.core.content.edit
-import com.vini.common.gson.GsonProvider
 
-class LocalStorage(private val context: Context, private val gsonProvider: GsonProvider) {
+class LocalStorage(private val context: Context) {
 
     private val sharedPref by lazy {
         context.getSharedPreferences("login", Context.MODE_PRIVATE)

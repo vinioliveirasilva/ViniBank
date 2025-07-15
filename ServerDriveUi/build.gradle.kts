@@ -47,6 +47,7 @@ android {
 dependencies {
     implementation(project(":Common"))
     implementation(project(":DesignSystem"))
+    implementation(project(":DesignSystemSdUi"))
     implementation(project(":Network"))
     implementation(project(":Router"))
 
@@ -55,7 +56,6 @@ dependencies {
 
     //Retrofit
     implementation(libs.retrofit)
-    implementation(libs.gson)
 
     //Koin
     implementation(libs.koin)

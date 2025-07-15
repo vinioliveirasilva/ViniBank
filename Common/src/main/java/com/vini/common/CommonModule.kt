@@ -1,8 +1,8 @@
 package com.vini.common
 
-import com.vini.common.gson.GsonProvider
+import com.vini.common.json.JsonProvider
 import org.koin.dsl.module
 
 val CommonModule = module {
-    factory { GsonProvider() }
+    factory { JsonProvider() }
 }

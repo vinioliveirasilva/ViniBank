@@ -5,17 +5,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.components.BaseComponent
+import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
 import com.example.serverdriveui.ui.component.properties.EnabledComponentProperty
 import com.example.serverdriveui.ui.component.properties.EnabledProperty
 import com.example.serverdriveui.ui.component.properties.TextComponentProperty
 import com.example.serverdriveui.ui.component.properties.TextProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.google.gson.JsonObject
+import com.vini.designsystemsdui.outlinedButton
+import kotlinx.serialization.json.JsonObject
 
 /**
  * A component that renders an [OutlinedButton]. This behaves the same as [ButtonComponent]
@@ -36,21 +39,28 @@ data class OutlinedButtonComponent(
         navController: NavHostController,
         modifier: Modifier,
     ): @Composable () -> Unit = {
-            val isEnabled = getEnabled().collectAsState().value
-            OutlinedButton(
-                enabled = isEnabled,
-                modifier = modifier,
-                onClick = {
-                    actionParser.parse(
-                        componentJsonModel = model,
-                        componentStateManager = stateManager
-                    )?.execute(navController)
-                },
-                content = { Text(getText().collectAsState().value) }
-            )
-        }
+        val isEnabled = getEnabled().collectAsState().value
+        OutlinedButton(
+            enabled = isEnabled,
+            modifier = modifier,
+            onClick = {
+                actionParser.parse(
+                    model = model
+                )?.execute(navController)
+            },
+            content = { Text(getText().collectAsState().value) }
+        )
+    }
 
     companion object {
         const val IDENTIFIER = "outlinedButton"
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun Preview() {
+    SdUiComponentPreview(
+        outlinedButton(text = "salve")
+    )
 }

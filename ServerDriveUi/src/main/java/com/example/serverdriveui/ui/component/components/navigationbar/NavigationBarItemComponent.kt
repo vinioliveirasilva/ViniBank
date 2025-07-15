@@ -16,7 +16,7 @@ import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 
 class NavigationBarItemComponent(
     private val model: JsonObject,
@@ -47,12 +47,11 @@ class NavigationBarItemComponent(
             icon = {
                 componentParser.parseList(
                     model,
-                    componentTag,
-                    componentStateManager = stateManager
+                    componentTag
                 ).forEach { it.getComponent(navController).invoke() }
             },
             label = {
-                componentParser.parseList(model, componentStateManager = stateManager)
+                componentParser.parseList(model)
                     .forEach { it.getComponent(navController).invoke() }
             }
         )
@@ -66,49 +65,49 @@ class NavigationBarItemComponent(
 @Preview(showBackground = true)
 @Composable
 fun NavigationBarItemComponentPreview() {
-    SdUiComponentPreview(
-        componentModel = """
-            "type": "navigationBarItem",
-            "properties": [
-                {
-                    "name": "index",
-                    "value": "0"
-                }
-            ],
-            "components": [
-                {
-                    "type": "text",
-                    "properties": [
-                        {
-                            "name": "text",
-                            "value": "Home"
-                        }
-                    ]
-                }
-            ],
-            "selectedIcon": [
-                {
-                    "type": "icon",
-                    "properties": [
-                        {
-                            "name": "icon",
-                            "value": "Home"
-                        }
-                    ]
-                }
-            ],
-            "unselectedIcon": [
-                {
-                    "type": "icon",
-                    "properties": [
-                        {
-                            "name": "icon",
-                            "value": "Payment"
-                        }
-                    ]
-                }
-            ]
-       
-        """.trimIndent()
-    )
+//    SdUiComponentPreview(
+//        componentModel = """
+//            "type": "navigationBarItem",
+//            "properties": [
+//                {
+//                    "name": "index",
+//                    "value": "0"
+//                }
+//            ],
+//            "components": [
+//                {
+//                    "type": "text",
+//                    "properties": [
+//                        {
+//                            "name": "text",
+//                            "value": "Home"
+//                        }
+//                    ]
+//                }
+//            ],
+//            "selectedIcon": [
+//                {
+//                    "type": "icon",
+//                    "properties": [
+//                        {
+//                            "name": "icon",
+//                            "value": "Home"
+//                        }
+//                    ]
+//                }
+//            ],
+//            "unselectedIcon": [
+//                {
+//                    "type": "icon",
+//                    "properties": [
+//                        {
+//                            "name": "icon",
+//                            "value": "Payment"
+//                        }
+//                    ]
+//                }
+//            ]
+//
+//        """.trimIndent()
+//    )
 }

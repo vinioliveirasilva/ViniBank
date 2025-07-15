@@ -3,6 +3,7 @@ package com.example.serverdriveui.ui.validator.validators
 import com.example.serverdriveui.service.model.ValidatorModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.validators.generic.GenericConverterValidator
+import com.example.serverdriveui.util.JsonUtil.asString
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
@@ -15,7 +16,7 @@ class IntToStringValidator(
     componentStateManager = componentStateManager,
     scope = scope,
     inputConverter = { it.toInt() },
-    outputConverter = { it },
+    outputConverter = { it.asString() },
     defaultOutput = ""
 ) {
     companion object {

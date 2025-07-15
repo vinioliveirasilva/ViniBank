@@ -1,12 +1,13 @@
 package com.example.serverdriveui.service.model
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 
 @Serializable
 data class ValidatorModel(
-    @SerializedName("type") val type : String,
-    @SerializedName("data") val data : Map<String, String> = emptyMap(),//TODO deve ser somente string/string? impossibilita definir como object no backend
-    @SerializedName("id") val id : String,
-    @SerializedName("required") val required : List<String>,
+    @SerialName("type") val type: String,
+    @SerialName("data") val data: JsonObject = JsonObject(emptyMap()),
+    @SerialName("id") val id: String,
+    @SerialName("required") val required: List<String> = emptyList(),
 )

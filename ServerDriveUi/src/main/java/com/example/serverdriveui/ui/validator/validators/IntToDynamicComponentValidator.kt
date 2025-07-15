@@ -6,10 +6,9 @@ import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.Validator
 import com.example.serverdriveui.ui.validator.validators.generic.GenericConverterValidator
-import com.google.gson.Gson
-import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.serialization.json.jsonObject
 
 class IntToDynamicComponentValidator(
     private val model: ValidatorModel,
@@ -22,13 +21,7 @@ class IntToDynamicComponentValidator(
         componentStateManager = componentStateManager,
         scope = scope,
         inputConverter = { it.toInt() },
-        outputConverter = { componentParser.parse(
-            data = Gson().fromJson(
-                it,
-                JsonObject::class.java
-            ),
-            componentStateManager = componentStateManager
-        ) },
+        outputConverter = { componentParser.parse(data = it.jsonObject) },
         defaultOutput = componentParser.unknownComponent()
     ) {
 

@@ -15,8 +15,10 @@ import com.example.serverdriveui.ui.component.properties.VisibilityComponentProp
 import com.example.serverdriveui.ui.component.properties.VisibilityProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
+import com.example.serverdriveui.util.ScreenUtil.component
+import com.example.serverdriveui.util.ScreenUtil.property
 import com.example.serverdriveui.util.asValue
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 
 class BottomSheetComponent(
     private val model: JsonObject,
@@ -41,7 +43,7 @@ class BottomSheetComponent(
                 onDismissRequest = { setIsVisible(false) },
                 windowInsets = WindowInsets(0, 0, 0, 50)
             ) {
-                componentParser.parseList(model, componentStateManager = stateManager).forEach {
+                componentParser.parseList(model).forEach {
                     it.getComponentAsColumn(navController).invoke(this)
                 }
             }
@@ -56,20 +58,20 @@ class BottomSheetComponent(
 @Preview(showBackground = true)
 @Composable
 fun Preview() {
-    val jsonModel = """
-        "type": "bottomSheet",
-        "properties": [
-            { "name": "shouldShow", "value" : "true" }
-        ],
-        "components" : [
-            {
-                "type": "text",
-                "properties": [
-                    { "name": "text", "value" :"Dialog text, can be anything, just for example" }
-                ]
-            }
-        ]
-    """
-
-    SdUiComponentPreview(jsonModel)
+    SdUiComponentPreview(
+        component(
+            "bottomSheet",
+            listOf(
+                property("shouldShow", "true"),
+            ),
+            listOf(
+                component(
+                    "text",
+                    listOf(
+                        property("text", "Dialog text, can be anything, just for example")
+                    )
+                )
+            )
+        )
+    )
 }

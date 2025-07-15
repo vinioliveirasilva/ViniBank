@@ -11,7 +11,7 @@ data class EnabledProperty(
         stateManager = stateManager,
         properties = properties,
         propertyName = "enabled",
-        propertyValueTransformation = { it.toBoolean() != false },
+        propertyValueTransformation = { it.toBoolean() },
         defaultPropertyValue = true
     ) {
 

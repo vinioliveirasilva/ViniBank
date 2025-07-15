@@ -24,7 +24,7 @@ import com.example.serverdriveui.ui.component.properties.TextComponentProperty
 import com.example.serverdriveui.ui.component.properties.TextProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 import com.vini.designsystem.R
 import com.vini.designsystem.compose.icon.passwordTrailingIcon
 import com.vini.designsystem.compose.visualtransformation.getPasswordVisualTransformation

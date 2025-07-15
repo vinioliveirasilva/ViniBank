@@ -17,9 +17,9 @@ import com.example.serverdriveui.ui.component.properties.VerticalArrangementProp
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.asValue
-import com.google.gson.Gson
-import com.google.gson.JsonObject
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
 
 interface DynamicComponentProperty {
     fun getComponent(): StateFlow<Component?>
@@ -37,11 +37,7 @@ class DynamicComponentPropertyImpl(
         propertyName = "components",
         propertyValueTransformation = {
             componentParser.parse(
-                data = Gson().fromJson(
-                    it,
-                    JsonObject::class.java
-                ),
-                componentStateManager = stateManager
+                data = Json.decodeFromString<JsonObject>(it)
             )
         },
         defaultPropertyValue = null
@@ -75,10 +71,11 @@ class ColumnComponent(
     @Composable
     override fun getInternalComponent(
         navController: NavHostController,
-        modifier: Modifier
+        modifier: Modifier,
     ): @Composable () -> Unit = {
-        val action = actionParser.parse(model, componentStateManager = stateManager)
-        val actionModifier = action?.let { Modifier.clickable{ it.execute(navController) } } ?: Modifier
+        val action = actionParser.parse(model)
+        val actionModifier =
+            action?.let { Modifier.clickable { it.execute(navController) } } ?: Modifier
         val dynamicComponents = getComponent().asValue()
 
         Column(
@@ -88,10 +85,9 @@ class ColumnComponent(
                 .then(actionModifier)
         ) {
             dynamicComponents?.getComponentAsColumn(navController)?.invoke(this)
-                ?: componentParser.parseList(data = model, componentStateManager = stateManager)
-                    .forEach {
-                        it.getComponentAsColumn(navController).invoke(this)
-                    }
+                ?: componentParser.parseList(data = model).forEach {
+                    it.getComponentAsColumn(navController).invoke(this)
+                }
         }
     }
 

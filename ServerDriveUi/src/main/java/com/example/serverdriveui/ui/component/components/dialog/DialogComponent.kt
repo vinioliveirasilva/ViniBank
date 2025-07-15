@@ -16,7 +16,7 @@ import com.example.serverdriveui.ui.component.properties.VisibilityProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.asValue
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 
 class DialogComponent(
     private val model: JsonObject,
@@ -38,21 +38,18 @@ class DialogComponent(
                 icon = {
                     componentParser.parseList(
                         model,
-                        componentStateManager = stateManager,
                         componentTag = "icon"
                     ).forEach { it.getComponent(navController).invoke() }
                 },
                 title = {
                     componentParser.parseList(
                         model,
-                        componentStateManager = stateManager,
                         componentTag = "title"
                     ).forEach { it.getComponent(navController).invoke() }
                 },
                 text = {
                     componentParser.parseList(
                         model,
-                        componentStateManager = stateManager,
                         componentTag = "text"
                     ).forEach { it.getComponent(navController).invoke() }
                 },
@@ -116,5 +113,5 @@ fun Preview() {
         ]
     """
 
-    SdUiComponentPreview(jsonModel)
+    //SdUiComponentPreview(jsonModel)
 }

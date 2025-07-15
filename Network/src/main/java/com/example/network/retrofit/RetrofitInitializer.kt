@@ -32,9 +32,9 @@ class RetrofitInitializer(
 interface GitHubService {
     @HandShake
     @GET("/initialize")
-    fun handShake(): Flow<Any>
+    fun handShake(): Flow<String>
 
     @Encrypt
     @POST("/change-keys")
-    fun handShake2(@Body toDecrypt: String): Flow<Any>
+    fun handShake2(@Body toDecrypt: String): Flow<String>
 }

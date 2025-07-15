@@ -71,7 +71,7 @@ class LoginActivity : BaseComposeActivity() {
                 )
 
                 LoginVMEvent.NavigateToSdUi -> featureRouter.navigate(
-                    SdUiRoute(data = SdUiRouteData.StartAsDefault(flowId = "Home")),
+                    SdUiRoute(data = SdUiRouteData.StartAsDefault(flowId = "Example")),
                     signUpLauncher
                 )
             }
