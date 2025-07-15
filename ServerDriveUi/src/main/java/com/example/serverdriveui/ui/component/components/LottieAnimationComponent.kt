@@ -1,6 +1,5 @@
 package com.example.serverdriveui.ui.component.components
 
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -10,30 +9,32 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.serverdriveui.service.model.PropertyModel
-import com.example.serverdriveui.ui.actions.manager.Action
-import com.example.serverdriveui.ui.component.manager.Component
-import com.example.serverdriveui.ui.component.properties.static.LottieAnimationDataComponentProperty
-import com.example.serverdriveui.ui.component.properties.static.LottieAnimationDataProperty
+import com.example.serverdriveui.ui.action.manager.ActionParser
+import com.example.serverdriveui.ui.component.properties.LottieAnimationDataComponentProperty
+import com.example.serverdriveui.ui.component.properties.LottieAnimationDataProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
-import com.example.serverdriveui.ui.validator.manager.Validator
+import com.example.serverdriveui.ui.validator.manager.ValidatorParser
+import com.example.serverdriveui.util.asValue
+import com.google.gson.JsonObject
 
 data class LottieAnimationComponent(
-    private val dynamicProperties: List<PropertyModel>,
-    private val staticProperties: Map<String, String>,
-    private val action: Action,
+    private val model: JsonObject,
+    private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
-    private val validators: List<Validator>,
-) : Component,
-    LottieAnimationDataComponentProperty by LottieAnimationDataProperty(staticProperties) {
-
-    init {
-        validators.forEach { it.initialize() }
-    }
+    private val validatorParser: ValidatorParser,
+    private val actionParser: ActionParser,
+) : BaseComponent(model, properties, stateManager, validatorParser),
+    LottieAnimationDataComponentProperty by LottieAnimationDataProperty(
+        properties,
+        stateManager
+    ) {
 
     @Composable
-    override fun getComponent(navController: NavHostController): @Composable ColumnScope.() -> Unit =
-        {
-            val composition by rememberLottieComposition(lottieAnimationSpec)
+    override fun getInternalComponent(
+        navController: NavHostController,
+        modifier: Modifier,
+    ): @Composable () -> Unit = {
+            val composition by rememberLottieComposition(getLottieAnimationSpec().asValue())
 
             val progress by animateLottieCompositionAsState(
                 composition,
@@ -42,13 +43,16 @@ data class LottieAnimationComponent(
             )
 
             LottieAnimation(
-                modifier = Modifier.fillMaxSize(),
+                modifier = modifier.fillMaxSize(),
                 composition = composition,
                 progress = { progress },
             )
 
             if (progress == ANIMATION_FINISHED) {
-                action.execute(navController)
+                actionParser.parse(
+                    componentJsonModel = model,
+                    componentStateManager = stateManager
+                )?.execute(navController)
             }
         }
 

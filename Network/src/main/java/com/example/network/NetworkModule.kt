@@ -5,6 +5,7 @@ import com.example.network.retrofit.FlowCallAdapterFactory
 import com.example.network.retrofit.GitHubService
 import com.example.network.retrofit.RetrofitInitializer
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -24,13 +25,16 @@ val NetworkModule = module {
 
     single<OkHttpClient> {
         OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
             .addInterceptor(get<CryptoInterceptor>())
             .build()
     }
 
     single<Retrofit> {
         Builder()
-            .baseUrl("http://192.168.15.4:8080/")
+            .baseUrl("http://10.0.2.2:8080/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())

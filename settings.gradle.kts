@@ -17,7 +17,6 @@ rootProject.name = "ViniBank"
 include(":app")
 include(":FeatureLogin")
 include(":DesignSystem")
-include(":FeatureHome")
 include(":Storage")
 include(":Common")
 include(":Router")

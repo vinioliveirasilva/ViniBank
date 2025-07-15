@@ -3,18 +3,21 @@ package com.vini.bank
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.router.FeatureRouter
-import com.example.router.routes.HomeRoute
 import com.example.router.routes.LoginRoute
+import com.example.router.routes.SdUiRoute
+import com.example.router.routes.SdUiRouteData
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
@@ -43,7 +46,9 @@ class LauncherActivity : BaseComposeActivity() {
         observe(viewModel.event, ::handleEvent)
 
         setContent {
-            Row(modifier = Modifier.fillMaxSize()) {
+            Row(modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)) {
                 val composition by rememberLottieComposition(
                     LottieCompositionSpec.RawRes(
                         com.vini.designsystem.R.raw.lottie_launcher
@@ -88,7 +93,7 @@ class LauncherActivity : BaseComposeActivity() {
     }
 
     private fun handleEvent(event: LauncherUIEvent) = when (event) {
-        is LauncherUIEvent.OpenHome -> featureRouter.navigateAndFinish(HomeRoute())
+        is LauncherUIEvent.OpenHome -> featureRouter.navigateAndFinish(SdUiRoute(SdUiRouteData.StartAsDefault(flowId = "Home")))
         is LauncherUIEvent.OpenLogin -> featureRouter.navigate(LoginRoute(), loginLauncher)
         is LauncherUIEvent.Finish -> finish()
     }

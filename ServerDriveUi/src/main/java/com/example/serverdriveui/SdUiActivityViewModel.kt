@@ -2,50 +2,40 @@ package com.example.serverdriveui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.serverdriveui.service.model.ScreenModel
-import com.example.serverdriveui.ui.actions.ContinueAction.Companion.CONTINUE_EFFECT_ID
-import com.google.gson.Gson
+import com.example.serverdriveui.ui.action.actions.ContinueAction.Companion.CONTINUE_EFFECT_ID
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.receiveAsFlow
 
 class SdUiActivityViewModel(
     private val flowId: String,
+    private val screenData: String,
     private val repository: SdUiRepository,
-    private val stateManager: GlobalStateManager,
+    private val globalStateManager: GlobalStateManager,
 ) : ViewModel() {
-    val navigateOnError: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val navigateOnSuccess: MutableStateFlow<SdUiDestination2?> = MutableStateFlow(null)
+
+    private val _successNavigation: Channel<SdUiRoute> = Channel()
+    val navigateOnSuccess = _successNavigation.receiveAsFlow()
 
     init {
-        viewModelScope.launch {
-            stateManager.registerState(CONTINUE_EFFECT_ID)
-        }
+        addCloseable(globalStateManager)
 
-        viewModelScope.launch {
-            repository
-                .getScreen(
-                    SdUiModel(
-                        flowId = flowId,
-                        screenId = "",
-                        screenData = "{}",
-                        lastScreenId = ""
-                    )
+        globalStateManager.registerState(CONTINUE_EFFECT_ID)
+
+        repository
+            .getScreen(
+                SdUiModel(
+                    flowId = flowId,
+                    screenData = screenData,
                 )
-                .catch {
-                    val screen = Gson().fromJson<ScreenModel>(it.message, ScreenModel::class.java)
-                    navigateOnError.update { true }
-                    emit(screen)
-                    //should show error feedback with a retry button and close button
-                }
-                .map { navigateOnSuccess.value = SdUiDestination2(it) }
-                .flowOn(Dispatchers.IO)
-                .launchIn(viewModelScope)
-        }
+            )
+            .catch { emit(it.message.orEmpty()) }
+            .map { _successNavigation.send(SdUiRoute(screenData = it)) }
+            .flowOn(Dispatchers.IO)
+            .launchIn(viewModelScope)
     }
 }

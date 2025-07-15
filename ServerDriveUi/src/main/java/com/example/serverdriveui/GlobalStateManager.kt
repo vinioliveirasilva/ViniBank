@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 
 class GlobalStateManager(
     val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
-) {
+) : AutoCloseable {
     private val globalState = mutableMapOf<String, MutableSharedFlow<Any?>>()
 
     fun registerState(id: String) {
@@ -23,5 +23,9 @@ class GlobalStateManager(
 
     fun <T> updateState(id: String, data: T) = scope.launch {
         globalState[id]?.emit(data)
+    }
+
+    override fun close() {
+        globalState.clear()
     }
 }

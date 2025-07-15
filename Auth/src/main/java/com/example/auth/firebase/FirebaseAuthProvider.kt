@@ -6,7 +6,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 
@@ -23,7 +22,6 @@ class FirebaseAuthProvider(
 
     override fun logout() = flow {
         provider.signOut()
-        delay(1000)
         emit(true)
     }
 }

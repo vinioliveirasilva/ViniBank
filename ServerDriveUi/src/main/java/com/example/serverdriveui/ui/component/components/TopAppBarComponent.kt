@@ -1,57 +1,110 @@
 package com.example.serverdriveui.ui.component.components
 
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
-import com.example.serverdriveui.ui.component.manager.Component
-import com.example.serverdriveui.ui.component.properties.dynamic.TextComponentProperty
-import com.example.serverdriveui.ui.component.properties.dynamic.TextProperty
-import com.example.serverdriveui.ui.component.properties.static.FillTypeComponentModifier
-import com.example.serverdriveui.ui.component.properties.static.FillTypeModifier
-import com.example.serverdriveui.ui.component.properties.static.TextAlignComponentProperty
-import com.example.serverdriveui.ui.component.properties.static.TextAlignProperty
+import com.example.serverdriveui.ui.component.manager.ComponentParser
+import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
 import com.example.serverdriveui.ui.state.ComponentStateManager
-import com.example.serverdriveui.ui.validator.manager.Validator
+import com.example.serverdriveui.ui.validator.manager.ValidatorParser
+import com.google.gson.JsonObject
 
 data class TopAppBarComponent(
-    private val properties: List<PropertyModel>,
-    private val modifiers: Map<String, String>,
+    private val model: JsonObject,
+    private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
-    private val validators: List<Validator>,
-) : Component,
-    TextComponentProperty by TextProperty(properties, stateManager),
-    FillTypeComponentModifier by FillTypeModifier(modifiers),
-    TextAlignComponentProperty by TextAlignProperty(modifiers) {
-
-    init {
-        validators.forEach { it.initialize() }
-    }
+    private val validatorParser: ValidatorParser,
+    private val componentParser: ComponentParser,
+) : BaseComponent(model, properties, stateManager, validatorParser) {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    override fun getComponent(navController: NavHostController): @Composable ColumnScope.() -> Unit =
-        {
-            val text = getText().collectAsState().value
-
-            CenterAlignedTopAppBar(
-                modifier = Modifier.then(fillTypeModifier),
-                title = {
-                    Text(
-                        textAlign = textAlign,
-                        modifier = Modifier.then(fillTypeModifier),
-                        text = text
-                    )
+    override fun getInternalComponent(
+        navController: NavHostController,
+        modifier: Modifier,
+    ): @Composable () -> Unit = {
+        CenterAlignedTopAppBar(
+            modifier = Modifier
+                .then(horizontalFillTypeModifier),
+            title = {
+                componentParser.parseList(
+                    data = model,
+                    componentStateManager = stateManager
+                ).forEach {
+                    it.getComponent(navController).invoke()
                 }
-            )
-        }
+            },
+            navigationIcon = {
+                componentParser.parseList(
+                    data = model,
+                    componentTag = "navigationIcons",
+                    componentStateManager = stateManager
+                ).forEach {
+                    it.getComponent(navController).invoke()
+                }
+            },
+            actions = {
+                componentParser.parseList(
+                    data = model,
+                    componentTag = "actionIcons",
+                    componentStateManager = stateManager
+                ).forEach {
+                    it.getComponentAsRow(navController).invoke(this)
+                }
+            }
+        )
+    }
 
     companion object {
         const val IDENTIFIER = "topAppBar"
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TopAppBarComponentPreview() {
+    val jsonModel = """
+            "type": "topAppBar",
+            "properties": [
+            ],
+            "components": [
+                {
+                    "type": "text",
+                    "properties": [
+                        {
+                            "name": "text",
+                            "value": "Salve"
+                        }
+                    ]
+                }
+            ],
+            "navigationIcons": [
+                {
+                    "type": "button",
+                    "properties": [
+                        {
+                            "name": "text",
+                            "value": "Salve"
+                        }
+                    ]
+                }
+            ],
+            "actionIcons": [
+                {
+                    "type": "button",
+                    "properties": [
+                        {
+                            "name": "text",
+                            "value": "Salve"
+                        }
+                    ]
+                }
+            ]
+    """
+
+    SdUiComponentPreview(jsonModel)
 }
