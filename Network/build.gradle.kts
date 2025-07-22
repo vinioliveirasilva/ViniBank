@@ -34,6 +34,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":Common"))
+
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.scalar)
     implementation(libs.logging.interceptor)

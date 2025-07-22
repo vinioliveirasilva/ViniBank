@@ -42,7 +42,7 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "com.vini"
             artifactId = "designsystemsdui"
-            version = "0.0.1"
+            version = "0.0.2"
 
             afterEvaluate { artifact(tasks.getByName("bundleReleaseAar")) }
         }
