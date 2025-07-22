@@ -3,17 +3,20 @@ package com.example.network.retrofit
 import java.security.KeyFactory
 import java.security.KeyPair
 import java.security.KeyPairGenerator
+import java.security.spec.AlgorithmParameterSpec
 import java.security.spec.X509EncodedKeySpec
 import javax.crypto.KeyAgreement
 import javax.crypto.interfaces.DHPublicKey
-import javax.crypto.spec.DHParameterSpec
 
-class DHExchangePartner(private val algoSpec: DHParameterSpec?) {
+class DHExchangePartner(
+    private val algoSpec: AlgorithmParameterSpec,
+    private val algoName: String = "DH",
+) {
 
     private lateinit var keyAgreement: KeyAgreement
 
     private fun createPersonalDHKeypairAndInitAgreement(initKeyPairGenerator: (KeyPairGenerator) -> Unit): KeyPair {
-        val keyPair = KeyPairGenerator.getInstance("DH").apply {
+        val keyPair = KeyPairGenerator.getInstance(algoName).apply {
             initKeyPairGenerator(this)
         }.generateKeyPair()
         initializeKeyAgreement(keyPair)
@@ -24,12 +27,12 @@ class DHExchangePartner(private val algoSpec: DHParameterSpec?) {
         createPersonalDHKeypairAndInitAgreement { it.initialize(algoSpec) }
 
     fun createPublicKeyFromEncodedMaterial(encoded: ByteArray): DHPublicKey {
-        val keyFactory = KeyFactory.getInstance("DH")
+        val keyFactory = KeyFactory.getInstance(algoName)
         return keyFactory.generatePublic(X509EncodedKeySpec(encoded)) as DHPublicKey
     }
 
     private fun initializeKeyAgreement(keyPair: KeyPair) {
-        keyAgreement = KeyAgreement.getInstance("DH").apply {
+        keyAgreement = KeyAgreement.getInstance(algoName).apply {
             init(keyPair.private)
         }
     }

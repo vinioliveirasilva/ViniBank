@@ -1,6 +1,5 @@
 package com.example.network
 
-import com.example.network.retrofit.CryptoManager
 import com.example.network.retrofit.EncodeProvider
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -12,18 +11,13 @@ import okio.Buffer
 import retrofit2.Invocation
 
 
-annotation class Encrypt()
-annotation class HandShake()
-
-class CryptoInterceptor(
+class AesCryptoInterceptor(
     private val encoderProvider: EncodeProvider,
-    private val keyExchangeManager: KeyExchangeManager,
-    private val crypto: CryptoManager = CryptoManager(),
+    private val keyExchangeManager: FastKeyExchangeManager,
 ) : Interceptor {
 
     private lateinit var sessionId: String
     private lateinit var iv: String
-    private lateinit var secret: String
 
     fun <T : Annotation> Request.getAnnotation(annotationClass: Class<T>): T? {
         return tag(Invocation::class.java)?.method()?.getAnnotation(annotationClass)
@@ -51,7 +45,7 @@ class CryptoInterceptor(
         newBuilder().addHandShakeHeaders().build()
 
     private fun Request.createEncryptedRequest(): Request {
-        val (data, iv) = crypto.encrypt(readBody(this), secret)
+        val (data, iv) = keyExchangeManager.encrypt(readBody(this), keyExchangeManager.iv)
         return newBuilder()
             .addEncryptHeaders(iv, sessionId)
             .post(
@@ -82,19 +76,17 @@ class CryptoInterceptor(
     private fun Response.doOnHandShakeResponse(): Response {
         sessionId = header(Header.SESSION_ID).orEmpty()
         keyExchangeManager.createPublicKeyAndRunPhaseOne(encoderProvider.decode(readBody(this)))
-        secret = keyExchangeManager.generateSecret()
         return this.newBuilder().body(ResponseBody.create(JSON_MEDIA_TYPE, EMPTY_JSON)).build()
     }
 
     private fun Response.doOnEncryptedResponse(): Response {
         iv = header(Header.IV) ?: return this
-        val dec = crypto.decrypt(
-            dataToDecrypt = encoderProvider.decode(readBody(this)),
-            secret = secret,
+        val (dec, iv) = keyExchangeManager.decrypt(
+            encryptedData = encoderProvider.decode(readBody(this)),
             iv = encoderProvider.decode(iv)
-        ).decodeToString()
+        )
         return newBuilder()
-            .body(ResponseBody.create(JSON_MEDIA_TYPE, dec))
+            .body(ResponseBody.create(JSON_MEDIA_TYPE, dec.decodeToString()))
             .build()
     }
 
@@ -112,7 +104,7 @@ class CryptoInterceptor(
         val buffer = Buffer()
         newReq.body?.writeTo(buffer)
 
-        return buffer.readUtf8().orEmpty()
+        return buffer.readUtf8()
     }
 
     private companion object {

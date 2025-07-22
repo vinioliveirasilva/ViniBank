@@ -12,7 +12,7 @@ class KeyboardOptionsProperty(
     BasePropertyData<KeyboardOptions>(
         stateManager = stateManager,
         properties = properties,
-        propertyName = "textFormatter",
+        propertyName = "keyboardOptions",
         propertyValueTransformation = { it.toKeyboardOption() },
         defaultPropertyValue = KeyboardOptions.Default
     ) {
@@ -23,5 +23,6 @@ class KeyboardOptionsProperty(
 private fun String?.toKeyboardOption() = when (this) {
     "Documento.CPF" -> KeyboardOptions(keyboardType = KeyboardType.Number)
     "Telefone" -> KeyboardOptions(keyboardType = KeyboardType.Phone)
+    "Password", "Senha" -> KeyboardOptions(keyboardType = KeyboardType.Password)
     else -> KeyboardOptions.Default
 }

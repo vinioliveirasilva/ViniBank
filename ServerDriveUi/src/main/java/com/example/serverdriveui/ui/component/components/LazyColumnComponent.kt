@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
+import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.component.properties.HorizontalAlignmentComponentProperty
 import com.example.serverdriveui.ui.component.properties.HorizontalAlignmentProperty
@@ -21,7 +22,8 @@ class LazyColumnComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
-) : BaseComponent(model, properties, stateManager, validatorParser),
+    private val actionParser: ActionParser,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     HorizontalAlignmentComponentProperty by HorizontalAlignmentProperty(
         properties,
         stateManager

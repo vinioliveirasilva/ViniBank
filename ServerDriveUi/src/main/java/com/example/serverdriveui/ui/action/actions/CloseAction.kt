@@ -7,6 +7,7 @@ import kotlinx.serialization.json.JsonObject
 
 class CloseAction(val data: JsonObject) : Action {
     override fun execute(navController: NavHostController) {
+        super.execute(navController)
         (navController.context as Activity).finish()
     }
 

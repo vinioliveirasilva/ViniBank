@@ -24,7 +24,7 @@ class RowComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser),
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     VerticalAlignmentComponentProperty by VerticalAlignmentProperty(properties, stateManager),
     HorizontalArrangementComponentProperty by HorizontalArrangementProperty(
         properties,
@@ -36,8 +36,7 @@ class RowComponent(
         navController: NavHostController,
         modifier: Modifier,
     ): @Composable () -> Unit = {
-        val action = actionParser.parse(model)
-        val actionModifier = action?.let { Modifier.clickable { action.execute(navController) } } ?: Modifier
+        val actionModifier = actions["OnClick"]?.let { Modifier.clickable { it.execute(navController) } } ?: Modifier
 
         Row(
             verticalAlignment = getVerticalAlignment().asValue(),

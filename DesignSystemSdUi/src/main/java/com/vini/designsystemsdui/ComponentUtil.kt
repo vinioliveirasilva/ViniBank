@@ -1,16 +1,18 @@
 package com.vini.designsystemsdui
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
 
-typealias Property = JsonObject
-typealias Component = JsonObject
-typealias Validator = JsonObject
-typealias Action = JsonObject
+private typealias Property = JsonObject
+private typealias Component = JsonObject
+private typealias Validator = JsonObject
+private typealias Action = JsonObject
 
 object ComponentUtil {
     fun property(name: String, value: String, id: String? = null): Property = buildJsonObject {
@@ -22,11 +24,13 @@ object ComponentUtil {
     fun action(
         type: String,
         data: JsonObject? = null,
-        screenData: JsonObject? = null,
+        id: String? = null,
+        name: String = "OnClick",
     ): Action = buildJsonObject {
         put("type", type)
+        put("name", name)
+        id?.run { put("id", this) }
         data?.run { put("data", this) }
-        screenData?.run { put("screenData", this) }
     }
 
     fun validator(
@@ -45,7 +49,7 @@ object ComponentUtil {
         type: String,
         properties: List<Property>? = null,
         components: List<Component>? = null,
-        action: Action? = null,
+        actions: List<Action>? = null,
         validators: List<Validator>? = null,
         vararg customComponents: Pair<String, List<Component>>
     ): Component = buildJsonObject {
@@ -53,7 +57,7 @@ object ComponentUtil {
         properties?.run { putJsonArray("properties") { forEach { add(it) } } }
         components?.run { putJsonArray("components") { forEach { add(it) } } }
         validators?.run { putJsonArray("validators") { forEach { add(it) } } }
-        action?.run { put("action", this) }
+        actions?.run { putJsonArray("actions") { forEach { add(it) } } }
         customComponents.forEach { (name, component) ->
             putJsonArray(name) {
                 component.forEach {
@@ -81,12 +85,17 @@ object ComponentUtil {
         components?.run { putJsonArray("components") { forEach { add(it) } } }
     }
 
-    fun jsonObject(vararg pairs: Pair<String, Any>) = buildJsonObject {
+    fun jsonObject(vararg pairs: Pair<String, Any?>) = buildJsonObject {
         pairs.forEach { (name, value) ->
             when (value) {
                 is String -> put(name, value)
                 is JsonElement -> put(name, value)
             }
         }
+    }
+
+    @OptIn(ExperimentalSerializationApi::class)
+    fun jsonArray(vararg actions: Action) = buildJsonArray {
+        actions.forEach { add(it) }
     }
 }

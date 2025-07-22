@@ -28,7 +28,11 @@ class ComponentStateManager() : AutoCloseable {
     }
 
     fun <T> updateState(id: String, data: T) {
-        states[id]?.value = data
+        if(states[id] == null) {
+            registerState(id, data)
+        } else {
+            states[id]?.value = data
+        }
     }
 
     override fun close() {

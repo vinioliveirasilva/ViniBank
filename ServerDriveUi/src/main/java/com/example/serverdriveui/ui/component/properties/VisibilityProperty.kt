@@ -12,7 +12,7 @@ class VisibilityProperty(
         properties = properties,
         propertyName = "isVisible",
         propertyValueTransformation = { it.toBoolean() },
-        defaultPropertyValue = false
+        defaultPropertyValue = true
     ) {
 
     override fun getIsVisible() = getValue()

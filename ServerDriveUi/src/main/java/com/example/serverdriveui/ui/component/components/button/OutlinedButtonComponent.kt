@@ -30,7 +30,7 @@ data class OutlinedButtonComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser),
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     TextComponentProperty by TextProperty(properties, stateManager),
     EnabledComponentProperty by EnabledProperty(properties, stateManager) {
 
@@ -44,9 +44,7 @@ data class OutlinedButtonComponent(
             enabled = isEnabled,
             modifier = modifier,
             onClick = {
-                actionParser.parse(
-                    model = model
-                )?.execute(navController)
+                actions["OnClick"]?.execute(navController)
             },
             content = { Text(getText().collectAsState().value) }
         )

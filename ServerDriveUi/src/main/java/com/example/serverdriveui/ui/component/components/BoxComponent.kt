@@ -22,7 +22,7 @@ class BoxComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser),
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     ContentAlignmentComponentProperty by ContentAlignmentProperty(properties, stateManager) {
 
     @Composable
@@ -30,8 +30,7 @@ class BoxComponent(
         navController: NavHostController,
         modifier: Modifier
     ): @Composable () -> Unit = {
-        val action = actionParser.parse(model)
-        val actionModifier = action?.let { Modifier.clickable{ it.execute(navController) } } ?: Modifier
+        val actionModifier = actions["OnClick"]?.let { Modifier.clickable{ it.execute(navController) } } ?: Modifier
 
         Box(
             modifier = modifier

@@ -9,15 +9,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
+import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
-import com.example.serverdriveui.ui.component.properties.VisibilityComponentProperty
-import com.example.serverdriveui.ui.component.properties.VisibilityProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.example.serverdriveui.util.ScreenUtil.component
-import com.example.serverdriveui.util.ScreenUtil.property
-import com.example.serverdriveui.util.asValue
+import com.vini.designsystemsdui.ComponentUtil.component
+import com.vini.designsystemsdui.ComponentUtil.property
 import kotlinx.serialization.json.JsonObject
 
 class BottomSheetComponent(
@@ -26,8 +24,8 @@ class BottomSheetComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
-) : BaseComponent(model, properties, stateManager, validatorParser),
-    VisibilityComponentProperty by VisibilityProperty(properties, stateManager) {
+    private val actionParser: ActionParser,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser) {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -36,16 +34,14 @@ class BottomSheetComponent(
         modifier: Modifier,
     ): @Composable () -> Unit = {
         val sheetState = rememberModalBottomSheetState()
-        if (getIsVisible().asValue()) {
-            ModalBottomSheet(
-                modifier = modifier,
-                sheetState = sheetState,
-                onDismissRequest = { setIsVisible(false) },
-                windowInsets = WindowInsets(0, 0, 0, 50)
-            ) {
-                componentParser.parseList(model).forEach {
-                    it.getComponentAsColumn(navController).invoke(this)
-                }
+        ModalBottomSheet(
+            modifier = modifier,
+            sheetState = sheetState,
+            onDismissRequest = { setIsVisible(false) },
+            windowInsets = WindowInsets(0, 0, 0, 50)
+        ) {
+            componentParser.parseList(model).forEach {
+                it.getComponentAsColumn(navController).invoke(this)
             }
         }
     }

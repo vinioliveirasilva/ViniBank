@@ -8,24 +8,26 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
+import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.components.BaseComponent
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import kotlinx.serialization.json.JsonObject
 import com.google.maps.android.compose.DefaultMapUiSettings
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import kotlinx.serialization.json.JsonObject
 
 data class GoogleMapsComponent(
     private val model: JsonObject,
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
-    private val validatorParser: ValidatorParser
-) : BaseComponent(model, properties, stateManager, validatorParser) {
+    private val validatorParser: ValidatorParser,
+    private val actionParser: ActionParser,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser) {
 
     @Composable
     override fun getInternalComponent(//TODO

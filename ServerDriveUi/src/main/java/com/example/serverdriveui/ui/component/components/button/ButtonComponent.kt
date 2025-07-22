@@ -26,7 +26,7 @@ data class ButtonComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser),
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     TextComponentProperty by TextProperty(properties, stateManager),
     EnabledComponentProperty by EnabledProperty(properties, stateManager) {
 
@@ -38,9 +38,7 @@ data class ButtonComponent(
         Button(
             enabled = getEnabled().collectAsState().value,
             modifier = modifier,
-            onClick = {
-                actionParser.parse(model)?.execute(navController)
-            },
+            onClick = { actions["OnClick"]?.execute(navController) },
             content = { Text(getText().collectAsState().value) },
         )
     }

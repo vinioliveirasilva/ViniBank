@@ -1,7 +1,11 @@
 package com.example.serverdriveui
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.background
@@ -22,6 +26,8 @@ import androidx.navigation.toRoute
 import com.example.router.FeatureRouter
 import com.example.router.routes.SdUiRouteData.SdUiRouteDataParser
 import com.example.serverdriveui.di.getNewScope
+import com.example.serverdriveui.di.getNewScopeActivity
+import com.example.serverdriveui.ui.action.manager.ActionHandler
 import com.vini.designsystem.compose.dialog.NonDismissibleDialog
 import com.vini.designsystem.compose.loader.LoaderContent
 import com.vini.designsystem.compose.theme.ViniBankTheme
@@ -38,22 +44,30 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.compose.LocalKoinScope
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.parameter.parametersOf
+import org.koin.core.scope.Scope
 import java.util.UUID
 import kotlin.reflect.typeOf
 
 @Serializable
-data object LoaderRoute
+data object LoaderScreenRoute
 
 @Serializable
-data class SdUiRoute(
+data class SdUiScreenRoute(
     val screenData: JsonObject,
 )
 
 class SdUiActivity : BaseComposeActivity() {
 
+    override val scope: Scope = getKoin().getNewScopeActivity(UUID.randomUUID().toString())
+
+    private val activityResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            actionHandler.handleActivityResult(convertActivityResult(result))
+        }
+    private val actionHandler: ActionHandler by viewModel()
     private val featureRouter: FeatureRouter by inject { parametersOf(this) }
 
-    private val vm: SdUiActivityViewModel by viewModel {
+    private val viewModel: SdUiActivityViewModel by viewModel {
         with(SdUiRouteDataParser(intent)) {
             parametersOf(
                 flowId,
@@ -65,30 +79,31 @@ class SdUiActivity : BaseComposeActivity() {
     @OptIn(KoinExperimentalAPI::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             ViniBankTheme {
                 val navController = rememberNavController()
                 val scope = rememberCoroutineScope()
 
                 LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
-                    vm.navigateOnSuccess.map {
-                        navController.navigate(it) { popUpTo(LoaderRoute) { inclusive = true } }
+                    viewModel.screenCaller.map {
+                        navController.navigate(it) { popUpTo(LoaderScreenRoute) { inclusive = true } }
                     }.launchIn(scope)
 
-                    vm.navigateOnSuccess1.map {
-                        featureRouter.navigate(it)
+                    actionHandler.routeCaller.map {
+                        featureRouter.navigate(it, activityResult)
                     }.launchIn(scope)
                 }
 
                 NavHost(
                     navController = navController,
-                    startDestination = LoaderRoute,
+                    startDestination = LoaderScreenRoute,
                     enterTransition = { EnterTransition.None },
                     popEnterTransition = { EnterTransition.None },
                     exitTransition = { ExitTransition.None },
                     popExitTransition = { ExitTransition.None }
                 ) {
-                    composable<LoaderRoute> {
+                    composable<LoaderScreenRoute> {
                         Column(
                             Modifier
                                 .fillMaxSize()
@@ -98,10 +113,10 @@ class SdUiActivity : BaseComposeActivity() {
                         }
                     }
 
-                    composable<SdUiRoute>(
+                    composable<SdUiScreenRoute>(
                         typeMap = mapOf(typeOf<JsonObject>() to serializableType<JsonObject>())
                     ) {
-                        val routeData = it.toRoute<SdUiRoute>()
+                        val routeData = it.toRoute<SdUiScreenRoute>()
 
                         //TODO Melhorar ciclo de vida do scopo
                         val koinScope = remember {
@@ -139,5 +154,13 @@ class SdUiActivity : BaseComposeActivity() {
             bundle.putString(key, Json.encodeToString(value))
         }
     }
-
 }
+
+fun convertActivityResult(activityResult: ActivityResult): Map<String, String> =
+    when (activityResult.resultCode) {
+        Activity.RESULT_OK -> with(activityResult.data ?: Intent()) {
+            extras?.keySet()?.associateWith { getStringExtra(it) ?: "" } ?: emptyMap()
+        }
+
+        else -> emptyMap()
+    }

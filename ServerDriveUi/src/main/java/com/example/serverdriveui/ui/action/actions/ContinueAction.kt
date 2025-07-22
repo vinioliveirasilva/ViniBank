@@ -1,6 +1,5 @@
 package com.example.serverdriveui.ui.action.actions
 
-import androidx.navigation.NavHostController
 import com.example.serverdriveui.GlobalStateManager
 import com.example.serverdriveui.SdUiDestinationModel
 import com.example.serverdriveui.ui.action.manager.Action
@@ -17,7 +16,7 @@ class ContinueAction(
     private val stateManager: ComponentStateManager,
     private val globalStateManager: GlobalStateManager,
 ) : Action {
-    override fun execute(navController: NavHostController) {
+    override fun execute() {
         val newScreenData = buildJsonObject {
             data.getAsMap("screenData").forEach {
                 put(it.key, it.value)

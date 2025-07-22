@@ -13,7 +13,9 @@ import kotlinx.serialization.json.jsonPrimitive
 object JsonUtil {
     fun JsonElement.asString(default: String = "") = jsonPrimitive.takeIf { it.isString }?.content ?: default
     fun JsonObject.getAsMap(name: String, default: Map<String, JsonElement> = emptyMap()) = get(name)?.jsonObject?.toMap() ?: default
+    fun JsonObject.getAsStringMap(name: String, default: Map<String, JsonElement> = emptyMap()) = getAsMap(name, default).mapValues { it.value.asString() }
     fun JsonObject.getAsString(name: String, default: String = "") = get(name)?.jsonPrimitive?.content ?: default
+    fun JsonObject.getAsNullableString(name: String) = get(name)?.jsonPrimitive?.content
     fun JsonObject.getAsInt(name: String, default: Int = 0) = get(name)?.jsonPrimitive?.intOrNull ?: default
     fun JsonObject.getAsBoolean(name: String) = getAsString(name).toBoolean()
     fun JsonObject.getAsArray(name: String, default: JsonArray = JsonArray(emptyList())) = get(name)?.jsonArray

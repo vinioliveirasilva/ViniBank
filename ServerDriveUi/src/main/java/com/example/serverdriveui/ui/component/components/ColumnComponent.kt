@@ -54,7 +54,7 @@ class ColumnComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser),
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     HorizontalAlignmentComponentProperty by HorizontalAlignmentProperty(
         properties,
         stateManager
@@ -73,9 +73,7 @@ class ColumnComponent(
         navController: NavHostController,
         modifier: Modifier,
     ): @Composable () -> Unit = {
-        val action = actionParser.parse(model)
-        val actionModifier =
-            action?.let { Modifier.clickable { it.execute(navController) } } ?: Modifier
+        val actionModifier = actions["OnClick"]?.let { Modifier.clickable { it.execute(navController) } } ?: Modifier
         val dynamicComponents = getComponent().asValue()
 
         Column(

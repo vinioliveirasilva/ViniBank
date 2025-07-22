@@ -1,6 +1,5 @@
 package com.example.serverdriveui.ui.action.actions
 
-import androidx.navigation.NavHostController
 import com.example.serverdriveui.ui.action.manager.Action
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.getAsBoolean
@@ -14,7 +13,7 @@ class ToBooleanAction(
     private val externalIdToChange = data.getAsString("id")
     private val newValue = data.getAsBoolean("value")
 
-    override fun execute(navController: NavHostController) {
+    override fun execute() {
         stateManager.updateState(externalIdToChange, newValue)
     }
 

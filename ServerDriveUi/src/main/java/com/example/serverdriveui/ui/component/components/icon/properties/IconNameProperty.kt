@@ -30,6 +30,8 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material.icons.filled.SupervisorAccount
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.outlined.AttachMoney
 import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material.icons.outlined.Home
@@ -71,6 +73,8 @@ private val IconLibrary: Map<String, ImageVector>
         "Logout" to Icons.AutoMirrored.Filled.Logout,
         "LeftArrow" to Icons.Default.ArrowBackIosNew,
         "RightArrow" to Icons.AutoMirrored.Filled.ArrowForwardIos,
+        "Visibility" to Icons.Filled.Visibility,
+        "VisibilityOff" to Icons.Filled.VisibilityOff,
 
         //TODO Revisar
         "Add" to Icons.Default.Add,

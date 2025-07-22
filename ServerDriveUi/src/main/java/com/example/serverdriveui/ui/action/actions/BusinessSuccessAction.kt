@@ -12,6 +12,7 @@ class BusinessSuccessAction(val data: JsonObject) : Action {
     private val screenData = data.getAsMap("screenData")
 
     override fun execute(navController: NavHostController) {
+        super.execute(navController)
         with(navController.context as Activity) {
             setResult(
                 Activity.RESULT_OK,

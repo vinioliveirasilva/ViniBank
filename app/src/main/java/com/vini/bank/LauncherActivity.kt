@@ -15,7 +15,6 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.router.FeatureRouter
-import com.example.router.routes.LoginRoute
 import com.example.router.routes.SdUiRoute
 import com.example.router.routes.SdUiRouteData
 import com.google.firebase.Firebase
@@ -94,7 +93,7 @@ class LauncherActivity : BaseComposeActivity() {
 
     private fun handleEvent(event: LauncherUIEvent) = when (event) {
         is LauncherUIEvent.OpenHome -> featureRouter.navigateAndFinish(SdUiRoute(SdUiRouteData.StartAsDefault(flowId = "Home")))
-        is LauncherUIEvent.OpenLogin -> featureRouter.navigate(LoginRoute(), loginLauncher)
+        is LauncherUIEvent.OpenLogin -> featureRouter.navigate(SdUiRoute(SdUiRouteData.StartAsDefault(flowId = "Login")), loginLauncher)
         is LauncherUIEvent.Finish -> finish()
     }
 }

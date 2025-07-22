@@ -24,13 +24,16 @@ val NetworkModule = module {
     single<CryptoInterceptor> {
         CryptoInterceptor(encoderProvider = get(), keyExchangeManager = get())
     }
+    single {
+        AesCryptoInterceptor(encoderProvider = get(), keyExchangeManager = get())
+    }
 
     single<OkHttpClient> {
         OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
-            .addInterceptor(get<CryptoInterceptor>())
+            .addInterceptor(get<AesCryptoInterceptor>())
             .build()
     }
 
@@ -40,7 +43,6 @@ val NetworkModule = module {
         Builder()
             .baseUrl("http://10.0.2.2:8080/")
             .addConverterFactory(ScalarsConverterFactory.create())
-            //.addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()) )
             .addConverterFactory(ScalarsConverterFactory.create())
             .addCallAdapterFactory(FlowCallAdapterFactory())

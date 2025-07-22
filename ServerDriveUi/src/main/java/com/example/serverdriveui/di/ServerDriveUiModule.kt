@@ -1,7 +1,6 @@
 package com.example.serverdriveui.di
 
 import com.example.serverdriveui.GlobalStateManager
-import com.example.serverdriveui.SdUiActivity
 import com.example.serverdriveui.SdUiActivityViewModel
 import com.example.serverdriveui.SdUiRepository
 import com.example.serverdriveui.SdUiViewModel
@@ -12,11 +11,15 @@ import com.example.serverdriveui.ui.action.actions.BackAction
 import com.example.serverdriveui.ui.action.actions.BusinessSuccessAction
 import com.example.serverdriveui.ui.action.actions.CloseAction
 import com.example.serverdriveui.ui.action.actions.ContinueAction
+import com.example.serverdriveui.ui.action.actions.MultipleActionsAction
 import com.example.serverdriveui.ui.action.actions.NavigateAction
 import com.example.serverdriveui.ui.action.actions.ToBooleanAction
 import com.example.serverdriveui.ui.action.actions.ToIntAction
+import com.example.serverdriveui.ui.action.actions.ToStringAction
 import com.example.serverdriveui.ui.action.manager.Action
+import com.example.serverdriveui.ui.action.manager.ActionHandler
 import com.example.serverdriveui.ui.action.manager.ActionParser
+import com.example.serverdriveui.ui.component.components.BlankComponent
 import com.example.serverdriveui.ui.component.components.BottomSheetComponent
 import com.example.serverdriveui.ui.component.components.BoxComponent
 import com.example.serverdriveui.ui.component.components.CardComponent
@@ -67,17 +70,23 @@ import org.koin.core.scope.Scope
 import org.koin.dsl.module
 import retrofit2.Retrofit
 
-const val scopeName = "scopeName"
+const val sdUiComponents = "sdUiComponents"
+const val sdUiActivity = "sdUiActivity"
 
 fun Koin.getNewScope(name: String, scopeToLink: Scope?): Scope {
     println("criando um novo scopo")
-    return getOrCreateScope(name, named(scopeName)).apply {
+    return getOrCreateScope(name, named(sdUiComponents)).apply {
         scopeToLink?.let { linkTo(it) }
     }
 }
 
+fun Koin.getNewScopeActivity(name: String): Scope {
+    println("criando um novo activity scopo")
+    return getOrCreateScope(name, named(sdUiActivity))
+}
+
 val ServerDriveUiComponents = module {
-    scope(named(scopeName)) {
+    scope(named(sdUiComponents)) {
         factory<Component>(
             named(TopAppBarComponent.IDENTIFIER)
         ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
@@ -86,7 +95,8 @@ val ServerDriveUiComponents = module {
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
-                componentParser = get()
+                componentParser = get(),
+                actionParser = get(),
             )
         }
 
@@ -97,7 +107,8 @@ val ServerDriveUiComponents = module {
                 model = jsonComponent,
                 properties = properties,
                 stateManager = get(),
-                validatorParser = get()
+                validatorParser = get(),
+                actionParser = get(),
             )
         }
 
@@ -110,6 +121,7 @@ val ServerDriveUiComponents = module {
                 stateManager = get(),
                 validatorParser = get(),
                 componentParser = get(),
+                actionParser = get(),
             )
         }
 
@@ -122,6 +134,7 @@ val ServerDriveUiComponents = module {
                 stateManager = get(),
                 validatorParser = get(),
                 componentParser = get(),
+                actionParser = get(),
             )
         }
 
@@ -132,7 +145,20 @@ val ServerDriveUiComponents = module {
                 model = jsonComponent,
                 properties = properties,
                 stateManager = get(),
-                validatorParser = get()
+                validatorParser = get(),
+                actionParser = get(),
+            )
+        }
+
+        factory<Component>(
+            named(BlankComponent.IDENTIFIER)
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+            BlankComponent(
+                model = jsonComponent,
+                properties = properties,
+                stateManager = get(),
+                validatorParser = get(),
+                actionParser = get()
             )
         }
 
@@ -143,7 +169,9 @@ val ServerDriveUiComponents = module {
                 model = jsonComponent,
                 properties = properties,
                 stateManager = get(),
-                validatorParser = get()
+                validatorParser = get(),
+                componentParser = get(),
+                actionParser = get(),
             )
         }
 
@@ -194,7 +222,8 @@ val ServerDriveUiComponents = module {
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
-                componentParser = get()
+                componentParser = get(),
+                actionParser = get(),
             )
         }
 
@@ -206,7 +235,8 @@ val ServerDriveUiComponents = module {
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
-                componentParser = get()
+                componentParser = get(),
+                actionParser = get(),
             )
         }
 
@@ -218,7 +248,8 @@ val ServerDriveUiComponents = module {
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
-                componentParser = get()
+                componentParser = get(),
+                actionParser = get(),
             )
         }
 
@@ -291,6 +322,7 @@ val ServerDriveUiComponents = module {
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
+                actionParser = get(),
             )
         }
 
@@ -302,7 +334,8 @@ val ServerDriveUiComponents = module {
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
-                viewModel = get()
+                viewModel = get(),
+                actionParser = get(),
             )
         }
 
@@ -317,7 +350,8 @@ val ServerDriveUiComponents = module {
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
-                viewModel = get()
+                viewModel = get(),
+                actionParser = get(),
             )
         }
 
@@ -337,6 +371,7 @@ val ServerDriveUiComponents = module {
                 stateManager = get(),
                 validatorParser = get(),
                 componentParser = get(),
+                actionParser = get(),
             )
         }
 
@@ -349,6 +384,7 @@ val ServerDriveUiComponents = module {
                 stateManager = get(),
                 validatorParser = get(),
                 componentParser = get(),
+                actionParser = get(),
             )
         }
 
@@ -360,6 +396,7 @@ val ServerDriveUiComponents = module {
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
+                actionParser = get(),
             )
         }
 
@@ -371,6 +408,7 @@ val ServerDriveUiComponents = module {
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
+                actionParser = get(),
             )
         }
 
@@ -382,6 +420,7 @@ val ServerDriveUiComponents = module {
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
+                actionParser = get(),
             )
         }
 
@@ -393,6 +432,7 @@ val ServerDriveUiComponents = module {
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
+                actionParser = get(),
             )
         }
 
@@ -404,6 +444,7 @@ val ServerDriveUiComponents = module {
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
+                actionParser = get(),
             )
         }
 
@@ -441,30 +482,39 @@ val ServerDriveUiComponents = module {
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
+                actionParser = get(),
             )
         }
     }
 }
 
 val ServerDriveUiModule = module {
-    scope<SdUiActivity> {
+    scope(named(sdUiActivity)) {
         scoped<ComponentStateManager> { ComponentStateManager() }
         scoped<GlobalStateManager> { GlobalStateManager() }
+        viewModel {
+            ActionHandler(
+                globalStateManager = get(),
+                componentStateManager = get(),
+                savedStateHandle = get()
+            )
+        }
+
         viewModel { (flowId: String, screenData: JsonObject) ->
             SdUiActivityViewModel(
                 flowId = flowId,
                 screenData = screenData,
                 repository = get(),
-                globalStateManager = get(),
                 closables = listOf(
                     get<GlobalStateManager>(),
                     get<ComponentStateManager>(),
-                )
+                    AutoCloseable { close() }
+                ),
             )
         }
     }
 
-    scope(named(scopeName)) {
+    scope(named(sdUiComponents)) {
         viewModel { (jsonModel: JsonObject) ->
             SdUiViewModel(
                 jsonModel = jsonModel,
@@ -482,7 +532,7 @@ val ServerDriveUiModule = module {
         }
 
         //Parsers
-        scoped<ActionParser> { ActionParser(koinScope = this) }
+        scoped<ActionParser> { ActionParser(koinScope = this, componentStateManager = get()) }
         scoped<ComponentParser> { ComponentParser(koinScope = this) }
         scoped<ValidatorParser> { ValidatorParser(koinScope = this) }
     }
@@ -492,7 +542,7 @@ val ServerDriveUiModule = module {
 }
 
 val ServerDriveUiValidators = module {
-    scope(named(scopeName)) {
+    scope(named(sdUiComponents)) {
         factory<Validator>(named(MinLengthValidator.IDENTIFIER)) { (model: ValidatorModel) ->
             MinLengthValidator(
                 model = model,
@@ -528,7 +578,7 @@ val ServerDriveUiValidators = module {
 }
 
 val ServerDriveUiActions = module {
-    scope(named(scopeName)) {
+    scope(named(sdUiComponents)) {
         factory<Action>(named(CloseAction.IDENTIFIER)) { (data: JsonObject) ->
             CloseAction(
                 data = data
@@ -567,6 +617,18 @@ val ServerDriveUiActions = module {
             ToIntAction(
                 data = data,
                 stateManager = get(),
+            )
+        }
+        factory<Action>(named(ToStringAction.IDENTIFIER)) { (data: JsonObject) ->
+            ToStringAction(
+                data = data,
+                stateManager = get(),
+            )
+        }
+        factory<Action>(named(MultipleActionsAction.IDENTIFIER)) { (data: JsonObject) ->
+            MultipleActionsAction(
+                data = data,
+                actionParser = get(),
             )
         }
     }

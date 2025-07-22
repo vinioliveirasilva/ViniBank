@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
+import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.components.BaseComponent
 import com.example.serverdriveui.ui.component.components.pager.properties.ContentPaddingComponentProperty
 import com.example.serverdriveui.ui.component.components.pager.properties.ContentPaddingProperty
@@ -28,7 +29,8 @@ class HorizontalPagerComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
-) : BaseComponent(model, properties, stateManager, validatorParser),
+    private val actionParser: ActionParser,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     VerticalAlignmentComponentProperty by VerticalAlignmentProperty(properties, stateManager),
     ContentPaddingComponentProperty by ContentPaddingProperty(properties, stateManager),
     CurrentPageComponentProperty by CurrentPageProperty(properties, stateManager) {

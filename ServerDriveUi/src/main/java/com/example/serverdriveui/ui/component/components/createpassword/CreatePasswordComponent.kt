@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
+import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.components.BaseComponent
 import com.example.serverdriveui.ui.component.components.createpassword.properties.ValidPasswordComponentProperty
 import com.example.serverdriveui.ui.component.components.createpassword.properties.ValidPasswordProperty
@@ -24,10 +25,10 @@ import com.example.serverdriveui.ui.component.properties.TextComponentProperty
 import com.example.serverdriveui.ui.component.properties.TextProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import kotlinx.serialization.json.JsonObject
 import com.vini.designsystem.R
 import com.vini.designsystem.compose.icon.passwordTrailingIcon
 import com.vini.designsystem.compose.visualtransformation.getPasswordVisualTransformation
+import kotlinx.serialization.json.JsonObject
 
 class CreatePasswordComponent(
     private val model: JsonObject,
@@ -35,7 +36,8 @@ class CreatePasswordComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val viewModel: CreatePasswordViewModel,
-) : BaseComponent(model, properties, stateManager, validatorParser),
+    private val actionParser: ActionParser,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     ValidPasswordComponentProperty by ValidPasswordProperty(properties, stateManager),
     TextComponentProperty by TextProperty(properties, stateManager) {
 

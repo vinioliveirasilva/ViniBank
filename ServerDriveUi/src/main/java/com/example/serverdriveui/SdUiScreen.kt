@@ -13,12 +13,12 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.ui.component.manager.Component
 import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
-import com.example.serverdriveui.util.ScreenUtil.component
-import com.example.serverdriveui.util.ScreenUtil.property
-import com.example.serverdriveui.util.ScreenUtil.screen
 import com.example.serverdriveui.util.asValue
 import com.vini.designsystem.compose.loader.Loader
 import com.vini.designsystem.compose.loader.LoaderState
+import com.vini.designsystemsdui.ComponentUtil.component
+import com.vini.designsystemsdui.ComponentUtil.property
+import com.vini.designsystemsdui.ComponentUtil.screen
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -50,7 +50,7 @@ fun SdUiScreen(
 
     LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
         viewModel.initialize()?.launchIn(scope)
-        viewModel.navigateOnSuccess.map { navHostController.navigate(SdUiRoute(it)) }
+        viewModel.navigateOnSuccess.map { navHostController.navigate(SdUiScreenRoute(it)) }
             .launchIn(scope)
     }
 }

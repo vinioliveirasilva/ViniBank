@@ -6,6 +6,7 @@ import kotlinx.serialization.json.JsonObject
 
 class BackAction(val data: JsonObject) : Action {
     override fun execute(navController: NavHostController) {
+        super.execute(navController)
         navController.navigateUp()
     }
 

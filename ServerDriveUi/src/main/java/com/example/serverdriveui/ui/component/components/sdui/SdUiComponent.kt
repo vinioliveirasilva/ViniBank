@@ -7,6 +7,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
+import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.components.BaseComponent
 import com.example.serverdriveui.ui.component.components.sdui.properties.FlowIdentifierComponent
 import com.example.serverdriveui.ui.component.components.sdui.properties.FlowIdentifierProperty
@@ -17,8 +18,8 @@ import com.example.serverdriveui.ui.component.components.sdui.properties.StageId
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.asValue
-import kotlinx.serialization.json.JsonObject
 import com.vini.designsystem.compose.loader.Loader2
+import kotlinx.serialization.json.JsonObject
 
 class SdUiComponent(
     private val model: JsonObject,
@@ -26,7 +27,8 @@ class SdUiComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val viewModel: SdUiComponentViewModel,
-) : BaseComponent(model, properties, stateManager, validatorParser),
+    private val actionParser: ActionParser,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     FlowIdentifierComponent by FlowIdentifierProperty(properties, stateManager),
     ScreenDataComponent by ScreenDataProperty(properties, stateManager),
     StageIdentifierComponent by StageIdentifierProperty(properties, stateManager) {

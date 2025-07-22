@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
+import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.properties.SizeComponentModifier
 import com.example.serverdriveui.ui.component.properties.SizeModifier
 import com.example.serverdriveui.ui.state.ComponentStateManager
@@ -15,8 +16,9 @@ class SpacerComponent(
     private val model: JsonObject,
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
-    private val validatorParser: ValidatorParser
-) : BaseComponent(model, properties, stateManager, validatorParser),
+    private val validatorParser: ValidatorParser,
+    private val actionParser: ActionParser,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     SizeComponentModifier by SizeModifier(properties, stateManager) {
 
     @Composable

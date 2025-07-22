@@ -23,7 +23,7 @@ data class LottieAnimationComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser),
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     LottieAnimationDataComponentProperty by LottieAnimationDataProperty(
         properties,
         stateManager
@@ -49,9 +49,7 @@ data class LottieAnimationComponent(
             )
 
             if (progress == ANIMATION_FINISHED) {
-                actionParser.parse(
-                    model = model
-                )?.execute(navController)
+                actions["OnClick"]?.execute(navController)
             }
         }
 

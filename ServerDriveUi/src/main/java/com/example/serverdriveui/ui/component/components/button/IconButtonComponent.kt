@@ -19,25 +19,23 @@ class IconButtonComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser) {
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser) {
 
     @Composable
     override fun getInternalComponent(
         navController: NavHostController,
-        modifier: Modifier
+        modifier: Modifier,
     ): @Composable () -> Unit = {
             IconButton(
                 onClick = {
-                    actionParser.parse(
-                        model = model
-                    )?.execute(navController)
+                    actions["OnClick"]?.execute(navController)
                 }
             ) {
                 componentParser.parseList(data = model).forEach {
                     it.getComponent(navController).invoke()
                 }
             }
-        }
+    }
 
     companion object {
         const val IDENTIFIER = "iconButton"
