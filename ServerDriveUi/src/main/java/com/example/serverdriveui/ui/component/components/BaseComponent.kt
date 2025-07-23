@@ -31,6 +31,7 @@ import com.example.serverdriveui.ui.component.properties.WidthProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.asValue
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.JsonObject
 
 open class BaseComponent(
@@ -38,16 +39,17 @@ open class BaseComponent(
     properties: Map<String, PropertyModel>,
     stateManager: ComponentStateManager,
     validatorParser: ValidatorParser,
-    actionParser: ActionParser
+    actionParser: ActionParser,
+    scope: CoroutineScope,
 ) : Component, InternalComponent,
-    VerticalFillTypeComponentProperty by VerticalFillTypeProperty(properties, stateManager),
-    HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(properties, stateManager),
-    VerticalPaddingComponentProperty by VerticalPaddingProperty(properties, stateManager),
-    HorizontalPaddingComponentProperty by HorizontalPaddingProperty(properties, stateManager),
-    HeightComponentProperty by HeightProperty(properties, stateManager),
-    WidthComponentProperty by WidthProperty(properties, stateManager),
-    WeightComponentModifier by WeightModifier(properties, stateManager),
-    VisibilityComponentProperty by VisibilityProperty(properties, stateManager)
+    VerticalFillTypeComponentProperty by VerticalFillTypeProperty(properties, stateManager, scope),
+    HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(properties, stateManager, scope),
+    VerticalPaddingComponentProperty by VerticalPaddingProperty(properties, stateManager, scope),
+    HorizontalPaddingComponentProperty by HorizontalPaddingProperty(properties, stateManager, scope),
+    HeightComponentProperty by HeightProperty(properties, stateManager, scope),
+    WidthComponentProperty by WidthProperty(properties, stateManager, scope),
+    WeightComponentModifier by WeightModifier(properties, stateManager, scope),
+    VisibilityComponentProperty by VisibilityProperty(properties, stateManager, scope)
 {
 
     val actions: Map<String, Action> = actionParser?.parseActions(model) ?: emptyMap()

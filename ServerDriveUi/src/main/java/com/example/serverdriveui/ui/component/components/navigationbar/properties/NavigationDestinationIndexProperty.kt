@@ -3,16 +3,19 @@ package com.example.serverdriveui.ui.component.components.navigationbar.properti
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.component.properties.BasePropertyData
 import com.example.serverdriveui.ui.state.ComponentStateManager
+import kotlinx.coroutines.CoroutineScope
 
 class NavigationDestinationIndexProperty(
     properties: Map<String, PropertyModel>,
-    stateManager: ComponentStateManager
+    stateManager: ComponentStateManager,
+    private val scope: CoroutineScope,
 ) : NavigationDestinationIndexComponent, BasePropertyData<Int>(
     stateManager = stateManager,
     properties = properties,
     propertyName = "index",
-    propertyValueTransformation = { value -> value.toIntOrNull() },
-    defaultPropertyValue = 0
+    propertyValueTransformation = { value -> value.toIntOrNull() ?: 0 },
+    defaultPropertyValue = 0.toString(),
+    scope = scope
 ) {
     override fun getIndex() = getValue()
 }

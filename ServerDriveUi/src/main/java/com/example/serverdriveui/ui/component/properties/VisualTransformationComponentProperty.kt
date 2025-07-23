@@ -5,6 +5,6 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface VisualTransformationComponentProperty {
     fun getVisualTransformation(): StateFlow<VisualTransformation>
-    fun setVisualTransformation(visualTransformation: VisualTransformation)
+    fun setVisualTransformation(visualTransformation: VisualTransformationOption)
 }
 

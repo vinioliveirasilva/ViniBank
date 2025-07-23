@@ -14,6 +14,7 @@ import com.example.serverdriveui.ui.component.properties.VerticalArrangementProp
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.asValue
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.JsonObject
 
 class LazyColumnComponent(
@@ -23,14 +24,17 @@ class LazyColumnComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
+    private val scope: CoroutineScope,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope),
     HorizontalAlignmentComponentProperty by HorizontalAlignmentProperty(
         properties,
-        stateManager
+        stateManager,
+        scope
     ),
     VerticalArrangementComponentProperty by VerticalArrangementProperty(
         properties,
-        stateManager
+        stateManager,
+        scope
     ) {
 
     @Composable

@@ -5,5 +5,4 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface LottieAnimationDataComponentProperty {
     fun getLottieAnimationSpec() : StateFlow<LottieCompositionSpec>
-    fun setLottieAnimationSpec(lottieAnimationSpec: LottieCompositionSpec)
 }

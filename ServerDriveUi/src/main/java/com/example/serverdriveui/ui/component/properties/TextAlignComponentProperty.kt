@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface TextAlignComponentProperty {
     fun getTextAlign(): StateFlow<TextAlign>
-    fun setTextAlign(textAlign: TextAlign)
+    fun setTextAlign(textAlign: TextAlignOption)
 }

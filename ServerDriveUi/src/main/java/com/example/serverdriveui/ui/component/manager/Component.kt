@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
-interface Component : AutoCloseable {
+interface Component {
 
     @get:Composable
     val internalModifier: Modifier
@@ -48,8 +48,6 @@ interface Component : AutoCloseable {
 
     fun getComponentLazyListScope(navController: NavHostController): (LazyListScope.() -> Unit) =
         { item { getComponent(navController) } }
-
-    override fun close() = Unit
 }
 
 interface InternalComponent {

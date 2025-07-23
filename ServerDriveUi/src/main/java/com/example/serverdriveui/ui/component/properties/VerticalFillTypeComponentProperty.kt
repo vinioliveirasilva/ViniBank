@@ -5,8 +5,8 @@ import androidx.compose.ui.Modifier
 import kotlinx.coroutines.flow.StateFlow
 
 interface VerticalFillTypeComponentProperty {
-    fun getVerticalFillType(): StateFlow<VerticalFillType>
-    fun setVerticalFillType(value: VerticalFillType)
+    fun getVerticalFillType(): StateFlow<VerticalFillTypeOption>
+    fun setVerticalFillType(value: VerticalFillTypeOption)
     @get:Composable
     val verticalFillTypeModifier: Modifier
 }

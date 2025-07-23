@@ -4,32 +4,36 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.unit.dp
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
+import kotlinx.coroutines.CoroutineScope
 
 class VerticalArrangementProperty(
     private val properties: Map<String, PropertyModel>,
-    private val stateManager: ComponentStateManager
+    private val stateManager: ComponentStateManager,
+    private val scope: CoroutineScope,
 ) : VerticalArrangementComponentProperty,
     BasePropertyData<Arrangement.Vertical>(
         stateManager = stateManager,
         properties = properties,
         propertyName = "verticalArrangement",
         propertyValueTransformation = { it.toVerticalArrangement() },
-        defaultPropertyValue = Arrangement.Top
+        defaultPropertyValue = VerticalArrangementOption.Top.id,
+        scope = scope
     ) {
     override fun getVerticalArrangement() = getValue()
-    override fun setVerticalArrangement(value: Arrangement.Vertical) = setValue(value)
+    override fun setVerticalArrangement(value: VerticalArrangementOption) = setValue(value.id)
+}
+
+enum class VerticalArrangementOption(val id: String, val verticalArrangement: Arrangement.Vertical) {
+    Top("Top", Arrangement.Top),
+    Bottom("Bottom", Arrangement.Bottom),
+    Center("Center", Arrangement.Center),
+    SpaceAround("SpaceAround", Arrangement.SpaceAround),
+    SpaceBetween("SpaceBetween", Arrangement.SpaceBetween),
+    SpaceEvenly("SpaceEvenly", Arrangement.SpaceEvenly),
 }
 
 private fun String?.toVerticalArrangement() =
-    when (this) {
-        "Top" -> Arrangement.Top
-        "Bottom" -> Arrangement.Bottom
-        "Center" -> Arrangement.Center
-        "SpaceAround" -> Arrangement.SpaceAround
-        "SpaceBetween" -> Arrangement.SpaceBetween
-        "SpaceEvenly" -> Arrangement.SpaceEvenly
-        else -> null
-    } ?: when (true) {
+    VerticalArrangementOption.entries.firstOrNull { it.id == this }?.verticalArrangement ?: when (true) {
         this?.contains("SpacedBy") -> parseSpacedBy()
         else -> Arrangement.Top
     }

@@ -10,6 +10,7 @@ import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.JsonObject
 
 data class CardComponent(
@@ -19,7 +20,8 @@ data class CardComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser) {
+    private val scope: CoroutineScope,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope) {
 
     @Composable
     override fun getInternalComponent(

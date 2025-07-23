@@ -7,6 +7,7 @@ import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.JsonObject
 
 
@@ -17,7 +18,8 @@ data class BlankComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser) {
+    private val scope: CoroutineScope,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope) {
 
     @Composable
     override fun getInternalComponent(

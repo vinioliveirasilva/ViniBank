@@ -6,11 +6,11 @@ import androidx.navigation.compose.rememberNavController
 import com.example.serverdriveui.SdUiUI
 import com.example.serverdriveui.di.ServerDriverUiModules
 import com.example.serverdriveui.di.getNewScope
+import com.example.serverdriveui.di.getNewScopeActivity
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.vini.designsystem.compose.loader.loaderStateMock
 import kotlinx.serialization.json.JsonObject
 import org.koin.compose.KoinApplication
-import org.koin.compose.LocalKoinApplication
 import org.koin.compose.LocalKoinScope
 import org.koin.compose.getKoin
 import org.koin.compose.getKoinScope
@@ -30,7 +30,10 @@ fun SdUiComponentPreview(jsonObject: JsonObject) {
             )
         }
     ) {
-        val koinScope = getKoin().getNewScope(UUID.randomUUID().toString(), LocalKoinApplication.current.scopeRegistry.rootScope)
+        val koinScope = getKoin().getNewScope(
+            UUID.randomUUID().toString(),
+            getKoin().getNewScopeActivity(UUID.randomUUID().toString())
+        )
         CompositionLocalProvider(
             LocalKoinScope provides koinScope
         ) {

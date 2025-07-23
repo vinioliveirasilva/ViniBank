@@ -8,22 +8,25 @@ import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.asValue
 import com.vini.common.or
+import kotlinx.coroutines.CoroutineScope
 
 class SizeModifier(
     private val properties: Map<String, PropertyModel>,
-    private val stateManager: ComponentStateManager
+    private val stateManager: ComponentStateManager,
+    private val scope: CoroutineScope,
 ) : SizeComponentModifier,
     BasePropertyData<Int?>(
         stateManager = stateManager,
         properties = properties,
         propertyName = "size",
         propertyValueTransformation = { it.toIntOrNull() },
-        defaultPropertyValue = null
+        defaultPropertyValue = "",
+        scope = scope
     ) {
     override val sizeModifier: Modifier
         @Composable
         get() = getValue().asValue()?.let { Modifier.size(it.dp) } or Modifier
 
     override fun getSize() = getValue()
-    override fun setSize(size: Int) = setValue(size)
+    override fun setSize(size: Int) = setValue(size.toString())
 }

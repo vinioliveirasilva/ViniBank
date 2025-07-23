@@ -14,6 +14,7 @@ import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.StringUtil.toAnnotatedStringFromHtml
 import com.example.serverdriveui.util.asValue
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.JsonObject
 
 data class TextComponent(
@@ -22,9 +23,10 @@ data class TextComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
-    TextComponentProperty by TextProperty(properties, stateManager),
-    TextAlignComponentProperty by TextAlignProperty(properties, stateManager) {
+    private val scope: CoroutineScope
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope),
+    TextComponentProperty by TextProperty(properties, stateManager, scope),
+    TextAlignComponentProperty by TextAlignProperty(properties, stateManager, scope) {
 
     @Composable
     override fun getInternalComponent(

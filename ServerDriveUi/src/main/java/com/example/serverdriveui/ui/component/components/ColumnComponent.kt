@@ -17,19 +17,22 @@ import com.example.serverdriveui.ui.component.properties.VerticalArrangementProp
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.asValue
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 
 interface DynamicComponentProperty {
     fun getComponent(): StateFlow<Component?>
-    fun setComponents(component: Component)
+    fun setComponents(jsonObject: JsonObject)
 }
 
 class DynamicComponentPropertyImpl(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
     private val componentParser: ComponentParser,
+    private val scope: CoroutineScope,
 ) : DynamicComponentProperty,
     BasePropertyData<Component?>(
         stateManager = stateManager,
@@ -40,11 +43,12 @@ class DynamicComponentPropertyImpl(
                 data = Json.decodeFromString<JsonObject>(it)
             )
         },
-        defaultPropertyValue = null
+        defaultPropertyValue = Json.encodeToString(JsonObject(emptyMap())),
+        scope = scope
     ) {
     override fun getComponent() = getValue()
 
-    override fun setComponents(component: Component) = setValue(component)
+    override fun setComponents(jsonObject: JsonObject) = setValue(Json.encodeToString(jsonObject))
 }
 
 class ColumnComponent(
@@ -54,18 +58,22 @@ class ColumnComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
+    private val scope: CoroutineScope,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope),
     HorizontalAlignmentComponentProperty by HorizontalAlignmentProperty(
         properties,
-        stateManager
+        stateManager,
+        scope
     ),
     VerticalArrangementComponentProperty by VerticalArrangementProperty(
         properties,
-        stateManager
+        stateManager,
+        scope
     ), DynamicComponentProperty by DynamicComponentPropertyImpl(
         properties,
         stateManager,
-        componentParser
+        componentParser,
+        scope
     ) {
 
     @Composable
@@ -82,8 +90,7 @@ class ColumnComponent(
             modifier = modifier
                 .then(actionModifier)
         ) {
-            dynamicComponents?.getComponentAsColumn(navController)?.invoke(this)
-                ?: componentParser.parseList(data = model).forEach {
+            componentParser.parseList(data = model).forEach {
                     it.getComponentAsColumn(navController).invoke(this)
                 }
         }

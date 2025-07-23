@@ -15,6 +15,7 @@ import com.example.serverdriveui.ui.component.properties.TextComponentProperty
 import com.example.serverdriveui.ui.component.properties.TextProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.JsonObject
 
 /**
@@ -27,9 +28,10 @@ data class ElevatedButtonComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
-    TextComponentProperty by TextProperty(properties, stateManager),
-    EnabledComponentProperty by EnabledProperty(properties, stateManager) {
+    private val scope: CoroutineScope,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope),
+    TextComponentProperty by TextProperty(properties, stateManager, scope),
+    EnabledComponentProperty by EnabledProperty(properties, stateManager, scope) {
 
     @Composable
     override fun getInternalComponent(

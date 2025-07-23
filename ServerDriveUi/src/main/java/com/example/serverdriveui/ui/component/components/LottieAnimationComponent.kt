@@ -15,6 +15,7 @@ import com.example.serverdriveui.ui.component.properties.LottieAnimationDataProp
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.asValue
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.JsonObject
 
 data class LottieAnimationComponent(
@@ -23,10 +24,12 @@ data class LottieAnimationComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
+    private val scope: CoroutineScope,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope),
     LottieAnimationDataComponentProperty by LottieAnimationDataProperty(
         properties,
-        stateManager
+        stateManager,
+        scope
     ) {
 
     @Composable
@@ -34,24 +37,24 @@ data class LottieAnimationComponent(
         navController: NavHostController,
         modifier: Modifier,
     ): @Composable () -> Unit = {
-            val composition by rememberLottieComposition(getLottieAnimationSpec().asValue())
+        val composition by rememberLottieComposition(getLottieAnimationSpec().asValue())
 
-            val progress by animateLottieCompositionAsState(
-                composition,
-                isPlaying = true,
-                restartOnPlay = true,
-            )
+        val progress by animateLottieCompositionAsState(
+            composition,
+            isPlaying = true,
+            restartOnPlay = true,
+        )
 
-            LottieAnimation(
-                modifier = modifier.fillMaxSize(),
-                composition = composition,
-                progress = { progress },
-            )
+        LottieAnimation(
+            modifier = modifier.fillMaxSize(),
+            composition = composition,
+            progress = { progress },
+        )
 
-            if (progress == ANIMATION_FINISHED) {
-                actions["OnClick"]?.execute(navController)
-            }
+        if (progress == ANIMATION_FINISHED) {
+            actions["OnClick"]?.execute(navController)
         }
+    }
 
     companion object {
         const val IDENTIFIER = "lottie"

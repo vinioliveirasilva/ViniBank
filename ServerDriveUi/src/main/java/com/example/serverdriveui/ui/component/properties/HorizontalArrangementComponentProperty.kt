@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface HorizontalArrangementComponentProperty {
     fun getHorizontalArrangement(): StateFlow<Arrangement.Horizontal>
-    fun setHorizontalArrangement(value: Arrangement.Horizontal)
+    fun setHorizontalArrangement(value: HorizontalArrangementOptions)
 }

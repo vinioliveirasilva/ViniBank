@@ -14,6 +14,7 @@ import com.example.serverdriveui.ui.component.properties.SizeModifier
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.asValue
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.JsonObject
 
 class HorizontalDividerComponent(
@@ -22,8 +23,9 @@ class HorizontalDividerComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
-    SizeComponentModifier by SizeModifier(properties, stateManager) {
+    private val scope: CoroutineScope,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope),
+    SizeComponentModifier by SizeModifier(properties, stateManager, scope) {
 
     @Composable
     override fun getInternalComponent(

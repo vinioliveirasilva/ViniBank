@@ -6,17 +6,20 @@ import com.example.serverdriveui.ui.component.properties.BasePropertyData
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.asValue
 import com.vini.designsystem.R
+import kotlinx.coroutines.CoroutineScope
 
 class IconDrawableProperty(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
+    private val scope: CoroutineScope,
 ) : IconDrawableComponent,
     BasePropertyData<Int?>(
         stateManager = stateManager,
         properties = properties,
         propertyName = "iconDrawable",
         propertyValueTransformation = { IconLibrary[it] },
-        defaultPropertyValue = null
+        defaultPropertyValue = "",
+        scope = scope
     ) {
 
     override val drawableIcon: Int?

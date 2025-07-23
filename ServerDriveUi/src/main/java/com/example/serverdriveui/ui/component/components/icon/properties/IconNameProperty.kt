@@ -43,17 +43,20 @@ import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.component.properties.BasePropertyData
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.asValue
+import kotlinx.coroutines.CoroutineScope
 
 class IconNameProperty(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
+    private val scope: CoroutineScope,
 ) : IconNameComponent,
     BasePropertyData<ImageVector?>(
         stateManager = stateManager,
         properties = properties,
         propertyName = "icon",
         propertyValueTransformation = { IconLibrary[it] },
-        defaultPropertyValue = null
+        defaultPropertyValue = "",
+        scope = scope
     ) {
 
     override val icon: ImageVector?

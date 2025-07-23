@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface KeyboardOptionsComponentProperty {
     fun getKeyboardOptions(): StateFlow<KeyboardOptions>
-    fun setKeyboardOptions(keyboardOptions: KeyboardOptions)
+    fun setKeyboardOptions(keyboardOptions: KeyboardOptionsOption)
 }

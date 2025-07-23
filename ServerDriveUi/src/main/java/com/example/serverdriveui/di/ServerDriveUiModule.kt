@@ -61,6 +61,7 @@ import com.example.serverdriveui.ui.validator.validators.EmailValidator
 import com.example.serverdriveui.ui.validator.validators.IntToDynamicComponentValidator
 import com.example.serverdriveui.ui.validator.validators.IntToStringValidator
 import com.example.serverdriveui.ui.validator.validators.MinLengthValidator
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.JsonObject
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
@@ -89,7 +90,7 @@ val ServerDriveUiComponents = module {
     scope(named(sdUiComponents)) {
         factory<Component>(
             named(TopAppBarComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             TopAppBarComponent(
                 model = jsonComponent,
                 properties = properties,
@@ -97,24 +98,26 @@ val ServerDriveUiComponents = module {
                 validatorParser = get(),
                 componentParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(SpacerComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             SpacerComponent(
                 model = jsonComponent,
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(DialogComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             DialogComponent(
                 model = jsonComponent,
                 properties = properties,
@@ -122,12 +125,13 @@ val ServerDriveUiComponents = module {
                 validatorParser = get(),
                 componentParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(BottomSheetComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             BottomSheetComponent(
                 model = jsonComponent,
                 properties = properties,
@@ -135,36 +139,40 @@ val ServerDriveUiComponents = module {
                 validatorParser = get(),
                 componentParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(TextComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             TextComponent(
                 model = jsonComponent,
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(BlankComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             BlankComponent(
                 model = jsonComponent,
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
-                actionParser = get()
+                actionParser = get(),
+                scope = scope,
+
             )
         }
 
         factory<Component>(
             named(OutlinedTextInputComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             OutlinedTextInputComponent(
                 model = jsonComponent,
                 properties = properties,
@@ -172,25 +180,27 @@ val ServerDriveUiComponents = module {
                 validatorParser = get(),
                 componentParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(ColumnComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             ColumnComponent(
                 model = jsonComponent,
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
                 componentParser = get(),
-                actionParser = get()
+                actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(RowComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             RowComponent(
                 model = jsonComponent,
                 properties = properties,
@@ -198,12 +208,13 @@ val ServerDriveUiComponents = module {
                 validatorParser = get(),
                 componentParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(BoxComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             BoxComponent(
                 model = jsonComponent,
                 properties = properties,
@@ -211,12 +222,13 @@ val ServerDriveUiComponents = module {
                 validatorParser = get(),
                 componentParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(LazyColumnComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             LazyColumnComponent(
                 model = jsonComponent,
                 properties = properties,
@@ -224,12 +236,13 @@ val ServerDriveUiComponents = module {
                 validatorParser = get(),
                 componentParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(LazyRowComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             LazyRowComponent(
                 model = jsonComponent,
                 properties = properties,
@@ -237,12 +250,13 @@ val ServerDriveUiComponents = module {
                 validatorParser = get(),
                 componentParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(HorizontalPagerComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             HorizontalPagerComponent(
                 model = jsonComponent,
                 properties = properties,
@@ -250,85 +264,92 @@ val ServerDriveUiComponents = module {
                 validatorParser = get(),
                 componentParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(ButtonComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             ButtonComponent(
                 model = jsonComponent,
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
-                actionParser = get()
+                actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(CardComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             CardComponent(
                 model = jsonComponent,
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
                 componentParser = get(),
-                actionParser = get()
+                actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(OutlinedButtonComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             OutlinedButtonComponent(
                 model = jsonComponent,
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
-                actionParser = get()
+                actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(ElevatedButtonComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             ElevatedButtonComponent(
                 model = jsonComponent,
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
-                actionParser = get()
+                actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(LottieAnimationComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             LottieAnimationComponent(
                 model = jsonComponent,
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
-                actionParser = get()
+                actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(TextInputComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             TextInputComponent(
                 model = jsonComponent,
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(CreatePasswordComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             CreatePasswordComponent(
                 model = jsonComponent,
                 properties = properties,
@@ -336,6 +357,7 @@ val ServerDriveUiComponents = module {
                 validatorParser = get(),
                 viewModel = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
@@ -344,7 +366,7 @@ val ServerDriveUiComponents = module {
 
         factory<Component>(
             named(SdUiComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             SdUiComponent(
                 model = jsonComponent,
                 properties = properties,
@@ -352,6 +374,7 @@ val ServerDriveUiComponents = module {
                 validatorParser = get(),
                 viewModel = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
@@ -364,7 +387,7 @@ val ServerDriveUiComponents = module {
 
         factory<Component>(
             named(NavigationBarComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             NavigationBarComponent(
                 model = jsonComponent,
                 properties = properties,
@@ -372,12 +395,13 @@ val ServerDriveUiComponents = module {
                 validatorParser = get(),
                 componentParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(NavigationBarItemComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             NavigationBarItemComponent(
                 model = jsonComponent,
                 properties = properties,
@@ -385,72 +409,78 @@ val ServerDriveUiComponents = module {
                 validatorParser = get(),
                 componentParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(HorizontalDividerComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             HorizontalDividerComponent(
                 model = jsonComponent,
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(HorizontalDividerComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             HorizontalDividerComponent(
                 model = jsonComponent,
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(VerticalDividerComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             VerticalDividerComponent(
                 model = jsonComponent,
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(IconComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             IconComponent(
                 model = jsonComponent,
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(ImageComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             ImageComponent(
                 model = jsonComponent,
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(IconButtonComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             IconButtonComponent(
                 model = jsonComponent,
                 properties = properties,
@@ -458,12 +488,13 @@ val ServerDriveUiComponents = module {
                 validatorParser = get(),
                 componentParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(SnackBarComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             SnackBarComponent(
                 model = jsonComponent,
                 properties = properties,
@@ -471,18 +502,20 @@ val ServerDriveUiComponents = module {
                 validatorParser = get(),
                 componentParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
 
         factory<Component>(
             named(GoogleMapsComponent.IDENTIFIER)
-        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>) ->
+        ) { (jsonComponent: JsonObject, properties: Map<String, PropertyModel>, scope: CoroutineScope) ->
             GoogleMapsComponent(
                 model = jsonComponent,
                 properties = properties,
                 stateManager = get(),
                 validatorParser = get(),
                 actionParser = get(),
+                scope = scope,
             )
         }
     }

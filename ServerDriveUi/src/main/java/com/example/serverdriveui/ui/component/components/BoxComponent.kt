@@ -13,6 +13,7 @@ import com.example.serverdriveui.ui.component.properties.ContentAlignmentPropert
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.asValue
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.JsonObject
 
 class BoxComponent(
@@ -22,8 +23,9 @@ class BoxComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
-    ContentAlignmentComponentProperty by ContentAlignmentProperty(properties, stateManager) {
+    private val scope: CoroutineScope,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope),
+    ContentAlignmentComponentProperty by ContentAlignmentProperty(properties, stateManager, scope) {
 
     @Composable
     override fun getInternalComponent(

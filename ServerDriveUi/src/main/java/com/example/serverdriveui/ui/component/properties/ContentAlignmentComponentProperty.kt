@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface ContentAlignmentComponentProperty {
     fun getContentAlignment(): StateFlow<Alignment>
-    fun setContentAlignment(value: Alignment)
+    fun setContentAlignment(value: AlignmentOptions)
 }

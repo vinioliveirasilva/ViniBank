@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface VerticalArrangementComponentProperty {
     fun getVerticalArrangement(): StateFlow<Arrangement.Vertical>
-    fun setVerticalArrangement(value: Arrangement.Vertical)
+    fun setVerticalArrangement(value: VerticalArrangementOption)
 }

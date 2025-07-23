@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface VerticalAlignmentComponentProperty {
     fun getVerticalAlignment(): StateFlow<Alignment.Vertical>
-    fun setVerticalAlignment(value: Alignment.Vertical)
+    fun setVerticalAlignment(value: VerticalAlignmentOption)
 }

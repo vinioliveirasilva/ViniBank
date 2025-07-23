@@ -25,8 +25,6 @@ import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.asValue
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import kotlinx.serialization.json.JsonObject
 
 data class OutlinedTextInputComponent(
@@ -36,14 +34,14 @@ data class OutlinedTextInputComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-    private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO),
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
-    TextComponentProperty by TextProperty(properties, stateManager),
-    LabelComponentProperty by LabelProperty(properties, stateManager),
+    private val scope: CoroutineScope,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope),
+    TextComponentProperty by TextProperty(properties, stateManager, scope),
+    LabelComponentProperty by LabelProperty(properties, stateManager, scope),
     VisualTransformationComponentProperty by VisualTransformationProperty(properties, stateManager, scope),
-    KeyboardOptionsComponentProperty by KeyboardOptionsProperty(properties, stateManager),
-    ErrorComponentProperty by ErrorProperty(properties, stateManager),
-    ErrorMessageComponentProperty by ErrorMessageProperty(properties, stateManager) {
+    KeyboardOptionsComponentProperty by KeyboardOptionsProperty(properties, stateManager, scope),
+    ErrorComponentProperty by ErrorProperty(properties, stateManager, scope),
+    ErrorMessageComponentProperty by ErrorMessageProperty(properties, stateManager, scope) {
 
     @Composable
     override fun getInternalComponent(
@@ -72,10 +70,6 @@ data class OutlinedTextInputComponent(
             },
             modifier = modifier
         )
-    }
-
-    override fun close() {
-        scope.cancel()
     }
 
     companion object {
