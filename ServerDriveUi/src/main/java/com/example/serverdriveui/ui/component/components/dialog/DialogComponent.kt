@@ -23,8 +23,7 @@ class DialogComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-    private val scope: CoroutineScope
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope) {
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser) {
 
     @Composable
     override fun getInternalComponent(

@@ -3,7 +3,6 @@ package com.example.serverdriveui.ui.component.components.navigationbar
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
@@ -16,7 +15,6 @@ import com.example.serverdriveui.ui.component.components.navigationbar.propertie
 import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.JsonObject
 
 class NavigationBarItemComponent(
@@ -26,23 +24,20 @@ class NavigationBarItemComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-    private val scope: CoroutineScope,
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope),
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     NavigationDestinationComponent by NavigationDestinationProperty(
         properties,
         stateManager,
-        scope
     ),
     NavigationDestinationIndexComponent by NavigationDestinationIndexProperty(
         properties,
         stateManager,
-        scope
     ) {
 
     @Composable
     override fun getComponentAsRow(navController: NavHostController): @Composable (RowScope.() -> Unit) = {
-        val selectedDestination = getSelectedDestination().collectAsState().value
-        val index = getIndex().collectAsState().value
+        val selectedDestination = getSelectedDestination()
+        val index = getIndex()
         val selected = selectedDestination == index
         val componentTag = if (selected) "selectedIcon" else "unselectedIcon"
 

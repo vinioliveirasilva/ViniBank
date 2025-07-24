@@ -10,7 +10,6 @@ import com.example.serverdriveui.ui.component.properties.SizeComponentModifier
 import com.example.serverdriveui.ui.component.properties.SizeModifier
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.JsonObject
 
 class SpacerComponent(
@@ -19,9 +18,8 @@ class SpacerComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val actionParser: ActionParser,
-    private val scope: CoroutineScope
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope),
-    SizeComponentModifier by SizeModifier(properties, stateManager, scope) {
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
+    SizeComponentModifier by SizeModifier(properties, stateManager) {
 
     @Composable
     override fun getInternalComponent(

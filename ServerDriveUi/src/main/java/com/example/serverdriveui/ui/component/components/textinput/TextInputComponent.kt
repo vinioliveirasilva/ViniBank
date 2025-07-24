@@ -22,8 +22,6 @@ import com.example.serverdriveui.ui.component.properties.VisualTransformationCom
 import com.example.serverdriveui.ui.component.properties.VisualTransformationProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.example.serverdriveui.util.asValue
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.JsonObject
 
 data class TextInputComponent(
@@ -32,30 +30,29 @@ data class TextInputComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val actionParser: ActionParser,
-    private val scope: CoroutineScope,
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope),
-    TextComponentProperty by TextProperty(properties, stateManager, scope),
-    LabelComponentProperty by LabelProperty(properties, stateManager, scope),
-    VisualTransformationComponentProperty by VisualTransformationProperty(properties, stateManager, scope),
-    KeyboardOptionsComponentProperty by KeyboardOptionsProperty(properties, stateManager, scope),
-    ErrorComponentProperty by ErrorProperty(properties, stateManager, scope),
-    ErrorMessageComponentProperty by ErrorMessageProperty(properties, stateManager, scope) {
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
+    TextComponentProperty by TextProperty(properties, stateManager),
+    LabelComponentProperty by LabelProperty(properties, stateManager),
+    VisualTransformationComponentProperty by VisualTransformationProperty(properties, stateManager),
+    KeyboardOptionsComponentProperty by KeyboardOptionsProperty(properties, stateManager),
+    ErrorComponentProperty by ErrorProperty(properties, stateManager),
+    ErrorMessageComponentProperty by ErrorMessageProperty(properties, stateManager) {
 
     @Composable
     override fun getInternalComponent(
         navController: NavHostController,
         modifier: Modifier,
     ): @Composable () -> Unit = {
-        val text = getText().asValue()
-        val isError = getIsError().asValue()
+        val text = getText()
+        val isError = getIsError()
 
         TextField(
-            keyboardOptions = getKeyboardOptions().asValue(),
-            visualTransformation = getVisualTransformation().asValue(),
+            keyboardOptions = getKeyboardOptions(),
+            visualTransformation = getVisualTransformation(),
             singleLine = true,
             isError = isError,
-            supportingText = { if (isError) Text(text = getErrorMessage().asValue()) },
-            label = { Text(text = getLabel().asValue()) },
+            supportingText = { if (isError) Text(text = getErrorMessage()) },
+            label = { Text(text = getLabel()) },
             value = text,
             onValueChange = {
                 setIsError(false)

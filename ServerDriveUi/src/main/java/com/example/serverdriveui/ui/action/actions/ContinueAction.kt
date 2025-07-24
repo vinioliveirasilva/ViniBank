@@ -25,7 +25,7 @@ class ContinueAction(
             data.getAsMap("screenRequestData").forEach { requestData ->
                 put(
                     requestData.value.asString(),
-                    stateManager.getState<String>(requestData.key)?.value.orEmpty()
+                    stateManager.getState<String>(requestData.key)?.value
                 )
             }
         }

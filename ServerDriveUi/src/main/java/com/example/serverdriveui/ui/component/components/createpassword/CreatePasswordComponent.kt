@@ -28,7 +28,6 @@ import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.vini.designsystem.R
 import com.vini.designsystem.compose.icon.passwordTrailingIcon
 import com.vini.designsystem.compose.visualtransformation.getPasswordVisualTransformation
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.JsonObject
 
 class CreatePasswordComponent(
@@ -38,10 +37,9 @@ class CreatePasswordComponent(
     private val validatorParser: ValidatorParser,
     private val viewModel: CreatePasswordViewModel,
     private val actionParser: ActionParser,
-    private val scope: CoroutineScope,
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope),
-    ValidPasswordComponentProperty by ValidPasswordProperty(properties, stateManager, scope),
-    TextComponentProperty by TextProperty(properties, stateManager, scope) {
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
+    ValidPasswordComponentProperty by ValidPasswordProperty(properties, stateManager),
+    TextComponentProperty by TextProperty(properties, stateManager) {
 
     @Composable
     override fun getInternalComponent(

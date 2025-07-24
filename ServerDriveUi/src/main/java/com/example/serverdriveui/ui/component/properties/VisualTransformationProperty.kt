@@ -1,34 +1,36 @@
 package com.example.serverdriveui.ui.component.properties
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.component.properties.VisualTransformationOption.None
 import com.example.serverdriveui.ui.state.ComponentStateManager
+import com.example.serverdriveui.util.JsonUtil.asString
 import com.vini.designsystem.compose.textfield.MaskVisualTransformation
-import kotlinx.coroutines.CoroutineScope
 
 class VisualTransformationProperty(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
-    private val scope: CoroutineScope,
 ) : VisualTransformationComponentProperty,
-    BasePropertyData<VisualTransformation>(
+    BasePropertyData<String>(
         stateManager = stateManager,
         properties = properties,
         propertyName = "visualTransformation",
-        propertyValueTransformation = { it.toOption() },
+        transformToData = { it?.asString() },
         defaultPropertyValue = None.id,
-        scope = scope
     ) {
-    override fun getVisualTransformation() = getValue()
+
+    @Composable
+    override fun getVisualTransformation() = getValue().toOption().visualTransformation
+
     override fun setVisualTransformation(visualTransformation: VisualTransformationOption) =
         setValue(visualTransformation.id)
 }
 
 private fun String?.toOption() =
-    VisualTransformationOption.entries.firstOrNull { it.id == this }?.visualTransformation
-        ?: VisualTransformation.None
+    VisualTransformationOption.entries.firstOrNull { it.id == this }
+        ?: None
 
 enum class VisualTransformationOption(
     val id: String,

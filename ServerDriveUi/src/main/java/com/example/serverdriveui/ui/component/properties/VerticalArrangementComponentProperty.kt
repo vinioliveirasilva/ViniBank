@@ -1,9 +1,11 @@
 package com.example.serverdriveui.ui.component.properties
 
 import androidx.compose.foundation.layout.Arrangement
-import kotlinx.coroutines.flow.StateFlow
+import androidx.compose.runtime.Composable
 
 interface VerticalArrangementComponentProperty {
-    fun getVerticalArrangement(): StateFlow<Arrangement.Vertical>
+
+    @Composable
+    fun getVerticalArrangement(): Arrangement.Vertical
     fun setVerticalArrangement(value: VerticalArrangementOption)
 }

@@ -18,7 +18,7 @@ class EmailValidator(
     private val states: MutableMap<String, Boolean> = mutableMapOf()
 
     init {
-        componentStateManager.registerState<Boolean>(model.id, false)
+        componentStateManager.registerState(model.id, false)
         model.required.forEach {
             states[it] = false
         }

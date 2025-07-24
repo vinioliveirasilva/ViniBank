@@ -1,24 +1,25 @@
 package com.example.serverdriveui.ui.component.properties
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.runtime.Composable
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
-import kotlinx.coroutines.CoroutineScope
+import com.example.serverdriveui.util.JsonUtil.asString
 
 class HorizontalArrangementProperty(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
-    private val scope: CoroutineScope,
 ) : HorizontalArrangementComponentProperty,
-    BasePropertyData<Arrangement.Horizontal>(
+    BasePropertyData<String>(
         stateManager = stateManager,
         properties = properties,
         propertyName = "horizontalArrangement",
-        propertyValueTransformation = { it.toHorizontalArrangement() },
         defaultPropertyValue = HorizontalArrangementOptions.Start.id,
-        scope = scope
+        transformToData = { it?.asString() }
     ) {
-    override fun getHorizontalArrangement() = getValue()
+
+    @Composable
+    override fun getHorizontalArrangement() = getValue().toOption().arrangement
     override fun setHorizontalArrangement(value: HorizontalArrangementOptions) = setValue(value.id)
 }
 
@@ -30,6 +31,6 @@ enum class HorizontalArrangementOptions(val id: String, val arrangement: Arrange
     SpaceAround("SpaceAround", Arrangement.SpaceAround),
 }
 
-private fun String?.toHorizontalArrangement() =
-    HorizontalArrangementOptions.entries.firstOrNull { it.id == this }?.arrangement
-        ?: Arrangement.Start
+private fun String?.toOption() =
+    HorizontalArrangementOptions.entries.firstOrNull { it.id == this }
+        ?: HorizontalArrangementOptions.Start

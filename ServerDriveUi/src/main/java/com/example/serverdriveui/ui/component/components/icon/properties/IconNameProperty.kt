@@ -42,26 +42,23 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.component.properties.BasePropertyData
 import com.example.serverdriveui.ui.state.ComponentStateManager
-import com.example.serverdriveui.util.asValue
-import kotlinx.coroutines.CoroutineScope
+import com.example.serverdriveui.util.JsonUtil.asString
 
 class IconNameProperty(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
-    private val scope: CoroutineScope,
 ) : IconNameComponent,
-    BasePropertyData<ImageVector?>(
+    BasePropertyData<String?>(
         stateManager = stateManager,
         properties = properties,
         propertyName = "icon",
-        propertyValueTransformation = { IconLibrary[it] },
-        defaultPropertyValue = "",
-        scope = scope
+        transformToData = { it?.asString() },
+        defaultPropertyValue = null,
     ) {
 
     override val icon: ImageVector?
         @Composable
-        get() = getValue().asValue()
+        get() = IconLibrary[getValue()]
 }
 
 private val IconLibrary: Map<String, ImageVector>

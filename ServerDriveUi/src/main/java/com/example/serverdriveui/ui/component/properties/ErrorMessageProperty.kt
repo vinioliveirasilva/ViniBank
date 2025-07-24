@@ -1,22 +1,23 @@
 package com.example.serverdriveui.ui.component.properties
 
+import androidx.compose.runtime.Composable
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
-import kotlinx.coroutines.CoroutineScope
+import com.example.serverdriveui.util.JsonUtil.asString
 
 data class ErrorMessageProperty(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
-    private val scope: CoroutineScope,
 ) : ErrorMessageComponentProperty,
     BasePropertyData<String>(
         stateManager = stateManager,
         properties = properties,
         propertyName = "errorMessage",
-        propertyValueTransformation = { it },
         defaultPropertyValue = "",
-        scope = scope
+        transformToData = { it?.asString() }
     ) {
+
+    @Composable
     override fun getErrorMessage() = getValue()
     override fun setErrorMessage(message: String) = setValue(message)
 }

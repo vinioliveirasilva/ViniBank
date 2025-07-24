@@ -16,8 +16,8 @@ import com.example.serverdriveui.ui.component.properties.VerticalArrangementComp
 import com.example.serverdriveui.ui.component.properties.VerticalArrangementProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.example.serverdriveui.util.asValue
-import kotlinx.coroutines.CoroutineScope
+import com.example.serverdriveui.util.JsonUtil.asString
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -32,21 +32,15 @@ class DynamicComponentPropertyImpl(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
     private val componentParser: ComponentParser,
-    private val scope: CoroutineScope,
 ) : DynamicComponentProperty,
-    BasePropertyData<Component?>(
+    BasePropertyData<String>(
         stateManager = stateManager,
         properties = properties,
         propertyName = "components",
-        propertyValueTransformation = {
-            componentParser.parse(
-                data = Json.decodeFromString<JsonObject>(it)
-            )
-        },
+        transformToData = { it?.asString() },
         defaultPropertyValue = Json.encodeToString(JsonObject(emptyMap())),
-        scope = scope
     ) {
-    override fun getComponent() = getValue()
+    override fun getComponent() = MutableStateFlow(null)//getValue()
 
     override fun setComponents(jsonObject: JsonObject) = setValue(Json.encodeToString(jsonObject))
 }
@@ -58,41 +52,42 @@ class ColumnComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-    private val scope: CoroutineScope,
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope),
+
+    ) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     HorizontalAlignmentComponentProperty by HorizontalAlignmentProperty(
         properties,
         stateManager,
-        scope
     ),
     VerticalArrangementComponentProperty by VerticalArrangementProperty(
         properties,
         stateManager,
-        scope
-    ), DynamicComponentProperty by DynamicComponentPropertyImpl(
-        properties,
-        stateManager,
-        componentParser,
-        scope
-    ) {
+    )
+//    , DynamicComponentProperty by DynamicComponentPropertyImpl(
+//        properties,
+//        stateManager,
+//        componentParser,
+//        scope
+//    )
+{
 
     @Composable
     override fun getInternalComponent(
         navController: NavHostController,
         modifier: Modifier,
     ): @Composable () -> Unit = {
-        val actionModifier = actions["OnClick"]?.let { Modifier.clickable { it.execute(navController) } } ?: Modifier
-        val dynamicComponents = getComponent().asValue()
+        val actionModifier =
+            actions["OnClick"]?.let { Modifier.clickable { it.execute(navController) } } ?: Modifier
+        //val dynamicComponents = getComponent().asValue()
 
         Column(
-            verticalArrangement = getVerticalArrangement().asValue(),
-            horizontalAlignment = getHorizontalAlignment().asValue(),
+            verticalArrangement = getVerticalArrangement(),
+            horizontalAlignment = getHorizontalAlignment(),
             modifier = modifier
                 .then(actionModifier)
         ) {
             componentParser.parseList(data = model).forEach {
-                    it.getComponentAsColumn(navController).invoke(this)
-                }
+                it.getComponentAsColumn(navController).invoke(this)
+            }
         }
     }
 

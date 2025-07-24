@@ -1,8 +1,9 @@
 package com.example.serverdriveui.ui.component.properties
 
-import kotlinx.coroutines.flow.StateFlow
+import androidx.compose.runtime.Composable
 
 interface VisibilityComponentProperty {
-    fun getIsVisible(): StateFlow<Boolean>
+    @Composable
+    fun getIsVisible(): Boolean
     fun setIsVisible(isVisible: Boolean)
 }

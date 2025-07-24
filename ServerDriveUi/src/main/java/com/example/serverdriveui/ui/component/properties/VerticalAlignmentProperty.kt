@@ -1,24 +1,26 @@
 package com.example.serverdriveui.ui.component.properties
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
-import kotlinx.coroutines.CoroutineScope
+import com.example.serverdriveui.util.JsonUtil.asString
 
 class VerticalAlignmentProperty(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
-    private val scope: CoroutineScope,
 ) : VerticalAlignmentComponentProperty,
-    BasePropertyData<Alignment.Vertical>(
+    BasePropertyData<String>(
         stateManager = stateManager,
         properties = properties,
         propertyName = "verticalAlignment",
-        propertyValueTransformation = { it.toOption() },
+        transformToData = { it?.asString() },
         defaultPropertyValue = VerticalAlignmentOption.Top.id,
-        scope = scope
     ) {
-    override fun getVerticalAlignment() = getValue()
+
+    @Composable
+    override fun getVerticalAlignment() = getValue().toOption().verticalAlignment
+
     override fun setVerticalAlignment(value: VerticalAlignmentOption) = setValue(value.id)
 }
 
@@ -29,5 +31,4 @@ enum class VerticalAlignmentOption(val id: String, val verticalAlignment: Alignm
 }
 
 private fun String?.toOption() =
-    VerticalAlignmentOption.entries.firstOrNull { it.id == this }?.verticalAlignment
-        ?: VerticalAlignmentOption.Top.verticalAlignment
+    VerticalAlignmentOption.entries.firstOrNull { it.id == this } ?: VerticalAlignmentOption.Top

@@ -1,8 +1,10 @@
 package com.example.serverdriveui.ui.component.properties
 
-import kotlinx.coroutines.flow.StateFlow
+import androidx.compose.runtime.Composable
 
 interface ErrorComponentProperty {
-    fun getIsError() : StateFlow<Boolean>
+
+    @Composable
+    fun getIsError() : Boolean
     fun setIsError(value: Boolean)
 }

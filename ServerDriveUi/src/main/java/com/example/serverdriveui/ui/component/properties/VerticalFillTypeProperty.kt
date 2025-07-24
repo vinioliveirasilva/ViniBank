@@ -6,28 +6,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
-import com.example.serverdriveui.util.asValue
-import kotlinx.coroutines.CoroutineScope
+import com.example.serverdriveui.util.JsonUtil.asString
 
 data class VerticalFillTypeProperty(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
-    private val scope: CoroutineScope,
 ) : VerticalFillTypeComponentProperty,
-    BasePropertyData<VerticalFillTypeOption>(
+    BasePropertyData<String>(
         stateManager = stateManager,
         properties = properties,
         propertyName = "verticalFillType",
-        propertyValueTransformation = { it.toOption() },
+        transformToData = { it?.asString() },
         defaultPropertyValue = VerticalFillTypeOption.None.id,
-        scope = scope
     ) {
     override val verticalFillTypeModifier: Modifier
         @Composable
-        get() = getValue().asValue().modifier
-
-    override fun getVerticalFillType() = getValue()
-    override fun setVerticalFillType(value: VerticalFillTypeOption) = setValue(value.id)
+        get() = getValue().toOption().modifier
 }
 
 enum class VerticalFillTypeOption(val id: String, val modifier: Modifier) {
@@ -38,4 +32,5 @@ enum class VerticalFillTypeOption(val id: String, val modifier: Modifier) {
     None("", Modifier)
 }
 
-private fun String?.toOption() = VerticalFillTypeOption.entries.firstOrNull { it.id == this } ?: VerticalFillTypeOption.None
+private fun String?.toOption() =
+    VerticalFillTypeOption.entries.firstOrNull { it.id == this } ?: VerticalFillTypeOption.None

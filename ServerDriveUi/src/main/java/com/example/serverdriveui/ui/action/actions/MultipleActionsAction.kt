@@ -6,8 +6,8 @@ import com.example.serverdriveui.ui.action.manager.ActionParser
 import kotlinx.serialization.json.JsonObject
 
 class MultipleActionsAction(
-    data: JsonObject,
-    actionParser: ActionParser,
+    private val data: JsonObject,
+    private val actionParser: ActionParser,
 ) : Action {
 
     private val actions = actionParser.parseActions(data).values

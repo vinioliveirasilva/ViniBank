@@ -1,8 +1,10 @@
 package com.example.serverdriveui.ui.component.properties
 
-import kotlinx.coroutines.flow.StateFlow
+import androidx.compose.runtime.Composable
 
 interface ErrorMessageComponentProperty {
-    fun getErrorMessage() : StateFlow<String>
+
+    @Composable
+    fun getErrorMessage() : String
     fun setErrorMessage(message: String)
 }

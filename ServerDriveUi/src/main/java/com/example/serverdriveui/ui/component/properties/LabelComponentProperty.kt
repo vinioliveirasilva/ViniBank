@@ -1,8 +1,10 @@
 package com.example.serverdriveui.ui.component.properties
 
-import kotlinx.coroutines.flow.StateFlow
+import androidx.compose.runtime.Composable
 
 interface LabelComponentProperty {
-    fun getLabel() : StateFlow<String>
+
+    @Composable
+    fun getLabel() : String
     fun setLabel(value: String)
 }

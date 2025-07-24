@@ -1,8 +1,8 @@
 package com.example.serverdriveui.ui.component.properties
 
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import kotlinx.coroutines.flow.StateFlow
+import androidx.compose.runtime.Composable
 
 interface LottieAnimationDataComponentProperty {
-    fun getLottieAnimationSpec() : StateFlow<LottieCompositionSpec>
+    @Composable
+    fun getLottieAnimationStringData() : String
 }

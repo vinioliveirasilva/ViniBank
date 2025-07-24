@@ -1,24 +1,26 @@
 package com.example.serverdriveui.ui.component.properties
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.style.TextAlign
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
-import kotlinx.coroutines.CoroutineScope
+import com.example.serverdriveui.util.JsonUtil.asString
 
 class TextAlignProperty(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
-    private val scope: CoroutineScope,
 ) : TextAlignComponentProperty,
-    BasePropertyData<TextAlign>(
+    BasePropertyData<String>(
         stateManager = stateManager,
         properties = properties,
         propertyName = "textAlign",
-        propertyValueTransformation = { it.toTextAlign() },
+        transformToData = { it?.asString() },
         defaultPropertyValue = TextAlignOption.Start.id,
-        scope = scope
     ) {
-    override fun getTextAlign() = getValue()
+
+    @Composable
+    override fun getTextAlign() = getValue().toTextAlign().textAlign
+
     override fun setTextAlign(textAlign: TextAlignOption) = setValue(textAlign.id)
 }
 
@@ -28,4 +30,5 @@ enum class TextAlignOption(val id: String, val textAlign: TextAlign) {
     End("End", TextAlign.End),
 }
 
-private fun String?.toTextAlign(): TextAlign = TextAlignOption.entries.firstOrNull { it.id == this }?.textAlign ?: TextAlignOption.Start.textAlign
+private fun String?.toTextAlign() =
+    TextAlignOption.entries.firstOrNull { it.id == this } ?: TextAlignOption.Start

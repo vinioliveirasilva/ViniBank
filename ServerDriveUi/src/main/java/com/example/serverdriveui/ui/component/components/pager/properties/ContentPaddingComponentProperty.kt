@@ -1,8 +1,10 @@
 package com.example.serverdriveui.ui.component.components.pager.properties
 
-import kotlinx.coroutines.flow.StateFlow
+import androidx.compose.runtime.Composable
 
 interface ContentPaddingComponentProperty {
-    fun getContentPadding(): StateFlow<Int>
+
+    @Composable
+    fun getContentPadding(): Int
     fun setContentPadding(value: Int)
 }

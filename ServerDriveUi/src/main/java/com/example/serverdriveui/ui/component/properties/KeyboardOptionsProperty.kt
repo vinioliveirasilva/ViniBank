@@ -1,25 +1,27 @@
 package com.example.serverdriveui.ui.component.properties
 
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.input.KeyboardType
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
-import kotlinx.coroutines.CoroutineScope
+import com.example.serverdriveui.util.JsonUtil.asString
 
 class KeyboardOptionsProperty(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
-    private val scope: CoroutineScope,
 ) : KeyboardOptionsComponentProperty,
-    BasePropertyData<KeyboardOptions>(
+    BasePropertyData<String>(
         stateManager = stateManager,
         properties = properties,
         propertyName = "keyboardOptions",
-        propertyValueTransformation = { it.toKeyboardOption() },
         defaultPropertyValue = KeyboardOptionsOption.Default.id,
-        scope = scope
+        transformToData = { it?.asString() }
     ) {
-    override fun getKeyboardOptions() = getValue()
+
+    @Composable
+    override fun getKeyboardOptions() = getValue().toOption().keyboardOptions
+
     override fun setKeyboardOptions(keyboardOptions: KeyboardOptionsOption) = setValue(keyboardOptions.id)
 }
 
@@ -30,6 +32,6 @@ enum class KeyboardOptionsOption(val id: String, val keyboardOptions: KeyboardOp
     Password("Password", KeyboardOptions(keyboardType = KeyboardType.Password)),
 }
 
-private fun String?.toKeyboardOption() =
-    KeyboardOptionsOption.entries.firstOrNull { it.id == this }?.keyboardOptions
-        ?: KeyboardOptionsOption.Default.keyboardOptions
+private fun String?.toOption() =
+    KeyboardOptionsOption.entries.firstOrNull { it.id == this }
+        ?: KeyboardOptionsOption.Default

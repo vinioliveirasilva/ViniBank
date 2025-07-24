@@ -19,7 +19,6 @@ import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.asValue
 import com.vini.designsystem.compose.loader.Loader2
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.JsonObject
 
 class SdUiComponent(
@@ -29,11 +28,10 @@ class SdUiComponent(
     private val validatorParser: ValidatorParser,
     private val viewModel: SdUiComponentViewModel,
     private val actionParser: ActionParser,
-    private val scope: CoroutineScope,
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope),
-    FlowIdentifierComponent by FlowIdentifierProperty(properties, stateManager, scope),
-    ScreenDataComponent by ScreenDataProperty(properties, stateManager, scope),
-    StageIdentifierComponent by StageIdentifierProperty(properties, stateManager, scope) {
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
+    FlowIdentifierComponent by FlowIdentifierProperty(properties, stateManager),
+    ScreenDataComponent by ScreenDataProperty(properties, stateManager),
+    StageIdentifierComponent by StageIdentifierProperty(properties, stateManager) {
 
     init {
         viewModel.initialize(

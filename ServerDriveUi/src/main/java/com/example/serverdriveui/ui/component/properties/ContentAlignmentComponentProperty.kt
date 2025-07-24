@@ -1,9 +1,11 @@
 package com.example.serverdriveui.ui.component.properties
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import kotlinx.coroutines.flow.StateFlow
 
 interface ContentAlignmentComponentProperty {
-    fun getContentAlignment(): StateFlow<Alignment>
+
+    @Composable
+    fun getContentAlignment(): Alignment
     fun setContentAlignment(value: AlignmentOptions)
 }

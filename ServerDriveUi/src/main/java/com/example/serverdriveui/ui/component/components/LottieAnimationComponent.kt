@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.serverdriveui.service.model.PropertyModel
@@ -14,8 +15,6 @@ import com.example.serverdriveui.ui.component.properties.LottieAnimationDataComp
 import com.example.serverdriveui.ui.component.properties.LottieAnimationDataProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.example.serverdriveui.util.asValue
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.JsonObject
 
 data class LottieAnimationComponent(
@@ -24,12 +23,10 @@ data class LottieAnimationComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val actionParser: ActionParser,
-    private val scope: CoroutineScope,
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope),
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     LottieAnimationDataComponentProperty by LottieAnimationDataProperty(
         properties,
         stateManager,
-        scope
     ) {
 
     @Composable
@@ -37,7 +34,9 @@ data class LottieAnimationComponent(
         navController: NavHostController,
         modifier: Modifier,
     ): @Composable () -> Unit = {
-        val composition by rememberLottieComposition(getLottieAnimationSpec().asValue())
+        val composition by rememberLottieComposition(
+            LottieCompositionSpec.JsonString(getLottieAnimationStringData())
+        )
 
         val progress by animateLottieCompositionAsState(
             composition,

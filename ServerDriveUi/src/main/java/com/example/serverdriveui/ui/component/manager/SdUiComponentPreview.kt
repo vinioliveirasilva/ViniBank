@@ -7,7 +7,6 @@ import com.example.serverdriveui.SdUiUI
 import com.example.serverdriveui.di.ServerDriverUiModules
 import com.example.serverdriveui.di.getNewScope
 import com.example.serverdriveui.di.getNewScopeActivity
-import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.vini.designsystem.compose.loader.loaderStateMock
 import kotlinx.serialization.json.JsonObject
 import org.koin.compose.KoinApplication
@@ -16,7 +15,6 @@ import org.koin.compose.getKoin
 import org.koin.compose.getKoinScope
 import org.koin.core.annotation.KoinInternalApi
 import org.koin.core.parameter.parametersOf
-import org.koin.dsl.module
 import java.util.UUID
 
 @OptIn(KoinInternalApi::class)
@@ -24,10 +22,7 @@ import java.util.UUID
 fun SdUiComponentPreview(jsonObject: JsonObject) {
     KoinApplication(
         application = {
-            modules(
-                ServerDriverUiModules,
-                module { single { ComponentStateManager() } }
-            )
+            modules(ServerDriverUiModules)
         }
     ) {
         val koinScope = getKoin().getNewScope(

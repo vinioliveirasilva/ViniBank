@@ -3,7 +3,6 @@ package com.example.serverdriveui.ui.component.components.button
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
@@ -18,7 +17,6 @@ import com.example.serverdriveui.ui.component.properties.TextProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.vini.designsystemsdui.outlinedButton
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.JsonObject
 
 /**
@@ -31,24 +29,23 @@ data class OutlinedButtonComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val actionParser: ActionParser,
-    private val scope: CoroutineScope,
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope),
-    TextComponentProperty by TextProperty(properties, stateManager, scope),
-    EnabledComponentProperty by EnabledProperty(properties, stateManager, scope) {
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
+    TextComponentProperty by TextProperty(properties, stateManager),
+    EnabledComponentProperty by EnabledProperty(properties, stateManager) {
 
     @Composable
     override fun getInternalComponent(
         navController: NavHostController,
         modifier: Modifier,
     ): @Composable () -> Unit = {
-        val isEnabled = getEnabled().collectAsState().value
+        val isEnabled = getEnabled()
         OutlinedButton(
             enabled = isEnabled,
             modifier = modifier,
             onClick = {
                 actions["OnClick"]?.execute(navController)
             },
-            content = { Text(getText().collectAsState().value) }
+            content = { Text(getText()) }
         )
     }
 

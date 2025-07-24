@@ -40,6 +40,7 @@ class SdUiViewModel(
 
     override fun onCleared() {
         super.onCleared()
+        println("fechando scopo da tela")
         closables.forEach {
             it.close()
         }

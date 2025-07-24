@@ -3,7 +3,6 @@ package com.example.serverdriveui.ui.component.components.navigationbar
 import androidx.activity.compose.BackHandler
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
@@ -15,7 +14,6 @@ import com.example.serverdriveui.ui.component.components.navigationbar.propertie
 import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.JsonObject
 import org.json.JSONObject
 
@@ -26,12 +24,10 @@ class NavigationBarComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-    private val scope: CoroutineScope,
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope),
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     NavigationDestinationComponent by NavigationDestinationProperty(
         properties,
         stateManager,
-        scope
     ) {
     @Composable
     override fun getInternalComponent(
@@ -40,7 +36,7 @@ class NavigationBarComponent(
     ): @Composable (() -> Unit) =
         {
             val destinations = componentParser.parseList(model)
-            val selectedDestination = getSelectedDestination().collectAsState().value
+            val selectedDestination = getSelectedDestination()
 
             BackHandler(enabled = selectedDestination != FIRST_DESTINATION_INDEX) {
                 setSelectedDestination(FIRST_DESTINATION_INDEX)

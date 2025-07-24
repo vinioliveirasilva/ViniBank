@@ -8,6 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.jsonObject
 
 class MinLengthValidator(
     private val model: ValidatorModel,
@@ -16,10 +17,10 @@ class MinLengthValidator(
 ) : Validator {
 
     val states: MutableMap<String, Boolean> = mutableMapOf()
-    val minLength: Int = model.data.getAsInt("length")
+    val minLength: Int = model.data.jsonObject.getAsInt("length")
 
     init {
-        componentStateManager.registerState<Boolean>(model.id, false)
+        componentStateManager.registerState(model.id, false)
         model.required.forEach {
             states[it] = false
         }

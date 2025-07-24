@@ -5,7 +5,7 @@ fun button(text: String, horizontalFillType: String = "Max", isEnabled: Boolean 
         type = "button",
         properties = listOf(
             ComponentUtil.property("text", text),
-            ComponentUtil.property("enabled", isEnabled.toString()),
+            ComponentUtil.property("enabled", isEnabled),
             ComponentUtil.property("horizontalFillType", horizontalFillType),
         )
     )
@@ -15,7 +15,7 @@ fun outlinedButton(text: String, horizontalFillType: String = "Max", isEnabled: 
         type = "outlinedButton",
         properties = listOf(
             ComponentUtil.property("text", text),
-            ComponentUtil.property("enabled", isEnabled.toString()),
+            ComponentUtil.property("enabled", isEnabled),
             ComponentUtil.property("horizontalFillType", horizontalFillType),
         )
     )

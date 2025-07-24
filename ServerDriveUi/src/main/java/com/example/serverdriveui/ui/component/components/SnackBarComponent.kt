@@ -16,8 +16,6 @@ import com.example.serverdriveui.ui.component.properties.TextComponentProperty
 import com.example.serverdriveui.ui.component.properties.TextProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.example.serverdriveui.util.asValue
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonObject
 
@@ -28,9 +26,8 @@ class SnackBarComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-    private val scope: CoroutineScope,
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope),
-    TextComponentProperty by TextProperty(properties, stateManager, scope) {
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
+    TextComponentProperty by TextProperty(properties, stateManager) {
 
     @Composable
     override fun getInternalComponent(
@@ -39,7 +36,7 @@ class SnackBarComponent(
     ): @Composable () -> Unit = {
         val snackBarHostState = remember { SnackbarHostState() }
         val scope = rememberCoroutineScope()
-        val text = getText().asValue()
+        val text = getText()
 
         scope.launch {
             when (snackBarHostState.showSnackbar(text)) {

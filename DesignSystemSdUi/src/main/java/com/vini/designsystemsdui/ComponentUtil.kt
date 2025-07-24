@@ -21,6 +21,18 @@ object ComponentUtil {
         id?.run { put("id", this) }
     }
 
+    fun property(name: String, value: Boolean, id: String? = null): Property = buildJsonObject {
+        put("name", name)
+        put("value", value)
+        id?.run { put("id", this) }
+    }
+
+    fun property(name: String, value: Number, id: String? = null): Property = buildJsonObject {
+        put("name", name)
+        put("value", value)
+        id?.run { put("id", this) }
+    }
+
     fun action(
         type: String,
         data: JsonObject? = null,

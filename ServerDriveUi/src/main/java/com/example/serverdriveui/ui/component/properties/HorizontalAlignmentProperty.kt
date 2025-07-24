@@ -1,24 +1,26 @@
 package com.example.serverdriveui.ui.component.properties
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
-import kotlinx.coroutines.CoroutineScope
+import com.example.serverdriveui.util.JsonUtil.asString
 
 class HorizontalAlignmentProperty(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
-    private val scope: CoroutineScope,
 ) : HorizontalAlignmentComponentProperty,
-    BasePropertyData<Alignment.Horizontal>(
+    BasePropertyData<String>(
         stateManager = stateManager,
         properties = properties,
         propertyName = "horizontalAlignment",
-        propertyValueTransformation = { it.toHorizontalAlignment() },
+        transformToData = { it?.asString() },
         defaultPropertyValue = HorizontalAlignmentOptions.Start.id,
-        scope = scope
     ) {
-    override fun getHorizontalAlignment() = getValue()
+
+    @Composable
+    override fun getHorizontalAlignment() = getValue().toOption().alignment
+
     override fun setHorizontalAlignment(value: HorizontalAlignmentOptions) = setValue(value.id)
 }
 
@@ -28,5 +30,6 @@ enum class HorizontalAlignmentOptions(val id: String, val alignment: Alignment.H
     End("End", Alignment.End),
 }
 
-private fun String?.toHorizontalAlignment(): Alignment.Horizontal =
-    HorizontalAlignmentOptions.entries.firstOrNull { it.id == this }?.alignment ?: Alignment.Start
+private fun String?.toOption() =
+    HorizontalAlignmentOptions.entries.firstOrNull { it.id == this }
+        ?: HorizontalAlignmentOptions.Start

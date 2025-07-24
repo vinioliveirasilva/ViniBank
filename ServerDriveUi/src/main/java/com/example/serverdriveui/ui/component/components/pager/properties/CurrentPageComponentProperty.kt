@@ -1,8 +1,10 @@
 package com.example.serverdriveui.ui.component.components.pager.properties
 
-import kotlinx.coroutines.flow.StateFlow
+import androidx.compose.runtime.Composable
 
 interface CurrentPageComponentProperty {
-    fun getCurrentPage(): StateFlow<Int>
+
+    @Composable
+    fun getCurrentPage(): Int
     fun setCurrentPage(value: Int)
 }

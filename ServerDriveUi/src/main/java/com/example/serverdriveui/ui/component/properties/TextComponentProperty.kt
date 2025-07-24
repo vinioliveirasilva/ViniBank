@@ -1,8 +1,10 @@
 package com.example.serverdriveui.ui.component.properties
 
-import kotlinx.coroutines.flow.StateFlow
+import androidx.compose.runtime.Composable
 
 interface TextComponentProperty {
-    fun getText() : StateFlow<String>
+
+    @Composable
+    fun getText() : String
     fun setText(text: String)
 }

@@ -20,8 +20,6 @@ import com.example.serverdriveui.ui.component.properties.VerticalAlignmentCompon
 import com.example.serverdriveui.ui.component.properties.VerticalAlignmentProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.example.serverdriveui.util.asValue
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.JsonObject
 
 class HorizontalPagerComponent(
@@ -31,11 +29,10 @@ class HorizontalPagerComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-    private val scope: CoroutineScope,
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope),
-    VerticalAlignmentComponentProperty by VerticalAlignmentProperty(properties, stateManager, scope),
-    ContentPaddingComponentProperty by ContentPaddingProperty(properties, stateManager, scope),
-    CurrentPageComponentProperty by CurrentPageProperty(properties, stateManager, scope) {
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
+    VerticalAlignmentComponentProperty by VerticalAlignmentProperty(properties, stateManager),
+    ContentPaddingComponentProperty by ContentPaddingProperty(properties, stateManager),
+    CurrentPageComponentProperty by CurrentPageProperty(properties, stateManager) {
 
     @Composable
     override fun getInternalComponent(
@@ -44,7 +41,7 @@ class HorizontalPagerComponent(
     ): @Composable () -> Unit = {
 
         val components = componentParser.parseList(data = model)
-        val currentPage = getCurrentPage().asValue()
+        val currentPage = getCurrentPage()
         val pagerState = rememberPagerState(
             pageCount = { components.size },
             initialPage = currentPage
@@ -55,7 +52,7 @@ class HorizontalPagerComponent(
 
         HorizontalPager(
             state = pagerState,
-            contentPadding = PaddingValues(getContentPadding().asValue().dp)
+            contentPadding = PaddingValues(getContentPadding().dp)
         ) { page -> components[page].getComponent(navController).invoke() }
     }
 

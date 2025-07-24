@@ -1,22 +1,22 @@
 package com.example.serverdriveui.ui.component.properties
 
-import com.airbnb.lottie.compose.LottieCompositionSpec
+import androidx.compose.runtime.Composable
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
-import kotlinx.coroutines.CoroutineScope
+import com.example.serverdriveui.util.JsonUtil.asString
 
 class LottieAnimationDataProperty(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
-    private val scope: CoroutineScope,
 ) : LottieAnimationDataComponentProperty,
-    BasePropertyData<LottieCompositionSpec>(
+    BasePropertyData<String>(
         stateManager = stateManager,
         properties = properties,
         propertyName = "animation",
-        propertyValueTransformation = { LottieCompositionSpec.JsonString(it) },
         defaultPropertyValue = "",
-        scope = scope
+        transformToData = { it?.asString() }
     ) {
-    override fun getLottieAnimationSpec() = getValue()
+
+    @Composable
+    override fun getLottieAnimationStringData() = getValue()
 }

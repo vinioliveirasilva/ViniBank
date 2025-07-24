@@ -13,8 +13,6 @@ import com.example.serverdriveui.ui.component.properties.TextProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.StringUtil.toAnnotatedStringFromHtml
-import com.example.serverdriveui.util.asValue
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.JsonObject
 
 data class TextComponent(
@@ -23,18 +21,17 @@ data class TextComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val actionParser: ActionParser,
-    private val scope: CoroutineScope
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope),
-    TextComponentProperty by TextProperty(properties, stateManager, scope),
-    TextAlignComponentProperty by TextAlignProperty(properties, stateManager, scope) {
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
+    TextComponentProperty by TextProperty(properties, stateManager),
+    TextAlignComponentProperty by TextAlignProperty(properties, stateManager) {
 
     @Composable
     override fun getInternalComponent(
         navController: NavHostController,
         modifier: Modifier,
     ): @Composable () -> Unit = {
-        val text = getText().asValue()
-        val textAlign = getTextAlign().asValue()
+        val text = getText()
+        val textAlign = getTextAlign()
 
         Text(
             textAlign = textAlign,

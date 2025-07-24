@@ -10,7 +10,6 @@ import com.example.serverdriveui.ui.component.components.BaseComponent
 import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.JsonObject
 
 class IconButtonComponent(
@@ -20,8 +19,7 @@ class IconButtonComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-    private val scope: CoroutineScope,
-) : BaseComponent(model, properties, stateManager, validatorParser, actionParser, scope) {
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser) {
 
     @Composable
     override fun getInternalComponent(

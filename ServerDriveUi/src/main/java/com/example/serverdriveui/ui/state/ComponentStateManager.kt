@@ -8,7 +8,9 @@ class ComponentStateManager() : AutoCloseable {
     //TODO Corrigir gambiarra
     var shouldUpdate = false
     val updatedStates = mutableListOf<String>()
-    private val states = mutableMapOf<String, MutableStateFlow<Any?>>()
+
+    //TODO segregar em outra interface
+    val states = mutableMapOf<String, MutableStateFlow<Any?>>()
 
     fun <T> registerState(id: String, data: T) {
         when {

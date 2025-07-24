@@ -1,8 +1,9 @@
 package com.example.serverdriveui.ui.component.properties
 
-import kotlinx.coroutines.flow.StateFlow
+import androidx.compose.runtime.Composable
 
 interface EnabledComponentProperty {
-    fun getEnabled() : StateFlow<Boolean>
+    @Composable
+    fun getEnabled() : Boolean
     fun setEnabled(value: Boolean)
 }

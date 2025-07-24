@@ -1,8 +1,10 @@
 package com.example.serverdriveui.ui.component.components.createpassword.properties
 
-import kotlinx.coroutines.flow.StateFlow
+import androidx.compose.runtime.Composable
 
 interface ValidPasswordComponentProperty {
-    fun isPasswordValid() : StateFlow<Boolean>
+
+    @Composable
+    fun isPasswordValid() : Boolean
     fun setPasswordValid(isValid: Boolean)
 }

@@ -1,9 +1,10 @@
 package com.example.serverdriveui.ui.component.properties
 
 import androidx.compose.foundation.text.KeyboardOptions
-import kotlinx.coroutines.flow.StateFlow
+import androidx.compose.runtime.Composable
 
 interface KeyboardOptionsComponentProperty {
-    fun getKeyboardOptions(): StateFlow<KeyboardOptions>
+    @Composable
+    fun getKeyboardOptions(): KeyboardOptions
     fun setKeyboardOptions(keyboardOptions: KeyboardOptionsOption)
 }

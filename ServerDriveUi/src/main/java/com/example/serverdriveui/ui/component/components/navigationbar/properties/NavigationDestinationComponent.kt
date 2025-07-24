@@ -1,8 +1,10 @@
 package com.example.serverdriveui.ui.component.components.navigationbar.properties
 
-import kotlinx.coroutines.flow.StateFlow
+import androidx.compose.runtime.Composable
 
 interface NavigationDestinationComponent {
-    fun getSelectedDestination(): StateFlow<Int>
+
+    @Composable
+    fun getSelectedDestination(): Int
     fun setSelectedDestination(index: Int)
 }

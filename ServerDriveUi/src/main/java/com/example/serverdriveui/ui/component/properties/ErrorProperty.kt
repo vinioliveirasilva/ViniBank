@@ -1,22 +1,23 @@
 package com.example.serverdriveui.ui.component.properties
 
+import androidx.compose.runtime.Composable
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
-import kotlinx.coroutines.CoroutineScope
+import com.example.serverdriveui.util.JsonUtil.asBoolean
 
 data class ErrorProperty(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
-    private val scope: CoroutineScope,
 ) : ErrorComponentProperty,
     BasePropertyData<Boolean>(
         stateManager = stateManager,
         properties = properties,
         propertyName = "isError",
-        propertyValueTransformation = { it.toBoolean() },
-        defaultPropertyValue = false.toString(),
-        scope = scope
+        defaultPropertyValue = false,
+        transformToData = { it?.asBoolean() }
     ) {
+
+    @Composable
     override fun getIsError() = getValue()
-    override fun setIsError(value: Boolean) = setValue(value.toString())
+    override fun setIsError(value: Boolean) = setValue(value)
 }
