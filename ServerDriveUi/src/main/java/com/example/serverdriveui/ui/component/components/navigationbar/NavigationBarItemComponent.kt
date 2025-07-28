@@ -35,27 +35,31 @@ class NavigationBarItemComponent(
     ) {
 
     @Composable
-    override fun getComponentAsRow(navController: NavHostController): @Composable (RowScope.() -> Unit) = {
-        val selectedDestination = getSelectedDestination()
-        val index = getIndex()
-        val selected = selectedDestination == index
-        val componentTag = if (selected) "selectedIcon" else "unselectedIcon"
+    override fun getComponentAsRow(navController: NavHostController): @Composable (RowScope.() -> Unit) =
+        {
+            val selectedDestination = getSelectedDestination()
+            val index = getIndex()
+            val selected = selectedDestination == index
+            val componentTag = if (selected) "selectedIcon" else "unselectedIcon"
 
-        NavigationBarItem(
-            selected = selected,
-            onClick = { setSelectedDestination(index) },
-            icon = {
-                componentParser.parseList(
-                    model,
-                    componentTag
-                ).forEach { it.getComponent(navController).invoke() }
-            },
-            label = {
-                componentParser.parseList(model)
-                    .forEach { it.getComponent(navController).invoke() }
-            }
-        )
-    }
+            NavigationBarItem(
+                selected = selected,
+                onClick = {
+                    setSelectedDestination(index)
+                    actions["OnClick"]?.execute()
+                },
+                icon = {
+                    componentParser.parseList(
+                        model,
+                        componentTag
+                    ).forEach { it.getComponent(navController).invoke() }
+                },
+                label = {
+                    componentParser.parseList(model)
+                        .forEach { it.getComponent(navController).invoke() }
+                }
+            )
+        }
 
     companion object {
         const val IDENTIFIER = "navigationBarItem"

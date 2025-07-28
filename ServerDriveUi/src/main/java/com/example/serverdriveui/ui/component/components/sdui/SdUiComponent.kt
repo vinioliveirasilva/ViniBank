@@ -78,9 +78,6 @@ class SdUiComponent(
                         screenData = getScreenData()
                     )
                 }
-            }
-
-            LaunchedEffect(componentsFromVm) {
                 setUpdateHasBeenRequested(false)
             }
 

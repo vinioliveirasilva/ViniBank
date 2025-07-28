@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 data class LoaderState(
-    val visible: Boolean = false
+    val visible: Boolean = false,
 )
 
 interface LoaderComponent {
@@ -43,27 +43,33 @@ class LoaderComponentViewModel : LoaderComponent {
 }
 
 @Composable
-fun Loader(state: StateFlow<LoaderState>, content: @Composable () -> Unit = {}) = if (state.collectAsStateWithLifecycle().value.visible) {
-    NonDismissibleDialog { LoaderContent() }
-} else {
-    content()
-}
+fun Loader(state: StateFlow<LoaderState>, content: @Composable () -> Unit = {}) =
+    if (state.collectAsStateWithLifecycle().value.visible) {
+        NonDismissibleDialog {
+            LoaderContent(
+                Modifier
+                    .size(76.dp)
+                    .background(
+                        color = Color.LightGray,
+                        shape = RoundedCornerShape(4.dp)
+                    )
+            )
+        }
+    } else {
+        content()
+    }
 
 @Composable
-fun Loader2(state: StateFlow<LoaderState>, content: @Composable () -> Unit = {}) = if (state.collectAsStateWithLifecycle().value.visible) {
-    LoaderContent()
-} else {
-    content()
-}
+fun Loader2(state: StateFlow<LoaderState>, content: @Composable () -> Unit = {}) =
+    if (state.collectAsStateWithLifecycle().value.visible) {
+        LoaderContent()
+    } else {
+        content()
+    }
 
 @Composable
-fun LoaderContent() = Box(
-    modifier = Modifier
-        .size(76.dp)
-        .background(
-            color = Color.LightGray,
-            shape = RoundedCornerShape(4.dp)
-        )
+fun LoaderContent(modifier: Modifier = Modifier) = Box(
+    modifier = modifier
 ) {
     CircularProgressIndicator(
         modifier = Modifier.align(Alignment.Center),
