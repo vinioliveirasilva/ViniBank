@@ -1,24 +1,56 @@
 package com.example.serverdriveui.ui.state
 
+import androidx.lifecycle.SavedStateHandle
+import com.example.serverdriveui.ui.action.manager.ActionStateManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 
-class ComponentStateManager() : AutoCloseable {
+interface InternalComponentStateManager {
+    fun clean()
+}
 
-    //TODO Corrigir gambiarra
-    var shouldUpdate = false
-    val updatedStates = mutableListOf<String>()
+interface SavableComponentStateManager {
+    fun saveState(savedStateHandle: SavedStateHandle)
+    fun loadState(savedStateHandle: SavedStateHandle)
+}
 
-    //TODO segregar em outra interface
-    val states = mutableMapOf<String, MutableStateFlow<Any?>>()
+class ComponentStateManager(
+    private val actionStateManager: ActionStateManager,
+    private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO),
+) : AutoCloseable, InternalComponentStateManager, SavableComponentStateManager {
+    private val states = mutableMapOf<String, MutableStateFlow<Any?>>()
+
+    init {
+        actionStateManager
+            .getState()
+            .map { actionStates ->
+                actionStates.forEach { (id, action) -> updateState(id, action) }
+            }
+            .launchIn(scope)
+    }
+
+    override fun clean() {
+        states.clear()
+    }
+
+    override fun saveState(savedStateHandle: SavedStateHandle) {
+        states.forEach { (id, stateFlow) ->
+            savedStateHandle[id] = stateFlow.value
+        }
+    }
+
+    override fun loadState(savedStateHandle: SavedStateHandle) {
+        savedStateHandle.keys().forEach {
+            registerState<Any?>(it, savedStateHandle[it])
+        }
+    }
 
     fun <T> registerState(id: String, data: T) {
         when {
-            shouldUpdate && states.containsKey(id) && updatedStates.contains(id).not() -> {
-                updateState(id, data)
-                updatedStates.add(id)
-            }
-
             states.containsKey(id) -> return
             else -> states[id] = MutableStateFlow(data)
         }
@@ -26,11 +58,12 @@ class ComponentStateManager() : AutoCloseable {
 
     @Suppress("UNCHECKED_CAST")
     fun <T> getState(id: String): StateFlow<T>? {
+        if (!states.containsKey(id)) registerState(id, null)
         return states[id] as? StateFlow<T>
     }
 
     fun <T> updateState(id: String, data: T) {
-        if(states[id] == null) {
+        if (states[id] == null) {
             registerState(id, data)
         } else {
             states[id]?.value = data

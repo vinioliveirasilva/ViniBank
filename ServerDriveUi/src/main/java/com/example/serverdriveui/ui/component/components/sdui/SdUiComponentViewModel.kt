@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
@@ -28,7 +29,8 @@ class SdUiComponentViewModel(
     private val componentParser: ComponentParser,
 ) : ViewModel(), LoaderComponent by LoaderComponentViewModel() {
 
-    val components: MutableStateFlow<List<Component>> = MutableStateFlow(emptyList())
+    private val internalComponents = MutableStateFlow(emptyList<Component>())
+    val components = internalComponents.asStateFlow()
     private var lastScreenId: String = ""
     private var lastJob: Job? = null
 
@@ -48,10 +50,10 @@ class SdUiComponentViewModel(
                 fromScreen = lastScreenId
             )
         )
-            .catch { emit(Json.decodeFromString(it.message.orEmpty())) }
+            .catch { emit(it.message.toJson()) }
             .map { response ->
                 lastScreenId = screen
-                components.update {
+                internalComponents.update {
                     componentParser.parseList(
                         data = response
                     )
@@ -62,4 +64,6 @@ class SdUiComponentViewModel(
             .flowOn(Dispatchers.IO)
             .launchIn(viewModelScope)
     }
+
+    private fun String?.toJson() = Json.decodeFromString<JsonObject>(this.orEmpty())
 }

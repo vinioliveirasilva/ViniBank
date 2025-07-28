@@ -10,13 +10,27 @@ import com.example.serverdriveui.util.JsonUtil.getAsString
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.TimeMark
+import kotlin.time.TimeSource
 
 class ContinueAction(
     val data: JsonObject,
     private val stateManager: ComponentStateManager,
     private val globalStateManager: GlobalStateManager,
+    private val timeSource: TimeSource = TimeSource.Monotonic,
 ) : Action {
+    private val debounceTime = 200.milliseconds
+    private var timeMark: TimeMark? = null
+
     override fun execute() {
+        timeMark?.run {
+            if (elapsedNow() < debounceTime) {
+                return
+            }
+        }
+        timeMark = timeSource.markNow()
+
         val newScreenData = buildJsonObject {
             data.getAsMap("screenData").forEach {
                 put(it.key, it.value)
@@ -30,9 +44,8 @@ class ContinueAction(
             }
         }
 
-        globalStateManager.updateState(
-            id = CONTINUE_EFFECT_ID,
-            data = SdUiDestinationModel(
+        globalStateManager.setDestination(
+            SdUiDestinationModel(
                 flowId = data.getAsString("flowId"),
                 screenId = data.getAsString("nextScreenId"),
                 screenData = newScreenData,

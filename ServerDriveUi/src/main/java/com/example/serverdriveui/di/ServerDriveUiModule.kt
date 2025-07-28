@@ -19,6 +19,7 @@ import com.example.serverdriveui.ui.action.actions.ToStringAction
 import com.example.serverdriveui.ui.action.manager.Action
 import com.example.serverdriveui.ui.action.manager.ActionHandler
 import com.example.serverdriveui.ui.action.manager.ActionParser
+import com.example.serverdriveui.ui.action.manager.ActionStateManager
 import com.example.serverdriveui.ui.component.components.BlankComponent
 import com.example.serverdriveui.ui.component.components.BottomSheetComponent
 import com.example.serverdriveui.ui.component.components.BoxComponent
@@ -74,14 +75,12 @@ const val sdUiComponents = "sdUiComponents"
 const val sdUiActivity = "sdUiActivity"
 
 fun Koin.getNewScope(name: String, scopeToLink: Scope?): Scope {
-    println("criando um novo scopo")
     return getOrCreateScope(name, named(sdUiComponents)).apply {
         scopeToLink?.let { linkTo(it) }
     }
 }
 
 fun Koin.getNewScopeActivity(name: String): Scope {
-    println("criando um novo activity scopo")
     return getOrCreateScope(name, named(sdUiActivity))
 }
 
@@ -159,7 +158,6 @@ val ServerDriveUiComponents = module {
                 stateManager = get(),
                 validatorParser = get(),
                 actionParser = get(),
-
             )
         }
 
@@ -353,15 +351,11 @@ val ServerDriveUiComponents = module {
                 validatorParser = get(),
                 viewModel = get(),
                 actionParser = get(),
-            )
-        }
-
-        viewModel {
-            SdUiComponentViewModel(
-                repository = get(),
                 componentParser = get(),
             )
         }
+
+        viewModelOf(::SdUiComponentViewModel)
 
         factory<Component>(
             named(NavigationBarComponent.IDENTIFIER)
@@ -491,12 +485,13 @@ val ServerDriveUiComponents = module {
 
 val ServerDriveUiModule = module {
     scope(named(sdUiActivity)) {
-        scoped<ComponentStateManager> { ComponentStateManager() }
         scoped<GlobalStateManager> { GlobalStateManager() }
+        scoped<ActionStateManager> { ActionStateManager() }
+
         viewModel {
             ActionHandler(
                 globalStateManager = get(),
-                componentStateManager = get(),
+                actionStateManager = get(),
                 savedStateHandle = get()
             )
         }
@@ -506,12 +501,10 @@ val ServerDriveUiModule = module {
                 flowId = flowId,
                 screenData = screenData,
                 repository = get(),
-                componentStateManager = get(),
-                savedStateHandle = get(),
                 closables = listOf(
                     get<GlobalStateManager>(),
-                    get<ComponentStateManager>(),
-                    AutoCloseable { close() }
+                    get<ActionStateManager>(),
+                    AutoCloseable { close() },
                 ),
             )
         }
@@ -524,19 +517,27 @@ val ServerDriveUiModule = module {
                 repository = get(),
                 componentParser = get(),
                 globalStateManager = get(),
-                componentStateManager = get(),
+                savableComponentStateManager = get<ComponentStateManager>(),
                 closables = listOf(
                     get<ActionParser>(),
                     get<ComponentParser>(),
                     get<ValidatorParser>(),
                     AutoCloseable { close() }
-                )
+                ),
+                savedStateHandle = get()
             )
         }
 
+        scoped<ComponentStateManager> { ComponentStateManager(actionStateManager = get()) }
+
         //Parsers
         scoped<ActionParser> { ActionParser(koinScope = this, componentStateManager = get()) }
-        scoped<ComponentParser> { ComponentParser(koinScope = this) }
+        scoped<ComponentParser> {
+            ComponentParser(
+                koinScope = this,
+                internalComponentStateManager = get<ComponentStateManager>()
+            )
+        }
         scoped<ValidatorParser> { ValidatorParser(koinScope = this) }
     }
 

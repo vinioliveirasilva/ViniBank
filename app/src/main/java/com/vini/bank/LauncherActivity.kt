@@ -68,9 +68,7 @@ class LauncherActivity : BaseComposeActivity() {
             }
         }
 
-        //savedInstanceState ?: setupRemoteConfig()
-
-        viewModel.doOnCreate()
+        savedInstanceState ?: viewModel.doOnCreate()//setupRemoteConfig() TODO
     }
 
     private fun setupRemoteConfig() {

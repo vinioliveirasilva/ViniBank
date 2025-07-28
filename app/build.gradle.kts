@@ -71,7 +71,6 @@ dependencies {
     implementation(project(":Auth"))
     implementation(project(":Network"))
     implementation(project(":Router"))
-    implementation(project(":FeatureLogin"))
     implementation(project(":Common"))
     implementation(project(":Storage"))
     implementation(project(":DesignSystem"))

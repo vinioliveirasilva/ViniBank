@@ -1,6 +1,7 @@
 package com.example.serverdriveui.ui.component.manager
 
 import com.example.serverdriveui.service.model.PropertyModel
+import com.example.serverdriveui.ui.state.InternalComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.getAsJsonObjectArray
 import com.example.serverdriveui.util.JsonUtil.getAsString
 import com.example.serverdriveui.util.JsonUtil.getAsTypedArray
@@ -11,12 +12,22 @@ import org.koin.core.scope.Scope
 
 class ComponentParser(
     private val koinScope: Scope,
+    private val internalComponentStateManager: InternalComponentStateManager,
 ) : AutoCloseable {
 
     private val cache: MutableMap<JsonObject, Component?> = mutableMapOf()
 
     override fun close() {
         //TODO Needed?
+    }
+
+    private var shouldUseCache = true
+
+    fun setupForError(actionToRun: ComponentParser.() -> Unit) {
+        internalComponentStateManager.clean()
+        shouldUseCache = false
+        actionToRun()
+        //shouldUseCache = true //TODO Corrigir
     }
 
     fun parseList(
@@ -28,12 +39,16 @@ class ComponentParser(
 
     fun parse(
         data: JsonObject,
-    ) = cache[data] ?: koinScope.getOrNull<Component>(named(data.getAsString(TYPE_TAG))) {
-        parametersOf(
-            data,
-            data.getAsTypedArray<PropertyModel>(PROPERTIES_TAG).associateBy { model -> model.name }
-        )
-    }.also { cache[data] = it } ?: unknownComponent()
+    ) = cache[data].takeIf { shouldUseCache }
+        ?: koinScope.getOrNull<Component>(named(data.getAsString(TYPE_TAG))) {
+            parametersOf(
+                data,
+                data.getAsTypedArray<PropertyModel>(PROPERTIES_TAG)
+                    .associateBy { model -> model.name }
+            )
+        }.also {
+            cache[data] = it
+        } ?: unknownComponent()
 
     fun unknownComponent() = object : Component {}
 

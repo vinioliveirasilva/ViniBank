@@ -61,7 +61,9 @@ class SdUiActivity : BaseComposeActivity() {
 
     private val activityResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            actionHandler.handleActivityResult(convertActivityResult(result))
+            actionHandler.handleActivityResult(
+                convertActivityResult(result)
+            )
         }
     private val actionHandler: ActionHandler by viewModel()
     private val featureRouter: FeatureRouter by inject { parametersOf(this) }
@@ -75,14 +77,9 @@ class SdUiActivity : BaseComposeActivity() {
         }
     }
 
-    override fun onStop() {
-        viewModel.doOnStop()
-        super.onStop()
-    }
-    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        savedInstanceState ?: viewModel.initialize()
         setContent {
             ViniBankTheme {
                 val navController = rememberNavController()

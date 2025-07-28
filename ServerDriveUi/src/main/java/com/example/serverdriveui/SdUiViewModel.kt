@@ -1,11 +1,11 @@
 package com.example.serverdriveui
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.example.serverdriveui.service.model.SdUiError
-import com.example.serverdriveui.ui.action.actions.ContinueAction.Companion.CONTINUE_EFFECT_ID
 import com.example.serverdriveui.ui.component.manager.Component
 import com.example.serverdriveui.ui.component.manager.ComponentParser
-import com.example.serverdriveui.ui.state.ComponentStateManager
+import com.example.serverdriveui.ui.state.SavableComponentStateManager
 import com.vini.designsystem.compose.loader.LoaderComponent
 import com.vini.designsystem.compose.loader.LoaderComponentViewModel
 import kotlinx.coroutines.Dispatchers
@@ -28,8 +28,9 @@ class SdUiViewModel(
     private val repository: SdUiRepository,
     private val componentParser: ComponentParser,
     private val globalStateManager: GlobalStateManager,
-    private val componentStateManager: ComponentStateManager,
+    private val savableComponentStateManager: SavableComponentStateManager,
     private val closables: List<AutoCloseable>,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel(), LoaderComponent by LoaderComponentViewModel() {
 
     val components: MutableStateFlow<List<Component>> = MutableStateFlow(
@@ -40,7 +41,6 @@ class SdUiViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        println("fechando scopo da tela")
         closables.forEach {
             it.close()
         }
@@ -50,37 +50,37 @@ class SdUiViewModel(
     val navigateOnSuccess = _navigation.receiveAsFlow()
 
     init {
-        globalStateManager.registerState(CONTINUE_EFFECT_ID)
+        savableComponentStateManager.loadState(savedStateHandle)
+    }
+
+    fun doOnStop() {
+        savableComponentStateManager.saveState(savedStateHandle)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun initialize() = globalStateManager.getState<SdUiDestinationModel>(CONTINUE_EFFECT_ID)
-        ?.flatMapConcat { destination ->
-            repository
-                .getScreen(
-                    SdUiModel(
-                        destination.flowId,
-                        destination.screenId,
-                        destination.screenData,
-                        destination.lastScreenId
-                    )
+    fun initialize() = globalStateManager.getDestination().flatMapConcat { destination ->
+        repository
+            .getScreen(
+                SdUiModel(
+                    destination.flowId,
+                    destination.screenId,
+                    destination.screenData,
+                    destination.lastScreenId
                 )
-                .catch { error ->
-                    val errorFeedback = Json.decodeFromString<SdUiError>(
-                        error.message?.split("Network call failed: 400 ")?.last().orEmpty(),
-                    )
-                    componentStateManager.apply {
-                        shouldUpdate = true
-                        updatedStates.clear()
-                    }
-                    val newComponents = componentParser.parseList(
-                        data = errorFeedback.screen
-                    )
+            )
+            .catch { error ->
+                val errorFeedback = Json.decodeFromString<SdUiError>(
+                    error.message?.split("Network call failed: 400 ")?.last().orEmpty(),
+                )
+
+                componentParser.setupForError {
+                    val newComponents = parseList(errorFeedback.screen)
                     components.update { newComponents }
                 }
-                .onStart { showLoader() }
-                .onCompletion { hideLoader() }
-                .map { _navigation.send(it) }
-                .flowOn(Dispatchers.IO)
-        }
+            }
+            .onStart { showLoader() }
+            .onCompletion { hideLoader() }
+            .map { _navigation.send(it) }
+            .flowOn(Dispatchers.IO)
+    }
 }

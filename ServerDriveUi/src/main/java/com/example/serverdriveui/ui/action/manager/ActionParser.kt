@@ -9,7 +9,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.JsonObject
 import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
@@ -52,12 +53,10 @@ class ActionParser(
     }
 
     private fun String.initializeAutoTrigger(action: Action) {
-        componentStateManager.registerState(this, null)
-        scope.launch {
-            componentStateManager
-                .getState<String>(this@initializeAutoTrigger)
-                ?.filterNotNull()
-                ?.collect { action.execute() }
-        }
+        componentStateManager
+            .getState<Boolean?>(this@initializeAutoTrigger)
+            ?.filterNotNull()
+            ?.map { action.execute() }
+            ?.launchIn(scope)
     }
 }

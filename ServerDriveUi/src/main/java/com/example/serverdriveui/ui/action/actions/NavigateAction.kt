@@ -34,14 +34,10 @@ class NavigateAction(
             actionIdToRun = actionToRun
         )
 
-        globalStateManager.updateState(
-            id = NAVIGATE_EFFECT_ID,
-            data = navigationArg
-        )
+        globalStateManager.setNavArgs(navigationArg)
     }
 
     companion object {
         const val IDENTIFIER = "navigate"
-        const val NAVIGATE_EFFECT_ID = "NAVIGATE_EFFECT_ID"
     }
 }
