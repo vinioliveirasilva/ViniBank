@@ -24,10 +24,11 @@ class ComponentParser(
     private var shouldUseCache = true
 
     fun setupForError(actionToRun: ComponentParser.() -> Unit) {
-        internalComponentStateManager.clean()
+        internalComponentStateManager.setupForError {
+            shouldUseCache = true
+        }
         shouldUseCache = false
         actionToRun()
-        //shouldUseCache = true //TODO Corrigir
     }
 
     fun parseList(

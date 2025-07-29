@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
@@ -75,6 +76,7 @@ private val IconLibrary: Map<String, ImageVector>
         "RightArrow" to Icons.AutoMirrored.Filled.ArrowForwardIos,
         "Visibility" to Icons.Filled.Visibility,
         "VisibilityOff" to Icons.Filled.VisibilityOff,
+        "Autorenew" to Icons.Filled.Autorenew,
 
         //TODO Revisar
         "Add" to Icons.Default.Add,
