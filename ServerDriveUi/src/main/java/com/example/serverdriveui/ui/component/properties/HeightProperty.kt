@@ -25,3 +25,8 @@ class HeightProperty(
         get() = getValue()?.let { Modifier.height(it.dp) } ?: Modifier
 
 }
+
+interface HeightComponentProperty {
+    @get:Composable
+    val heightModifier: Modifier
+}

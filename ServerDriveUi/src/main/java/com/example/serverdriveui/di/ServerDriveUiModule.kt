@@ -522,6 +522,7 @@ val ServerDriveUiModule = module {
                     get<ActionParser>(),
                     get<ComponentParser>(),
                     get<ValidatorParser>(),
+                    get<ComponentStateManager>(),
                     AutoCloseable { close() }
                 ),
                 savedStateHandle = get()

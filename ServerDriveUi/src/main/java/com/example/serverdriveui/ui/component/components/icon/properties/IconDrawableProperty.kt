@@ -30,3 +30,8 @@ private val IconLibrary: Map<String, Int>
         "Visa" to R.drawable.visa,
         "Mastercard" to R.drawable.mastercard,
     )
+
+interface IconDrawableComponent {
+    @get:Composable
+    val drawableIcon: Int?
+}

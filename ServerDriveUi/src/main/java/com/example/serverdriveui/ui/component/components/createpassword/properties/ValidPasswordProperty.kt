@@ -22,3 +22,10 @@ data class ValidPasswordProperty(
     override fun isPasswordValid() = getValue()
     override fun setPasswordValid(isValid: Boolean) = setValue(isValid)
 }
+
+interface ValidPasswordComponentProperty {
+
+    @Composable
+    fun isPasswordValid() : Boolean
+    fun setPasswordValid(isValid: Boolean)
+}

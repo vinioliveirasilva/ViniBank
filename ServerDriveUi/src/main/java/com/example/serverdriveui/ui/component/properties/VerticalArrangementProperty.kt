@@ -63,3 +63,10 @@ private fun String.parseSpacedBy() = (split("SpacedBy").lastOrNull()?.toInt() ?:
         verticalArrangement = Arrangement.spacedBy(space = it.dp)
     )
 }
+
+interface VerticalArrangementComponentProperty {
+
+    @Composable
+    fun getVerticalArrangement(): Arrangement.Vertical
+    fun setVerticalArrangement(value: VerticalArrangementOption)
+}

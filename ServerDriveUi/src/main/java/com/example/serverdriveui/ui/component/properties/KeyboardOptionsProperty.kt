@@ -35,3 +35,9 @@ enum class KeyboardOptionsOption(val id: String, val keyboardOptions: KeyboardOp
 private fun String?.toOption() =
     KeyboardOptionsOption.entries.firstOrNull { it.id == this }
         ?: KeyboardOptionsOption.Default
+
+interface KeyboardOptionsComponentProperty {
+    @Composable
+    fun getKeyboardOptions(): KeyboardOptions
+    fun setKeyboardOptions(keyboardOptions: KeyboardOptionsOption)
+}

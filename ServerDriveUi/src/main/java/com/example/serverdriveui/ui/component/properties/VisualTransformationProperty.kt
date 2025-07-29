@@ -53,3 +53,9 @@ enum class VisualTransformationOption(
         )
     ),
 }
+
+interface VisualTransformationComponentProperty {
+    @Composable
+    fun getVisualTransformation(): VisualTransformation
+    fun setVisualTransformation(visualTransformation: VisualTransformationOption)
+}

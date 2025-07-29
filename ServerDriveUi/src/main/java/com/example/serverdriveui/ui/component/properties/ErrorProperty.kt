@@ -21,3 +21,10 @@ data class ErrorProperty(
     override fun getIsError() = getValue()
     override fun setIsError(value: Boolean) = setValue(value)
 }
+
+interface ErrorComponentProperty {
+
+    @Composable
+    fun getIsError() : Boolean
+    fun setIsError(value: Boolean)
+}

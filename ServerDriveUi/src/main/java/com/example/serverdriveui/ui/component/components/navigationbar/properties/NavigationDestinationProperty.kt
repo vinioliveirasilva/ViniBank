@@ -21,3 +21,10 @@ class NavigationDestinationProperty(
     override fun getSelectedDestination() = getValue()
     override fun setSelectedDestination(index: Int) = setValue(index)
 }
+
+interface NavigationDestinationComponent {
+
+    @Composable
+    fun getSelectedDestination(): Int
+    fun setSelectedDestination(index: Int)
+}

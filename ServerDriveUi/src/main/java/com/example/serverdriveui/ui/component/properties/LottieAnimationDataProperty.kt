@@ -20,3 +20,8 @@ class LottieAnimationDataProperty(
     @Composable
     override fun getLottieAnimationStringData() = getValue()
 }
+
+interface LottieAnimationDataComponentProperty {
+    @Composable
+    fun getLottieAnimationStringData() : String
+}

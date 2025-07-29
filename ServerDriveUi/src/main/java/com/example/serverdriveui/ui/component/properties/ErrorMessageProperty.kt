@@ -21,3 +21,10 @@ data class ErrorMessageProperty(
     override fun getErrorMessage() = getValue()
     override fun setErrorMessage(message: String) = setValue(message)
 }
+
+interface ErrorMessageComponentProperty {
+
+    @Composable
+    fun getErrorMessage() : String
+    fun setErrorMessage(message: String)
+}

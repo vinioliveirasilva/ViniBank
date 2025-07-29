@@ -21,3 +21,10 @@ class LabelProperty(
     override fun getLabel() = getValue()
     override fun setLabel(value: String) = setValue(value)
 }
+
+interface LabelComponentProperty {
+
+    @Composable
+    fun getLabel() : String
+    fun setLabel(value: String)
+}

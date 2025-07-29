@@ -20,11 +20,11 @@ import kotlinx.serialization.json.JsonObject
 
 class BottomSheetComponent(
     private val model: JsonObject,
-    private val properties: Map<String, PropertyModel>,
-    private val stateManager: ComponentStateManager,
-    private val validatorParser: ValidatorParser,
+    properties: Map<String, PropertyModel>,
+    stateManager: ComponentStateManager,
+    validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
-    private val actionParser: ActionParser,
+    actionParser: ActionParser,
 ) : BaseComponent(model, properties, stateManager, validatorParser, actionParser) {
 
     @OptIn(ExperimentalMaterial3Api::class)

@@ -23,3 +23,8 @@ data class HorizontalPaddingProperty(
         @Composable
         get() = Modifier.padding(horizontal = getValue().dp)
 }
+
+interface HorizontalPaddingComponentProperty {
+    @get:Composable
+    val horizontalPaddingModifier: Modifier
+}

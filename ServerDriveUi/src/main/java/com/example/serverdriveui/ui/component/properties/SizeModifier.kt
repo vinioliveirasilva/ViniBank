@@ -27,3 +27,11 @@ class SizeModifier(
     @Composable
     override fun getSize() = getValue()
 }
+
+interface SizeComponentModifier {
+    @get:Composable
+    val sizeModifier: Modifier
+
+    @Composable
+    fun getSize() : Int?
+}

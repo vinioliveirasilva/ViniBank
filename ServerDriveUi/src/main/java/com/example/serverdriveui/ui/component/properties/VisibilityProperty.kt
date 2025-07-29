@@ -21,3 +21,9 @@ class VisibilityProperty(
     override fun getIsVisible() = getValue()
     override fun setIsVisible(isVisible: Boolean) = setValue(isVisible)
 }
+
+interface VisibilityComponentProperty {
+    @Composable
+    fun getIsVisible(): Boolean
+    fun setIsVisible(isVisible: Boolean)
+}

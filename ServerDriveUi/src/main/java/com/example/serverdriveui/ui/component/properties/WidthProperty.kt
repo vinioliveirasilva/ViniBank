@@ -24,3 +24,8 @@ class WidthProperty(
         get() = getValue()?.let { Modifier.width(it.dp) } ?: Modifier
 
 }
+
+interface WidthComponentProperty {
+    @get:Composable
+    val widthModifier: Modifier
+}

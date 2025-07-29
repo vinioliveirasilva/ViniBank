@@ -32,3 +32,10 @@ enum class TextAlignOption(val id: String, val textAlign: TextAlign) {
 
 private fun String?.toTextAlign() =
     TextAlignOption.entries.firstOrNull { it.id == this } ?: TextAlignOption.Start
+
+interface TextAlignComponentProperty {
+
+    @Composable
+    fun getTextAlign(): TextAlign
+    fun setTextAlign(textAlign: TextAlignOption)
+}

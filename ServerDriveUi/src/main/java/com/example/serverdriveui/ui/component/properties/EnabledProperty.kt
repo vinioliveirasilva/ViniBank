@@ -5,6 +5,12 @@ import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asBoolean
 
+interface EnabledComponentProperty {
+    @Composable
+    fun getEnabled() : Boolean
+    fun setEnabled(value: Boolean)
+}
+
 data class EnabledProperty(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,

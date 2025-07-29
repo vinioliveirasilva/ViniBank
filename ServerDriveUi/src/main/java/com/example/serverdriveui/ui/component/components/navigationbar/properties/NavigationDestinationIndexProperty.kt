@@ -20,3 +20,8 @@ class NavigationDestinationIndexProperty(
     @Composable
     override fun getIndex() = getValue()
 }
+
+interface NavigationDestinationIndexComponent {
+    @Composable
+    fun getIndex(): Int
+}

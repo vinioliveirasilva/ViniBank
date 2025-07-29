@@ -35,3 +35,8 @@ enum class HorizontalFillTypeOption(val id: String, val modifier: Modifier) {
 
 private fun String?.toOptions(): HorizontalFillTypeOption =
     HorizontalFillTypeOption.entries.firstOrNull { it.id == this } ?: HorizontalFillTypeOption.None
+
+interface HorizontalFillTypeComponentProperty {
+    @get:Composable
+    val horizontalFillTypeModifier: Modifier
+}

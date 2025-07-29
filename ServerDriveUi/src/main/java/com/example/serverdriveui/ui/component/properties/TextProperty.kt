@@ -21,3 +21,10 @@ data class TextProperty(
     override fun getText() = getValue()
     override fun setText(text: String) = setValue(text)
 }
+
+interface TextComponentProperty {
+
+    @Composable
+    fun getText() : String
+    fun setText(text: String)
+}

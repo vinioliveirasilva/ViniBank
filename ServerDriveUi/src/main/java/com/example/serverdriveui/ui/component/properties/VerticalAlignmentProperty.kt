@@ -32,3 +32,9 @@ enum class VerticalAlignmentOption(val id: String, val verticalAlignment: Alignm
 
 private fun String?.toOption() =
     VerticalAlignmentOption.entries.firstOrNull { it.id == this } ?: VerticalAlignmentOption.Top
+
+interface VerticalAlignmentComponentProperty {
+    @Composable
+    fun getVerticalAlignment(): Alignment.Vertical
+    fun setVerticalAlignment(value: VerticalAlignmentOption)
+}

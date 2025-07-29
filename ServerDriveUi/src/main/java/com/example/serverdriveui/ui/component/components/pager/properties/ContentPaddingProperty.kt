@@ -24,3 +24,10 @@ class ContentPaddingProperty(
 
     override fun setContentPadding(value: Int) = setValue(value)
 }
+
+interface ContentPaddingComponentProperty {
+
+    @Composable
+    fun getContentPadding(): Int
+    fun setContentPadding(value: Int)
+}

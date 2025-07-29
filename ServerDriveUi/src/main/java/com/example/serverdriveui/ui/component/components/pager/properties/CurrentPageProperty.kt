@@ -24,3 +24,10 @@ class CurrentPageProperty(
 
     override fun setCurrentPage(value: Int) = setValue(value)
 }
+
+interface CurrentPageComponentProperty {
+
+    @Composable
+    fun getCurrentPage(): Int
+    fun setCurrentPage(value: Int)
+}

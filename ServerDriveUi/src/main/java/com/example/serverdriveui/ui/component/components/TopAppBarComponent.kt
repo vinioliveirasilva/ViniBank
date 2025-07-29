@@ -9,8 +9,11 @@ import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.manager.ComponentParser
+import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
+import com.vini.designsystemsdui.ComponentUtil.component
+import com.vini.designsystemsdui.ComponentUtil.property
 import kotlinx.serialization.json.JsonObject
 
 data class TopAppBarComponent(
@@ -65,44 +68,36 @@ data class TopAppBarComponent(
 @Preview(showBackground = true)
 @Composable
 fun TopAppBarComponentPreview() {
-    val jsonModel = """
-            "type": "topAppBar",
-            "properties": [
-            ],
-            "components": [
-                {
-                    "type": "text",
-                    "properties": [
-                        {
-                            "name": "text",
-                            "value": "Salve"
-                        }
-                    ]
-                }
-            ],
-            "navigationIcons": [
-                {
-                    "type": "button",
-                    "properties": [
-                        {
-                            "name": "text",
-                            "value": "Salve"
-                        }
-                    ]
-                }
-            ],
-            "actionIcons": [
-                {
-                    "type": "button",
-                    "properties": [
-                        {
-                            "name": "text",
-                            "value": "Salve"
-                        }
-                    ]
-                }
-            ]
-    """
+    val component = component(
+        "topAppBar",
+        listOf(),
+        listOf(
+            component(
+                "text",
+                listOf(
+                    property("text", "TopBar Title")
+                )
+            )
+        ),
+        customComponents = arrayOf(
+            "navigationIcons" to listOf(
+                component(
+                    "icon",
+                    listOf(
+                        property("icon", "LeftArrow")
+                    )
+                )
+            ),
+            "actionIcons" to listOf(
+                component(
+                    "icon",
+                    listOf(
+                        property("icon", "User")
+                    )
+                )
+            )
+        )
+    )
 
-    //SdUiComponentPreview(jsonModel)
+    SdUiComponentPreview(component)
 }

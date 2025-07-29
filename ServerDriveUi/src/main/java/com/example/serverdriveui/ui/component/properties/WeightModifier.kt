@@ -27,3 +27,11 @@ class WeightModifier(
         @Composable
         get() = getValue()?.let { Modifier.weight(it) } ?: Modifier
 }
+
+interface WeightComponentModifier {
+    @get:Composable
+    val ColumnScope.weightModifier: Modifier
+
+    @get:Composable
+    val RowScope.weightModifier: Modifier
+}

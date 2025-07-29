@@ -43,17 +43,15 @@ data class TextInputComponent(
         navController: NavHostController,
         modifier: Modifier,
     ): @Composable () -> Unit = {
-        val text = getText()
-        val isError = getIsError()
 
         TextField(
             keyboardOptions = getKeyboardOptions(),
             visualTransformation = getVisualTransformation(),
             singleLine = true,
-            isError = isError,
-            supportingText = { if (isError) Text(text = getErrorMessage()) },
+            isError = getIsError(),
+            supportingText = { if (getIsError()) Text(text = getErrorMessage()) },
             label = { Text(text = getLabel()) },
-            value = text,
+            value = getText(),
             onValueChange = {
                 setIsError(false)
                 setText(it)

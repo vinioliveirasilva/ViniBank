@@ -46,7 +46,7 @@ class NavigationBarItemComponent(
                 selected = selected,
                 onClick = {
                     setSelectedDestination(index)
-                    actions["OnClick"]?.execute()
+                    actions["OnClick"]?.execute(navController)
                 },
                 icon = {
                     componentParser.parseList(

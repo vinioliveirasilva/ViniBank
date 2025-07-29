@@ -104,3 +104,8 @@ private val IconLibrary: Map<String, ImageVector>
         "ShoppingBag" to Icons.Filled.ShoppingBag,
         "SupervisorAccount" to Icons.Filled.SupervisorAccount,
     )
+
+interface IconNameComponent {
+    @get:Composable
+    val icon: ImageVector?
+}

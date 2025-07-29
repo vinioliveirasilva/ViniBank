@@ -1,6 +1,7 @@
 package com.example.serverdriveui.ui.component.components
 
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -37,10 +38,12 @@ class LazyColumnComponent(
         navController: NavHostController,
         modifier: Modifier
     ): @Composable () -> Unit = {
+        val state = rememberLazyListState()
         LazyColumn(
             verticalArrangement = getVerticalArrangement(),
             horizontalAlignment = getHorizontalAlignment(),
             modifier = modifier,
+            state = state,
         ) {
             componentParser.parseList(data = model).forEach {
                 it.getComponentLazyListScope(navController).invoke(this)

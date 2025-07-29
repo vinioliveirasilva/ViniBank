@@ -34,3 +34,10 @@ enum class HorizontalArrangementOptions(val id: String, val arrangement: Arrange
 private fun String?.toOption() =
     HorizontalArrangementOptions.entries.firstOrNull { it.id == this }
         ?: HorizontalArrangementOptions.Start
+
+interface HorizontalArrangementComponentProperty {
+
+    @Composable
+    fun getHorizontalArrangement(): Arrangement.Horizontal
+    fun setHorizontalArrangement(value: HorizontalArrangementOptions)
+}

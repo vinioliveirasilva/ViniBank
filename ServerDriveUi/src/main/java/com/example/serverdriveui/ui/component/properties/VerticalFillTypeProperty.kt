@@ -34,3 +34,8 @@ enum class VerticalFillTypeOption(val id: String, val modifier: Modifier) {
 
 private fun String?.toOption() =
     VerticalFillTypeOption.entries.firstOrNull { it.id == this } ?: VerticalFillTypeOption.None
+
+interface VerticalFillTypeComponentProperty {
+    @get:Composable
+    val verticalFillTypeModifier: Modifier
+}

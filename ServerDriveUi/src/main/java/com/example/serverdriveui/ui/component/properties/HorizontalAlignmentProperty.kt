@@ -33,3 +33,9 @@ enum class HorizontalAlignmentOptions(val id: String, val alignment: Alignment.H
 private fun String?.toOption() =
     HorizontalAlignmentOptions.entries.firstOrNull { it.id == this }
         ?: HorizontalAlignmentOptions.Start
+
+interface HorizontalAlignmentComponentProperty {
+    @Composable
+    fun getHorizontalAlignment(): Alignment.Horizontal
+    fun setHorizontalAlignment(value: HorizontalAlignmentOptions)
+}
