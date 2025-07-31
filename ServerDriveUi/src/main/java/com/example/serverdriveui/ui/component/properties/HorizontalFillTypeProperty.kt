@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
+import com.vini.designsystemsdui.PropertyOptions.HorizontalFillTypeOption
 
 data class HorizontalFillTypeProperty(
     private val properties: Map<String, PropertyModel>,
@@ -23,14 +24,6 @@ data class HorizontalFillTypeProperty(
     override val horizontalFillTypeModifier: Modifier
         @Composable
         get() = getValue().toOptions().modifier
-}
-
-enum class HorizontalFillTypeOption(val id: String, val modifier: Modifier) {
-    Max("Max", Modifier.fillMaxWidth()),
-    Half("Half", Modifier.fillMaxWidth(.5f)),
-    Quarter("Quarter", Modifier.fillMaxWidth(.25f)),
-    Wrap("Wrap", Modifier.wrapContentWidth()),
-    None("", Modifier),
 }
 
 private fun String?.toOptions(): HorizontalFillTypeOption =

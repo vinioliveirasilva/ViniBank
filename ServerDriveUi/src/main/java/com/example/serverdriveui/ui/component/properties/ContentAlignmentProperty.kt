@@ -5,6 +5,7 @@ import androidx.compose.ui.Alignment
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
+import com.vini.designsystemsdui.PropertyOptions.AlignmentOptions
 
 interface ContentAlignmentComponentProperty {
 
@@ -35,14 +36,3 @@ class ContentAlignmentProperty(
 private fun String?.toOptions() =
     AlignmentOptions.entries.firstOrNull { it.id == this } ?: AlignmentOptions.TopStart
 
-enum class AlignmentOptions(val id: String, val alignment: Alignment) {
-    TopStart("TopStart", Alignment.TopStart),
-    TopCenter("TopCenter", Alignment.TopCenter),
-    TopEnd("TopEnd", Alignment.TopEnd),
-    CenterStart("CenterStart", Alignment.CenterStart),
-    Center("Center", Alignment.Center),
-    CenterEnd("CenterEnd", Alignment.CenterEnd),
-    BottomStart("BottomStart", Alignment.BottomStart),
-    BottomCenter("BottomCenter", Alignment.BottomCenter),
-    BottomEnd("BottomEnd", Alignment.BottomEnd),
-}

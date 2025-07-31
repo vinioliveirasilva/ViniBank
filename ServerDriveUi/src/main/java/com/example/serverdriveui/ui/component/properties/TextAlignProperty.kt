@@ -5,6 +5,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
+import com.vini.designsystemsdui.PropertyOptions.TextAlignOption
 
 class TextAlignProperty(
     private val properties: Map<String, PropertyModel>,
@@ -22,12 +23,6 @@ class TextAlignProperty(
     override fun getTextAlign() = getValue().toTextAlign().textAlign
 
     override fun setTextAlign(textAlign: TextAlignOption) = setValue(textAlign.id)
-}
-
-enum class TextAlignOption(val id: String, val textAlign: TextAlign) {
-    Start("Start", TextAlign.Start),
-    Center("Center", TextAlign.Center),
-    End("End", TextAlign.End),
 }
 
 private fun String?.toTextAlign() =
