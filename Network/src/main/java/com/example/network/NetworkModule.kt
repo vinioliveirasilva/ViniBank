@@ -1,5 +1,9 @@
 package com.example.network
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import com.example.network.ktor.KtorHttpClientProvider
+import com.example.network.ktor.KtorInitializer
 import com.example.network.retrofit.EncodeProvider
 import com.example.network.retrofit.FlowCallAdapterFactory
 import com.example.network.retrofit.GitHubService
@@ -14,7 +18,9 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.Retrofit.Builder
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.time.Duration
 
+@RequiresApi(Build.VERSION_CODES.O)
 val NetworkModule = module {
 
     single<EncodeProvider> {
@@ -34,6 +40,10 @@ val NetworkModule = module {
                 level = HttpLoggingInterceptor.Level.BODY
             })
             .addInterceptor(get<AesCryptoInterceptor>())
+            .connectTimeout(Duration.ofSeconds(60))
+            .readTimeout(Duration.ofSeconds(60))
+            .writeTimeout(Duration.ofSeconds(60))
+            .callTimeout(Duration.ofSeconds(60))
             .build()
     }
 
