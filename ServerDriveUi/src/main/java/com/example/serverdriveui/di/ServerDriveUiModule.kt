@@ -542,7 +542,7 @@ val ServerDriveUiModule = module {
         scoped<ValidatorParser> { ValidatorParser(koinScope = this) }
     }
 
-    single<SdUiRepository> { SdUiRepository(sdUiService = get()) }
+    single<SdUiRepository> { SdUiRepository(sdUiService = get(), ktor = get()) }
     single<SdUiService> { get<Retrofit>().create(SdUiService::class.java) }
 }
 

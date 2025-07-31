@@ -15,7 +15,6 @@ import retrofit2.http.POST
 class RetrofitInitializer(
     val service: GitHubService,
 ) {
-
     fun abc() {
         CoroutineScope(Dispatchers.IO).launch {
             service.handShake()

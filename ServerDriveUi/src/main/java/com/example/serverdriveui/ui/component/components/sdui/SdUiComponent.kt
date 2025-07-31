@@ -12,6 +12,8 @@ import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.components.BaseComponent
 import com.example.serverdriveui.ui.component.components.sdui.properties.FlowIdentifierComponent
 import com.example.serverdriveui.ui.component.components.sdui.properties.FlowIdentifierProperty
+import com.example.serverdriveui.ui.component.components.sdui.properties.FromScreenIdentifierComponent
+import com.example.serverdriveui.ui.component.components.sdui.properties.FromScreenIdentifierComponentProperty
 import com.example.serverdriveui.ui.component.components.sdui.properties.ScreenDataComponent
 import com.example.serverdriveui.ui.component.components.sdui.properties.ScreenDataProperty
 import com.example.serverdriveui.ui.component.components.sdui.properties.StageIdentifierComponent
@@ -58,6 +60,10 @@ class SdUiComponent(
     FlowIdentifierComponent by FlowIdentifierProperty(properties, stateManager),
     ScreenDataComponent by ScreenDataProperty(properties, stateManager),
     StageIdentifierComponent by StageIdentifierProperty(properties, stateManager),
+    FromScreenIdentifierComponent by FromScreenIdentifierComponentProperty(
+        properties,
+        stateManager
+    ),
     RequestUpdateActor by RequestUpdateActorProperty(properties, stateManager) {
 
     @Composable
@@ -75,7 +81,8 @@ class SdUiComponent(
                     viewModel.initialize(
                         flowId = getFlowIdentifier(),
                         screenId = getStageIdentifier(),
-                        screenData = getScreenData()
+                        screenData = getScreenData(),
+                        fromScreen = getFromScreenIdentifier()
                     )
                 }
                 setUpdateHasBeenRequested(false)

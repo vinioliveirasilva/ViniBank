@@ -13,10 +13,13 @@ import com.example.serverdriveui.ui.component.components.icon.properties.IconDra
 import com.example.serverdriveui.ui.component.components.icon.properties.IconDrawableProperty
 import com.example.serverdriveui.ui.component.components.icon.properties.IconNameComponent
 import com.example.serverdriveui.ui.component.components.icon.properties.IconNameProperty
+import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
 import com.example.serverdriveui.ui.component.properties.SizeComponentModifier
 import com.example.serverdriveui.ui.component.properties.SizeModifier
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
+import com.vini.designsystemsdui.ComponentUtil.component
+import com.vini.designsystemsdui.ComponentUtil.property
 import kotlinx.serialization.json.JsonObject
 
 class IconComponent(
@@ -58,19 +61,13 @@ class IconComponent(
 @Composable
 private fun IconComponentPreview() {
 
-//    SdUiComponentPreview(
-//        """
-//            "type": "icon",
-//            "properties": [
-//                {
-//                    "name": "icon",
-//                    "value": "Payment"
-//                },
-//                {
-//                    "name": "size",
-//                    "value": "48"
-//                }
-//            ]
-//        """
-//    )
+    SdUiComponentPreview(
+        component(
+            "icon",
+            listOf(
+                property("icon", "Payment"),
+                property("size", "48")
+            )
+        )
+    )
 }

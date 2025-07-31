@@ -6,6 +6,7 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
 
@@ -110,4 +111,24 @@ object ComponentUtil {
     fun jsonArray(vararg actions: Action) = buildJsonArray {
         actions.forEach { add(it) }
     }
+
+    fun multipleActions(
+        actions: List<Action>,
+    ): Action = action(
+        type = "multipleActions",
+        data = jsonObject(
+            "actions" to buildJsonArray {
+                actions.mapIndexed { index, action ->
+                    add(
+                        buildJsonObject {
+                            action.jsonObject.entries.forEach { (key, value) ->
+                                put(key, value)
+                            }
+                            put("name", index)
+                        }
+                    )
+                }
+            }
+        )
+    )
 }

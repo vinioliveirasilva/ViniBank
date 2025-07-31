@@ -81,7 +81,7 @@ class AesCryptoInterceptor(
 
     private fun Response.doOnEncryptedResponse(): Response {
         iv = header(Header.IV) ?: return this
-        val (dec, iv) = keyExchangeManager.decrypt(
+        val dec = keyExchangeManager.decrypt(
             encryptedData = encoderProvider.decode(readBody(this)),
             iv = encoderProvider.decode(iv)
         )
@@ -107,7 +107,7 @@ class AesCryptoInterceptor(
         return buffer.readUtf8()
     }
 
-    private companion object {
+    companion object {
         val JSON_MEDIA_TYPE = "application/json".toMediaTypeOrNull()
         val TEXT_MEDIA_TYPE = "text/plain".toMediaTypeOrNull()
         const val EMPTY_JSON = "{}"

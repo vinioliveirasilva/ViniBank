@@ -45,10 +45,10 @@ class FastKeyExchangeManager(
         return cipher.doFinal(plainText) to cipher.iv
     }
 
-    fun decrypt(encryptedData: ByteArray, iv: ByteArray): Pair<ByteArray, ByteArray> {
+    fun decrypt(encryptedData: ByteArray, iv: ByteArray): ByteArray {
         val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
         cipher.init(Cipher.DECRYPT_MODE, secretKey, IvParameterSpec(iv))
-        return cipher.doFinal(encryptedData) to cipher.iv
+        return cipher.doFinal(encryptedData)
     }
 
     private fun internalEncrypt(data: String, publicKey: PublicKey): ByteArray {

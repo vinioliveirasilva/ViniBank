@@ -8,6 +8,7 @@ import com.example.serverdriveui.di.ServerDriverUiModules
 import com.example.serverdriveui.di.getNewScope
 import com.example.serverdriveui.di.getNewScopeActivity
 import com.vini.designsystem.compose.loader.loaderStateMock
+import com.vini.designsystem.compose.theme.ViniBankTheme
 import kotlinx.serialization.json.JsonObject
 import org.koin.compose.KoinApplication
 import org.koin.compose.LocalKoinScope
@@ -35,11 +36,13 @@ fun SdUiComponentPreview(jsonObject: JsonObject) {
             val navController = rememberNavController()
             val scope = getKoinScope()
             val componentParser = scope.get<ComponentParser> { parametersOf(scope) }
-            SdUiUI(
-                listOf(componentParser.parse(jsonObject)),
-                loaderStateMock(false),
-                navController
-            )
+            ViniBankTheme {
+                SdUiUI(
+                    listOf(componentParser.parse(jsonObject)),
+                    loaderStateMock(false),
+                    navController
+                )
+            }
         }
     }
 }

@@ -31,28 +31,26 @@ class SdUiComponentViewModel(
 
     private val internalComponents = MutableStateFlow(emptyList<Component>())
     val components = internalComponents.asStateFlow()
-    private var lastScreenId: String = ""
     private var lastJob: Job? = null
 
-    fun initialize(flowId: Flow<String>, screenId: Flow<String>, screenData: Flow<JsonObject>) {
-        combine(flowId, screenId, screenData) { flow, screen, screenData ->
-            setupScreen(flow, screen, screenData)
+    fun initialize(flowId: Flow<String>, screenId: Flow<String>, screenData: Flow<JsonObject>, fromScreen: Flow<String>) {
+        combine(flowId, screenId, screenData, fromScreen) { flow, screen, screenData, fromScreen ->
+            setupScreen(flow, screen, screenData, fromScreen)
         }.launchIn(viewModelScope)
     }
 
-    private fun setupScreen(flow: String, screen: String, screenData: JsonObject) {
+    private fun setupScreen(flow: String, screen: String, screenData: JsonObject, fromScreen: String) {
         lastJob?.cancel()
         lastJob = repository.getScreen(
             SdUiModel(
                 flow = flow,
                 toScreen = screen,
                 screenData = screenData,
-                fromScreen = lastScreenId
+                fromScreen = fromScreen
             )
         )
             .catch { emit(it.message.toJson()) }
             .map { response ->
-                lastScreenId = screen
                 internalComponents.update {
                     componentParser.parseList(
                         data = response

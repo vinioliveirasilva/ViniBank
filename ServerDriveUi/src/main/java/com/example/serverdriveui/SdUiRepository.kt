@@ -1,12 +1,17 @@
 package com.example.serverdriveui
 
+import com.example.network.ktor.KtorHttpClientProvider
 import com.example.serverdriveui.service.SdUiService
 import com.example.serverdriveui.service.model.SdUiRequest
+import io.ktor.http.HttpMethod
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.decodeFromJsonElement
@@ -27,22 +32,23 @@ private data class ScreenModel(
 
 class SdUiRepository(
     private val sdUiService: SdUiService,
+    private val ktor: KtorHttpClientProvider,
 ) {
     private val cache = mutableMapOf<String, JsonObject>()
 
     fun getScreen(
-        model: SdUiModel
+        model: SdUiModel,
     ): Flow<JsonObject> {
         val identifier = with(model) { "$flow/$toScreen" }
         val hasCache = cache.containsKey(identifier)
         if (hasCache) {
             return cache[identifier]?.let { flowOf(it).abc() }
-                ?: sdUiService.getScreenModel(
+                ?: ktor.getScreenModel(
                     request = model.toSdUiRequest()
                 ).abc()
         }
 
-        return sdUiService.getScreenModel(
+        return ktor.getScreenModel(
             request = model.toSdUiRequest()
         ).abc()
     }
@@ -62,4 +68,17 @@ class SdUiRepository(
         toScreen = toScreen,
         screenData = screenData,
     )
+
+    private fun KtorHttpClientProvider.getScreenModel(request: SdUiRequest) = callbackFlow {
+        request(
+            path = "/sdui_screens",
+            method = HttpMethod.Post,
+            body = Json.encodeToString(request),
+        ) { response ->
+            val jsonObject = Json { ignoreUnknownKeys = true }.decodeFromString<JsonObject>(response)
+            send(jsonObject)
+            close()
+        }
+        awaitClose()
+    }
 }

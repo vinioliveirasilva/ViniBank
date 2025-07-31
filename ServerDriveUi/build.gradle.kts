@@ -51,6 +51,9 @@ dependencies {
     implementation(project(":Network"))
     implementation(project(":Router"))
 
+    //ktor
+    implementation("io.ktor:ktor-client-core:2.3.12")
+
     //Lottie
     implementation(libs.lottie.compose)
 
