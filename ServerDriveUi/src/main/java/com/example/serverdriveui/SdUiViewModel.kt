@@ -1,14 +1,11 @@
 package com.example.serverdriveui
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.example.serverdriveui.service.model.SdUiError
-import com.example.serverdriveui.ui.action.actions.ContinueAction.Companion.CONTINUE_EFFECT_ID
 import com.example.serverdriveui.ui.component.manager.Component
 import com.example.serverdriveui.ui.component.manager.ComponentParser
-import com.example.serverdriveui.ui.state.ComponentStateManager
-import com.google.gson.Gson
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
+import com.example.serverdriveui.ui.state.SavableComponentStateManager
 import com.vini.designsystem.compose.loader.LoaderComponent
 import com.vini.designsystem.compose.loader.LoaderComponentViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,61 +20,67 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
 
 class SdUiViewModel(
-    jsonModel: String,
+    jsonModel: JsonObject,
     private val repository: SdUiRepository,
     private val componentParser: ComponentParser,
     private val globalStateManager: GlobalStateManager,
-    private val componentStateManager: ComponentStateManager,
+    private val savableComponentStateManager: SavableComponentStateManager,
+    private val closables: List<AutoCloseable>,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel(), LoaderComponent by LoaderComponentViewModel() {
 
     val components: MutableStateFlow<List<Component>> = MutableStateFlow(
         componentParser.parseList(
-            data = Gson().fromJson(jsonModel, JsonObject::class.java),
-            componentStateManager = componentStateManager
+            data = jsonModel
         )
     )
 
-    private val _navigation: Channel<String> = Channel()
+    override fun onCleared() {
+        super.onCleared()
+        closables.forEach {
+            it.close()
+        }
+    }
+
+    private val _navigation: Channel<JsonObject> = Channel()
     val navigateOnSuccess = _navigation.receiveAsFlow()
 
     init {
-        addCloseable(componentStateManager)
+        savableComponentStateManager.loadState(savedStateHandle)
+    }
+
+    fun doOnStop() {
+        savableComponentStateManager.saveState(savedStateHandle)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun initialize() = globalStateManager.getState<SdUiDestinationModel>(CONTINUE_EFFECT_ID)
-        ?.flatMapConcat { destination ->
-            repository
-                .getScreen(
-                    SdUiModel(
-                        destination.flowId,
-                        destination.screenId,
-                        destination.screenData,
-                        destination.lastScreenId
-                    )
+    fun initialize() = globalStateManager.getDestination().flatMapConcat { destination ->
+        repository
+            .getScreen(
+                SdUiModel(
+                    destination.flowId,
+                    destination.screenId,
+                    destination.screenData,
+                    destination.lastScreenId
                 )
-                .catch { error ->
-                    val errorFeedback =
-                        Gson().fromJson(
-                            error.message?.split("Network call failed: 400 ")?.last().orEmpty(),
-                            SdUiError::class.java
-                        )
-                    componentStateManager.apply {
-                        shouldUpdate = true
-                        updatedStates.clear()
-                    }
-                    components.update {
-                        componentParser.parseList(
-                            data = JsonParser.parseString(errorFeedback.screen).asJsonObject,
-                            componentStateManager = componentStateManager
-                        )
-                    }
+            )
+            .catch { error ->
+                val errorFeedback = Json.decodeFromString<SdUiError>(
+                    error.message?.split("Network call failed: 400 ")?.last().orEmpty(),
+                )
+
+                componentParser.setupForError {
+                    val newComponents = parseList(errorFeedback.screen)
+                    components.update { newComponents }
                 }
-                .onStart { showLoader() }
-                .onCompletion { hideLoader() }
-                .map { _navigation.send(it) }
-                .flowOn(Dispatchers.IO)
-        }
+            }
+            .onStart { showLoader() }
+            .onCompletion { hideLoader() }
+            .map { _navigation.send(it) }
+            .flowOn(Dispatchers.IO)
+    }
 }

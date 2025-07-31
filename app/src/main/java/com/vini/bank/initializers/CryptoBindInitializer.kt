@@ -1,9 +1,11 @@
 package com.vini.bank.initializers
 
+import com.example.network.ktor.KtorInitializer
 import com.example.network.retrofit.RetrofitInitializer
 
 class CryptoBindInitializer(
-    private val retrofitInitializer: RetrofitInitializer
+    private val retrofitInitializer: RetrofitInitializer,
+    private val ktorInitializer: KtorInitializer
 ) : Initializer {
     override var hasBeenInitialized: Boolean = false
 
@@ -11,7 +13,8 @@ class CryptoBindInitializer(
     override suspend fun initialize() {
         if (hasBeenInitialized) return
         super.initialize()
-        retrofitInitializer.abc()
+        ktorInitializer.abc()
+        //retrofitInitializer.abc()
         hasBeenInitialized = true
     }
 }

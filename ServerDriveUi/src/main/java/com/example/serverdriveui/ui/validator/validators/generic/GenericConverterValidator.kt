@@ -6,16 +6,20 @@ import com.example.serverdriveui.ui.validator.manager.Validator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.JsonElement
 
 open class GenericConverterValidator<Input, Output>(
     private val model: ValidatorModel,
     private val componentStateManager: ComponentStateManager,
     private val scope: CoroutineScope,
     private val inputConverter: (String) -> Input,
-    private val outputConverter: (String) -> Output,
-    private val defaultOutput: Output
+    private val outputConverter: (JsonElement) -> Output,
+    private val defaultOutput: Output,
 ) : Validator {
-    val parsedData = model.data.map { inputConverter(it.key) to outputConverter(it.value) }.toMap() //Podemos melhorar isso?
+    val parsedData = model.data
+        .mapKeys { inputConverter(it.key) }
+        .mapValues { outputConverter(it.value) }
+
     override fun initialize() {
         model.required.forEach { reqId ->
             scope.launch {

@@ -1,31 +1,26 @@
 package com.example.serverdriveui
 
+import com.example.serverdriveui.ui.action.actions.NavigationArg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class GlobalStateManager(
     val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) : AutoCloseable {
-    private val globalState = mutableMapOf<String, MutableSharedFlow<Any?>>()
+    private val internalNavArgs = Channel<NavigationArg>()
+    private val internalDestination = Channel<SdUiDestinationModel>()
 
-    fun registerState(id: String) {
-        if (globalState.containsKey(id)) return
-        globalState[id] = MutableSharedFlow()
-    }
+    fun getNavArgs() = internalNavArgs.receiveAsFlow()
+    fun setNavArgs(navArgs: NavigationArg) = scope.launch { internalNavArgs.send(navArgs) }
 
-    @Suppress("UNCHECKED_CAST")
-    fun <T> getState(id: String): SharedFlow<T>? {
-        return globalState[id] as? SharedFlow<T>
-    }
-
-    fun <T> updateState(id: String, data: T) = scope.launch {
-        globalState[id]?.emit(data)
-    }
+    fun getDestination() = internalDestination.receiveAsFlow()
+    fun setDestination(destination: SdUiDestinationModel) = scope.launch { internalDestination.send(destination) }
 
     override fun close() {
-        globalState.clear()
+        scope.cancel()
     }
 }

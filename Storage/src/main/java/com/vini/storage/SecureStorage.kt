@@ -1,19 +1,19 @@
 package com.vini.storage
 
-import com.vini.common.gson.GsonProvider
+import com.vini.common.json.JsonProvider
 import com.vini.storage.model.UserData
 import kotlinx.coroutines.flow.flow
 
 class SecureStorage(
     private val cryptoManager: CryptographyProvider,
     private val localStorage: LocalStorage,
-    private val gsonProvider: GsonProvider,
+    private val jsonProvider: JsonProvider,
 ) {
     fun saveUserData(userData: UserData) = flow {
         val securePassword = cryptoManager.hash(userData.password)
         val secureEmail = cryptoManager.hash(userData.email)
         val updatedUserData = userData.copy(password = securePassword)
-        val secureData = cryptoManager.encrypt(gsonProvider.toJson(updatedUserData))
+        val secureData = cryptoManager.encrypt(jsonProvider.toJson(updatedUserData))
 
         localStorage.save(TAG.plus(secureEmail), secureData)
         emit(true)
@@ -34,7 +34,7 @@ class SecureStorage(
             throw Exception("UserData not found")
         }
 
-        val userData = gsonProvider.fromJson(userDataSerialized, UserData::class.java)
+        val userData = jsonProvider.fromJson<UserData>(userDataSerialized)
         if (userData.password != securePassword) {
             throw Exception("Password not match")
         }

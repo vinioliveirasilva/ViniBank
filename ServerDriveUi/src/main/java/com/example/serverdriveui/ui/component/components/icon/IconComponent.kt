@@ -7,6 +7,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
+import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.components.BaseComponent
 import com.example.serverdriveui.ui.component.components.icon.properties.IconDrawableComponent
 import com.example.serverdriveui.ui.component.components.icon.properties.IconDrawableProperty
@@ -17,14 +18,17 @@ import com.example.serverdriveui.ui.component.properties.SizeComponentModifier
 import com.example.serverdriveui.ui.component.properties.SizeModifier
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.google.gson.JsonObject
+import com.vini.designsystemsdui.ComponentUtil.component
+import com.vini.designsystemsdui.ComponentUtil.property
+import kotlinx.serialization.json.JsonObject
 
 class IconComponent(
     private val model: JsonObject,
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
-) : BaseComponent(model, properties, stateManager, validatorParser),
+    private val actionParser: ActionParser,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     SizeComponentModifier by SizeModifier(properties, stateManager),
     IconNameComponent by IconNameProperty(properties, stateManager),
     IconDrawableComponent by IconDrawableProperty(properties, stateManager) {
@@ -37,7 +41,8 @@ class IconComponent(
         icon?.let {
             Icon(
                 modifier = modifier.then(sizeModifier),
-                imageVector = it, contentDescription = null
+                imageVector = it,
+                contentDescription = null
             )
         } ?: drawableIcon?.let {
             Icon(
@@ -57,18 +62,12 @@ class IconComponent(
 private fun IconComponentPreview() {
 
     SdUiComponentPreview(
-        """
-            "type": "icon",
-            "properties": [
-                {
-                    "name": "icon",
-                    "value": "Payment"
-                },
-                {
-                    "name": "size",
-                    "value": "48"
-                }
-            ]
-        """
+        component(
+            "icon",
+            listOf(
+                property("icon", "Payment"),
+                property("size", "48")
+            )
+        )
     )
 }

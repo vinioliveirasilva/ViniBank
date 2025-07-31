@@ -12,8 +12,7 @@ import com.example.serverdriveui.ui.component.properties.ContentAlignmentCompone
 import com.example.serverdriveui.ui.component.properties.ContentAlignmentProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.example.serverdriveui.util.asValue
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 
 class BoxComponent(
     private val model: JsonObject,
@@ -22,7 +21,7 @@ class BoxComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser),
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     ContentAlignmentComponentProperty by ContentAlignmentProperty(properties, stateManager) {
 
     @Composable
@@ -30,15 +29,14 @@ class BoxComponent(
         navController: NavHostController,
         modifier: Modifier
     ): @Composable () -> Unit = {
-        val action = actionParser.parse(model, componentStateManager = stateManager)
-        val actionModifier = action?.let { Modifier.clickable{ it.execute(navController) } } ?: Modifier
+        val actionModifier = actions["OnClick"]?.let { Modifier.clickable{ it.execute(navController) } } ?: Modifier
 
         Box(
             modifier = modifier
                 .then(actionModifier),
-            contentAlignment = getContentAlignment().asValue(),
+            contentAlignment = getContentAlignment(),
         ) {
-            componentParser.parseList(data = model, componentStateManager = stateManager).forEach {
+            componentParser.parseList(data = model).forEach {
                 it.getComponent(navController).invoke()
             }
         }

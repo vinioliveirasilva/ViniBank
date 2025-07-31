@@ -1,27 +1,40 @@
 package com.example.serverdriveui.ui.component.properties
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
+import com.example.serverdriveui.util.JsonUtil.asString
 
 class VerticalAlignmentProperty(
     private val properties: Map<String, PropertyModel>,
-    private val stateManager: ComponentStateManager
+    private val stateManager: ComponentStateManager,
 ) : VerticalAlignmentComponentProperty,
-    BasePropertyData<Alignment.Vertical>(
+    BasePropertyData<String>(
         stateManager = stateManager,
         properties = properties,
         propertyName = "verticalAlignment",
-        propertyValueTransformation = { it.toVerticalAlignment() },
-        defaultPropertyValue = Alignment.Top
+        transformToData = { it?.asString() },
+        defaultPropertyValue = VerticalAlignmentOption.Top.id,
     ) {
-    override fun getVerticalAlignment() = getValue()
-    override fun setVerticalAlignment(value: Alignment.Vertical) = setValue(value)
+
+    @Composable
+    override fun getVerticalAlignment() = getValue().toOption().verticalAlignment
+
+    override fun setVerticalAlignment(value: VerticalAlignmentOption) = setValue(value.id)
 }
 
-private fun String?.toVerticalAlignment(): Alignment.Vertical = when (this) {
-    "Center" -> Alignment.Companion.CenterVertically
-    "Bottom" -> Alignment.Companion.Bottom
-    "Top" -> Alignment.Companion.Top
-    else -> Alignment.Companion.Top
+enum class VerticalAlignmentOption(val id: String, val verticalAlignment: Alignment.Vertical) {
+    Top("Top", Alignment.Top),
+    Center("Center", Alignment.CenterVertically),
+    Bottom("Bottom", Alignment.Bottom),
+}
+
+private fun String?.toOption() =
+    VerticalAlignmentOption.entries.firstOrNull { it.id == this } ?: VerticalAlignmentOption.Top
+
+interface VerticalAlignmentComponentProperty {
+    @Composable
+    fun getVerticalAlignment(): Alignment.Vertical
+    fun setVerticalAlignment(value: VerticalAlignmentOption)
 }

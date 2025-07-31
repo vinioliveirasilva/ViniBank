@@ -3,7 +3,6 @@ package com.example.serverdriveui.ui.component.components.button
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
@@ -17,7 +16,8 @@ import com.example.serverdriveui.ui.component.properties.TextComponentProperty
 import com.example.serverdriveui.ui.component.properties.TextProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.google.gson.JsonObject
+import com.vini.designsystemsdui.button
+import kotlinx.serialization.json.JsonObject
 
 data class ButtonComponent(
     private val model: JsonObject,
@@ -25,25 +25,20 @@ data class ButtonComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser),
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     TextComponentProperty by TextProperty(properties, stateManager),
     EnabledComponentProperty by EnabledProperty(properties, stateManager) {
 
     @Composable
     override fun getInternalComponent(
         navController: NavHostController,
-        modifier: Modifier
+        modifier: Modifier,
     ): @Composable () -> Unit = {
         Button(
-            enabled = getEnabled().collectAsState().value,
+            enabled = getEnabled(),
             modifier = modifier,
-            onClick = {
-                actionParser.parse(
-                    componentJsonModel = model,
-                    componentStateManager = stateManager
-                )?.execute(navController)
-            },
-            content = { Text(getText().collectAsState().value) },
+            onClick = { actions["OnClick"]?.execute(navController) },
+            content = { Text(getText()) },
         )
     }
 
@@ -55,16 +50,8 @@ data class ButtonComponent(
 
 @Preview(showBackground = true)
 @Composable
-fun ButtonComponentPreview() {
-    val jsonModel = """
-        "type": "button",
-        "properties": [
-            {
-                "name": "text",
-                "value": "Salve"
-            }
-        ]
-    """
-
-    SdUiComponentPreview(jsonModel)
+private fun Preview() {
+    SdUiComponentPreview(
+        button(text = "salve")
+    )
 }

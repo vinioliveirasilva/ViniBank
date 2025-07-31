@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
@@ -30,6 +31,8 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material.icons.filled.SupervisorAccount
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.outlined.AttachMoney
 import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material.icons.outlined.Home
@@ -40,23 +43,23 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.component.properties.BasePropertyData
 import com.example.serverdriveui.ui.state.ComponentStateManager
-import com.example.serverdriveui.util.asValue
+import com.example.serverdriveui.util.JsonUtil.asString
 
 class IconNameProperty(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
 ) : IconNameComponent,
-    BasePropertyData<ImageVector?>(
+    BasePropertyData<String?>(
         stateManager = stateManager,
         properties = properties,
         propertyName = "icon",
-        propertyValueTransformation = { IconLibrary[it] },
-        defaultPropertyValue = null
+        transformToData = { it?.asString() },
+        defaultPropertyValue = null,
     ) {
 
     override val icon: ImageVector?
         @Composable
-        get() = getValue().asValue()
+        get() = IconLibrary[getValue()]
 }
 
 private val IconLibrary: Map<String, ImageVector>
@@ -71,6 +74,9 @@ private val IconLibrary: Map<String, ImageVector>
         "Logout" to Icons.AutoMirrored.Filled.Logout,
         "LeftArrow" to Icons.Default.ArrowBackIosNew,
         "RightArrow" to Icons.AutoMirrored.Filled.ArrowForwardIos,
+        "Visibility" to Icons.Filled.Visibility,
+        "VisibilityOff" to Icons.Filled.VisibilityOff,
+        "Autorenew" to Icons.Filled.Autorenew,
 
         //TODO Revisar
         "Add" to Icons.Default.Add,
@@ -98,3 +104,8 @@ private val IconLibrary: Map<String, ImageVector>
         "ShoppingBag" to Icons.Filled.ShoppingBag,
         "SupervisorAccount" to Icons.Filled.SupervisorAccount,
     )
+
+interface IconNameComponent {
+    @get:Composable
+    val icon: ImageVector?
+}

@@ -1,22 +1,25 @@
 package com.example.serverdriveui.ui.component.properties
 
+import androidx.compose.runtime.Composable
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
+import com.example.serverdriveui.util.asValue
 import com.vini.common.runWhen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.serialization.json.JsonElement
 
 open class BasePropertyData<T>(
     private val stateManager: ComponentStateManager,
-    properties: Map<String, PropertyModel>,
-    propertyName: String,
-    propertyValueTransformation: (String) -> T?,
-    defaultPropertyValue: T
+    private val properties: Map<String, PropertyModel>,
+    private val propertyName: String,
+    private val transformToData: (JsonElement?) -> T?,
+    private val defaultPropertyValue: T,
 ) {
     private val propertyData = properties[propertyName]
-    private val propertyId = propertyData?.id.orEmpty()
-    private val propertyValue = propertyData?.value?.let(propertyValueTransformation) ?: defaultPropertyValue
+    private val propertyId = propertyData?.id
+    private val propertyValue = transformToData(propertyData?.value) ?: defaultPropertyValue
     private lateinit var stateFlow: MutableStateFlow<T>
 
     init {
@@ -26,7 +29,15 @@ open class BasePropertyData<T>(
         )
     }
 
-    fun getValue() : StateFlow<T> {
+    @Composable
+    fun getValue(): T {
+        return propertyId.runWhen(
+            isNull = { stateFlow },
+            notNull = { stateManager.getState(it) ?: stateFlow }
+        ).asValue()
+    }
+
+    fun getValueAsState(): StateFlow<T> {
         return propertyId.runWhen(
             isNull = { stateFlow },
             notNull = { stateManager.getState(it) ?: stateFlow }

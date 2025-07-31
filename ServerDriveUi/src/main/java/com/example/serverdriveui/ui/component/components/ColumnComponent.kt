@@ -16,14 +16,16 @@ import com.example.serverdriveui.ui.component.properties.VerticalArrangementComp
 import com.example.serverdriveui.ui.component.properties.VerticalArrangementProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.example.serverdriveui.util.asValue
-import com.google.gson.Gson
-import com.google.gson.JsonObject
+import com.example.serverdriveui.util.JsonUtil.asString
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
 
 interface DynamicComponentProperty {
     fun getComponent(): StateFlow<Component?>
-    fun setComponents(component: Component)
+    fun setComponents(jsonObject: JsonObject)
 }
 
 class DynamicComponentPropertyImpl(
@@ -31,24 +33,16 @@ class DynamicComponentPropertyImpl(
     private val stateManager: ComponentStateManager,
     private val componentParser: ComponentParser,
 ) : DynamicComponentProperty,
-    BasePropertyData<Component?>(
+    BasePropertyData<String>(
         stateManager = stateManager,
         properties = properties,
         propertyName = "components",
-        propertyValueTransformation = {
-            componentParser.parse(
-                data = Gson().fromJson(
-                    it,
-                    JsonObject::class.java
-                ),
-                componentStateManager = stateManager
-            )
-        },
-        defaultPropertyValue = null
+        transformToData = { it?.asString() },
+        defaultPropertyValue = Json.encodeToString(JsonObject(emptyMap())),
     ) {
-    override fun getComponent() = getValue()
+    override fun getComponent() = MutableStateFlow(null)//getValue()
 
-    override fun setComponents(component: Component) = setValue(component)
+    override fun setComponents(jsonObject: JsonObject) = setValue(Json.encodeToString(jsonObject))
 }
 
 class ColumnComponent(
@@ -58,40 +52,42 @@ class ColumnComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser),
+
+    ) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     HorizontalAlignmentComponentProperty by HorizontalAlignmentProperty(
         properties,
-        stateManager
+        stateManager,
     ),
     VerticalArrangementComponentProperty by VerticalArrangementProperty(
         properties,
-        stateManager
-    ), DynamicComponentProperty by DynamicComponentPropertyImpl(
-        properties,
         stateManager,
-        componentParser
-    ) {
+    )
+//    , DynamicComponentProperty by DynamicComponentPropertyImpl(
+//        properties,
+//        stateManager,
+//        componentParser,
+//        scope
+//    )
+{
 
     @Composable
     override fun getInternalComponent(
         navController: NavHostController,
-        modifier: Modifier
+        modifier: Modifier,
     ): @Composable () -> Unit = {
-        val action = actionParser.parse(model, componentStateManager = stateManager)
-        val actionModifier = action?.let { Modifier.clickable{ it.execute(navController) } } ?: Modifier
-        val dynamicComponents = getComponent().asValue()
+        val actionModifier =
+            actions["OnClick"]?.let { Modifier.clickable { it.execute(navController) } } ?: Modifier
+        //val dynamicComponents = getComponent().asValue()
 
         Column(
-            verticalArrangement = getVerticalArrangement().asValue(),
-            horizontalAlignment = getHorizontalAlignment().asValue(),
+            verticalArrangement = getVerticalArrangement(),
+            horizontalAlignment = getHorizontalAlignment(),
             modifier = modifier
                 .then(actionModifier)
         ) {
-            dynamicComponents?.getComponentAsColumn(navController)?.invoke(this)
-                ?: componentParser.parseList(data = model, componentStateManager = stateManager)
-                    .forEach {
-                        it.getComponentAsColumn(navController).invoke(this)
-                    }
+            componentParser.parseList(data = model).forEach {
+                it.getComponentAsColumn(navController).invoke(this)
+            }
         }
     }
 

@@ -4,18 +4,21 @@ import android.app.Activity
 import android.content.Intent
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.ui.action.manager.Action
-import com.google.gson.JsonParser
+import com.example.serverdriveui.util.JsonUtil.asString
+import com.example.serverdriveui.util.JsonUtil.getAsMap
+import kotlinx.serialization.json.JsonObject
 
-class BusinessSuccessAction(val data: Map<String, String>) : Action {
-    private val screenData = data["screenData"]?.let { JsonParser.parseString(it) }?.asJsonObject?.asMap().orEmpty()
+class BusinessSuccessAction(val data: JsonObject) : Action {
+    private val screenData = data.getAsMap("screenData")
 
     override fun execute(navController: NavHostController) {
+        super.execute(navController)
         with(navController.context as Activity) {
             setResult(
                 Activity.RESULT_OK,
                 Intent().apply {
                     screenData.forEach {
-                        putExtra(it.key, it.value.asString)
+                        putExtra(it.key, it.value.asString())
                     }
                 }
             )

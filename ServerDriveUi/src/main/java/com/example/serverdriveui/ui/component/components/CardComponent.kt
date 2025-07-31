@@ -10,7 +10,7 @@ import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 
 data class CardComponent(
     private val model: JsonObject,
@@ -19,21 +19,19 @@ data class CardComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser) {
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser) {
 
     @Composable
     override fun getInternalComponent(
         navController: NavHostController,
         modifier: Modifier,
     ): @Composable () -> Unit = {
-
-        val action = actionParser.parse(model, componentStateManager = stateManager)
-        val hasAction = action != null
+        val actionModifier = actions["OnClick"]?.let { Modifier.clickable{ it.execute(navController) } } ?: Modifier
 
         Card(
-            modifier = modifier.clickable(enabled = hasAction) { action?.execute(navController) },
+            modifier = modifier.then(actionModifier),
         ) {
-            componentParser.parseList(model, componentStateManager = stateManager).forEach {
+            componentParser.parseList(model).forEach {
                 it.getComponentAsColumn(navController).invoke(this)
             }
         }

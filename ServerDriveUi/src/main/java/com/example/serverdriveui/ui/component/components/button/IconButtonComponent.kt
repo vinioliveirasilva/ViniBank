@@ -10,7 +10,7 @@ import com.example.serverdriveui.ui.component.components.BaseComponent
 import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 
 class IconButtonComponent(
     private val model: JsonObject,
@@ -19,26 +19,23 @@ class IconButtonComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser) {
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser) {
 
     @Composable
     override fun getInternalComponent(
         navController: NavHostController,
-        modifier: Modifier
+        modifier: Modifier,
     ): @Composable () -> Unit = {
             IconButton(
                 onClick = {
-                    actionParser.parse(
-                        componentJsonModel = model,
-                        componentStateManager = stateManager
-                    )?.execute(navController)
+                    actions["OnClick"]?.execute(navController)
                 }
             ) {
-                componentParser.parseList(data = model, componentStateManager = stateManager).forEach {
+                componentParser.parseList(data = model).forEach {
                     it.getComponent(navController).invoke()
                 }
             }
-        }
+    }
 
     companion object {
         const val IDENTIFIER = "iconButton"

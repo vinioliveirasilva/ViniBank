@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
+import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.component.properties.HorizontalArrangementComponentProperty
 import com.example.serverdriveui.ui.component.properties.HorizontalArrangementProperty
@@ -13,8 +14,7 @@ import com.example.serverdriveui.ui.component.properties.VerticalAlignmentCompon
 import com.example.serverdriveui.ui.component.properties.VerticalAlignmentProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.example.serverdriveui.util.asValue
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 
 class LazyRowComponent(
     private val model: JsonObject,
@@ -22,14 +22,15 @@ class LazyRowComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
-) : BaseComponent(model, properties, stateManager, validatorParser),
+    private val actionParser: ActionParser,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     HorizontalArrangementComponentProperty by HorizontalArrangementProperty(
         properties,
-        stateManager
+        stateManager,
     ),
     VerticalAlignmentComponentProperty by VerticalAlignmentProperty(
         properties,
-        stateManager
+        stateManager,
     ) {
 
     @Composable
@@ -41,12 +42,12 @@ class LazyRowComponent(
         val state = rememberLazyListState()
 
         LazyRow(
-            horizontalArrangement = getHorizontalArrangement().asValue(),
-            verticalAlignment = getVerticalAlignment().asValue(),
+            horizontalArrangement = getHorizontalArrangement(),
+            verticalAlignment = getVerticalAlignment(),
             modifier = modifier,
             state = state,
         ) {
-            componentParser.parseList(data = model, componentStateManager = stateManager).forEach {
+            componentParser.parseList(data = model).forEach {
                 it.getComponentLazyListScope(navController).invoke(this)
             }
         }

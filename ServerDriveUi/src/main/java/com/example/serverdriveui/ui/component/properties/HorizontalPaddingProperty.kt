@@ -6,23 +6,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
-import com.example.serverdriveui.util.asValue
+import com.example.serverdriveui.util.JsonUtil.asInt
 
 data class HorizontalPaddingProperty(
     private val properties: Map<String, PropertyModel>,
-    private val stateManager: ComponentStateManager
+    private val stateManager: ComponentStateManager,
 ) : HorizontalPaddingComponentProperty,
     BasePropertyData<Int>(
         stateManager = stateManager,
         properties = properties,
         propertyName = "paddingHorizontal",
-        propertyValueTransformation = { it.toIntOrNull() },
-        defaultPropertyValue = 0
+        defaultPropertyValue = 0,
+        transformToData = { it?.asInt() }
     ) {
     override val horizontalPaddingModifier: Modifier
         @Composable
-        get() = Modifier.padding(horizontal = getValue().asValue().dp)
+        get() = Modifier.padding(horizontal = getValue().dp)
+}
 
-    override fun getHorizontalPadding() = getValue()
-    override fun setHorizontalPadding(padding: Int) = setValue(padding)
+interface HorizontalPaddingComponentProperty {
+    @get:Composable
+    val horizontalPaddingModifier: Modifier
 }

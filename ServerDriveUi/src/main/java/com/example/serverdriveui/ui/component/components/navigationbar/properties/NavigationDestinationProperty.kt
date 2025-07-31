@@ -1,20 +1,30 @@
 package com.example.serverdriveui.ui.component.components.navigationbar.properties
 
+import androidx.compose.runtime.Composable
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.component.properties.BasePropertyData
 import com.example.serverdriveui.ui.state.ComponentStateManager
-import kotlinx.coroutines.flow.StateFlow
+import com.example.serverdriveui.util.JsonUtil.asInt
 
 class NavigationDestinationProperty(
     properties: Map<String, PropertyModel>,
-    stateManager: ComponentStateManager
+    stateManager: ComponentStateManager,
 ) : NavigationDestinationComponent, BasePropertyData<Int>(
     stateManager = stateManager,
     properties = properties,
     propertyName = "selectedDestination",
-    propertyValueTransformation = { value -> value.toIntOrNull() },
-    defaultPropertyValue = 0
+    transformToData = { it?.asInt() },
+    defaultPropertyValue = 0,
 ) {
-    override fun getSelectedDestination(): StateFlow<Int> = getValue()
+
+    @Composable
+    override fun getSelectedDestination() = getValue()
     override fun setSelectedDestination(index: Int) = setValue(index)
+}
+
+interface NavigationDestinationComponent {
+
+    @Composable
+    fun getSelectedDestination(): Int
+    fun setSelectedDestination(index: Int)
 }

@@ -1,8 +1,9 @@
 package com.example.auth.backend
 
 import com.example.network.Encrypt
-import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.flow.Flow
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -17,13 +18,15 @@ interface AuthService {
     fun logout(): Flow<Any>
 }
 
+@Serializable
 data class User(
-    @SerializedName("email") val email: String,
-    @SerializedName("password") val password: String,
+    @SerialName("email") val email: String,
+    @SerialName("password") val password: String,
 )
 
+@Serializable
 data class UserAuthenticated(
-    @SerializedName("email") val email: String,
-    @SerializedName("name") val name: String,
-    @SerializedName("docNumber") val docNumber: String,
+    @SerialName("email") val email: String,
+    @SerialName("name") val name: String,
+    @SerialName("docNumber") val docNumber: String,
 )

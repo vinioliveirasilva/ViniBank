@@ -47,15 +47,18 @@ android {
 dependencies {
     implementation(project(":Common"))
     implementation(project(":DesignSystem"))
+    implementation(project(":DesignSystemSdUi"))
     implementation(project(":Network"))
     implementation(project(":Router"))
+
+    //ktor
+    implementation("io.ktor:ktor-client-core:2.3.12")
 
     //Lottie
     implementation(libs.lottie.compose)
 
     //Retrofit
     implementation(libs.retrofit)
-    implementation(libs.gson)
 
     //Koin
     implementation(libs.koin)

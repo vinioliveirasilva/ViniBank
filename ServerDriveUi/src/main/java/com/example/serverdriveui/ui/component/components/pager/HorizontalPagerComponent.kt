@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
+import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.components.BaseComponent
 import com.example.serverdriveui.ui.component.components.pager.properties.ContentPaddingComponentProperty
 import com.example.serverdriveui.ui.component.components.pager.properties.ContentPaddingProperty
@@ -19,8 +20,7 @@ import com.example.serverdriveui.ui.component.properties.VerticalAlignmentCompon
 import com.example.serverdriveui.ui.component.properties.VerticalAlignmentProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.example.serverdriveui.util.asValue
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 
 class HorizontalPagerComponent(
     private val model: JsonObject,
@@ -28,7 +28,8 @@ class HorizontalPagerComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
-) : BaseComponent(model, properties, stateManager, validatorParser),
+    private val actionParser: ActionParser,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     VerticalAlignmentComponentProperty by VerticalAlignmentProperty(properties, stateManager),
     ContentPaddingComponentProperty by ContentPaddingProperty(properties, stateManager),
     CurrentPageComponentProperty by CurrentPageProperty(properties, stateManager) {
@@ -39,8 +40,8 @@ class HorizontalPagerComponent(
         modifier: Modifier
     ): @Composable () -> Unit = {
 
-        val components = componentParser.parseList(data = model, componentStateManager = stateManager)
-        val currentPage = getCurrentPage().asValue()
+        val components = componentParser.parseList(data = model)
+        val currentPage = getCurrentPage()
         val pagerState = rememberPagerState(
             pageCount = { components.size },
             initialPage = currentPage
@@ -51,7 +52,7 @@ class HorizontalPagerComponent(
 
         HorizontalPager(
             state = pagerState,
-            contentPadding = PaddingValues(getContentPadding().asValue().dp)
+            contentPadding = PaddingValues(getContentPadding().dp)
         ) { page -> components[page].getComponent(navController).invoke() }
     }
 

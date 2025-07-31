@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    kotlin("plugin.serialization") version "2.1.20"
 }
 
 android {
@@ -36,15 +37,14 @@ dependencies {
     implementation(project(":Network"))
 
     implementation(libs.retrofit)
-
-    implementation(libs.koin)
-
-    implementation(libs.gson)
+    implementation(libs.kotlinx.serialization.json)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
 
+    implementation(libs.koin)
     implementation(libs.androidx.core.ktx)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

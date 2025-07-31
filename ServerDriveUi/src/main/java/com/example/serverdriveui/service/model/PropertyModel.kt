@@ -1,14 +1,17 @@
 package com.example.serverdriveui.service.model
 
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 
+@Serializable
 data class PropertyModel(
-    @SerializedName("name")
+    @SerialName("name")
     val name: String,
-    @SerializedName("value")
-    val value: String,
-    @SerializedName("id")
+    @SerialName("value")
+    val value: JsonElement,
+    @SerialName("id")
     val id: String = "",
 ) {
     override fun toString(): String {

@@ -14,8 +14,7 @@ import com.example.serverdriveui.ui.component.properties.VerticalAlignmentCompon
 import com.example.serverdriveui.ui.component.properties.VerticalAlignmentProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.example.serverdriveui.util.asValue
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 
 class RowComponent(
     private val model: JsonObject,
@@ -24,11 +23,11 @@ class RowComponent(
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
     private val actionParser: ActionParser,
-) : BaseComponent(model, properties, stateManager, validatorParser),
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     VerticalAlignmentComponentProperty by VerticalAlignmentProperty(properties, stateManager),
     HorizontalArrangementComponentProperty by HorizontalArrangementProperty(
         properties,
-        stateManager
+        stateManager,
     ) {
 
     @Composable
@@ -36,15 +35,14 @@ class RowComponent(
         navController: NavHostController,
         modifier: Modifier,
     ): @Composable () -> Unit = {
-        val action = actionParser.parse(model, componentStateManager = stateManager)
-        val actionModifier = action?.let { Modifier.clickable { action.execute(navController) } } ?: Modifier
+        val actionModifier = actions["OnClick"]?.let { Modifier.clickable { it.execute(navController) } } ?: Modifier
 
         Row(
-            verticalAlignment = getVerticalAlignment().asValue(),
-            horizontalArrangement = getHorizontalArrangement().asValue(),
+            verticalAlignment = getVerticalAlignment(),
+            horizontalArrangement = getHorizontalArrangement(),
             modifier = modifier.then(actionModifier)
         ) {
-            componentParser.parseList(data = model, componentStateManager = stateManager).forEach {
+            componentParser.parseList(data = model).forEach {
                 it.getComponentAsRow(navController).invoke(this)
             }
         }

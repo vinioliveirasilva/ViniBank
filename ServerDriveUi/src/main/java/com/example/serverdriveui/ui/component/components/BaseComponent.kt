@@ -1,6 +1,5 @@
 package com.example.serverdriveui.ui.component.components
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.lazy.LazyItemScope
@@ -9,6 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
+import com.example.serverdriveui.ui.action.manager.Action
+import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.manager.Component
 import com.example.serverdriveui.ui.component.manager.InternalComponent
 import com.example.serverdriveui.ui.component.properties.HeightComponentProperty
@@ -21,19 +22,22 @@ import com.example.serverdriveui.ui.component.properties.VerticalFillTypeCompone
 import com.example.serverdriveui.ui.component.properties.VerticalFillTypeProperty
 import com.example.serverdriveui.ui.component.properties.VerticalPaddingComponentProperty
 import com.example.serverdriveui.ui.component.properties.VerticalPaddingProperty
+import com.example.serverdriveui.ui.component.properties.VisibilityComponentProperty
+import com.example.serverdriveui.ui.component.properties.VisibilityProperty
 import com.example.serverdriveui.ui.component.properties.WeightComponentModifier
 import com.example.serverdriveui.ui.component.properties.WeightModifier
 import com.example.serverdriveui.ui.component.properties.WidthComponentProperty
 import com.example.serverdriveui.ui.component.properties.WidthProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 
 open class BaseComponent(
     model: JsonObject,
     properties: Map<String, PropertyModel>,
     stateManager: ComponentStateManager,
     validatorParser: ValidatorParser,
+    actionParser: ActionParser,
 ) : Component, InternalComponent,
     VerticalFillTypeComponentProperty by VerticalFillTypeProperty(properties, stateManager),
     HorizontalFillTypeComponentProperty by HorizontalFillTypeProperty(properties, stateManager),
@@ -41,7 +45,22 @@ open class BaseComponent(
     HorizontalPaddingComponentProperty by HorizontalPaddingProperty(properties, stateManager),
     HeightComponentProperty by HeightProperty(properties, stateManager),
     WidthComponentProperty by WidthProperty(properties, stateManager),
-    WeightComponentModifier by WeightModifier(properties, stateManager) {
+    WeightComponentModifier by WeightModifier(properties, stateManager),
+    VisibilityComponentProperty by VisibilityProperty(properties, stateManager) {
+
+    val actions: Map<String, Action> = actionParser.parseActions(model)
+
+    init {
+        actions.forEach { (_, action) -> action.initialize() }
+        validatorParser.parse(model).forEach { validator -> validator.initialize() }
+    }
+
+    @Composable
+    private fun IntermediateComponent(navController: NavHostController, modifier: Modifier) {
+        if (getIsVisible()) {
+            getInternalComponent(navController, modifier).invoke()
+        }
+    }
 
     override val internalModifier: Modifier
         @Composable
@@ -53,61 +72,54 @@ open class BaseComponent(
             .then(heightModifier)
             .then(widthModifier)
 
-    init {
-        validatorParser.parse(model, stateManager)
-            .forEach { validator -> validator.initialize() }
-    }
-
     @Composable
     override fun getComponent(navController: NavHostController): @Composable (() -> Unit) = {
-        Column {
-            getInternalComponent(
-                navController,
-                internalModifier
-            ).invoke()
-        }
+        IntermediateComponent(
+            navController,
+            internalModifier
+        )
     }
 
     @Composable
     override fun getComponentAsRow(
         navController: NavHostController,
     ): @Composable (RowScope.() -> Unit) = {
-        getInternalComponent(
+        IntermediateComponent(
             navController,
             internalModifier
                 .then(weightModifier)
-        ).invoke()
+        )
     }
 
     @Composable
     override fun getComponentAsColumn(
         navController: NavHostController,
     ): @Composable (ColumnScope.() -> Unit) = {
-        getInternalComponent(
+        IntermediateComponent(
             navController,
             internalModifier
                 .then(weightModifier)
-        ).invoke()
+        )
     }
 
     @Composable
     override fun getComponentLazyItemScope(
         navController: NavHostController,
     ): @Composable (LazyItemScope.() -> Unit) = {
-        getInternalComponent(
+        IntermediateComponent(
             navController,
             internalModifier
-        ).invoke()
+        )
     }
 
     override fun getComponentLazyListScope(
         navController: NavHostController,
     ): (LazyListScope.() -> Unit) = {
         item {
-            getInternalComponent(
+            IntermediateComponent(
                 navController,
                 internalModifier
-            ).invoke()
+            )
         }
     }
 }

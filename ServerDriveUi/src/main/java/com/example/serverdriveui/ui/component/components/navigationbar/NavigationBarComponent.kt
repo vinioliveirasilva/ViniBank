@@ -3,19 +3,18 @@ package com.example.serverdriveui.ui.component.components.navigationbar
 import androidx.activity.compose.BackHandler
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
+import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.components.BaseComponent
 import com.example.serverdriveui.ui.component.components.navigationbar.properties.NavigationDestinationComponent
 import com.example.serverdriveui.ui.component.components.navigationbar.properties.NavigationDestinationProperty
 import com.example.serverdriveui.ui.component.manager.ComponentParser
-import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 import org.json.JSONObject
 
 class NavigationBarComponent(
@@ -24,10 +23,11 @@ class NavigationBarComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
-) : BaseComponent(model, properties, stateManager, validatorParser),
+    private val actionParser: ActionParser,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     NavigationDestinationComponent by NavigationDestinationProperty(
         properties,
-        stateManager
+        stateManager,
     ) {
     @Composable
     override fun getInternalComponent(
@@ -35,8 +35,8 @@ class NavigationBarComponent(
         modifier: Modifier
     ): @Composable (() -> Unit) =
         {
-            val destinations = componentParser.parseList(model, componentStateManager = stateManager)
-            val selectedDestination = getSelectedDestination().collectAsState().value
+            val destinations = componentParser.parseList(model)
+            val selectedDestination = getSelectedDestination()
 
             BackHandler(enabled = selectedDestination != FIRST_DESTINATION_INDEX) {
                 setSelectedDestination(FIRST_DESTINATION_INDEX)
@@ -262,5 +262,5 @@ fun BottomNavigationComponentPreview() {
         )
     )
 
-    SdUiComponentPreview(jsonObject = screen)
+    //SdUiComponentPreview(jsonObject = screen)
 }

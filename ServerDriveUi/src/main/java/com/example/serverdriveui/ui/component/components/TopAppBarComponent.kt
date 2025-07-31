@@ -7,11 +7,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
+import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.google.gson.JsonObject
+import com.vini.designsystemsdui.ComponentUtil.component
+import com.vini.designsystemsdui.ComponentUtil.property
+import kotlinx.serialization.json.JsonObject
 
 data class TopAppBarComponent(
     private val model: JsonObject,
@@ -19,7 +22,8 @@ data class TopAppBarComponent(
     private val stateManager: ComponentStateManager,
     private val validatorParser: ValidatorParser,
     private val componentParser: ComponentParser,
-) : BaseComponent(model, properties, stateManager, validatorParser) {
+    private val actionParser: ActionParser,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser) {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -32,8 +36,7 @@ data class TopAppBarComponent(
                 .then(horizontalFillTypeModifier),
             title = {
                 componentParser.parseList(
-                    data = model,
-                    componentStateManager = stateManager
+                    data = model
                 ).forEach {
                     it.getComponent(navController).invoke()
                 }
@@ -41,8 +44,7 @@ data class TopAppBarComponent(
             navigationIcon = {
                 componentParser.parseList(
                     data = model,
-                    componentTag = "navigationIcons",
-                    componentStateManager = stateManager
+                    componentTag = "navigationIcons"
                 ).forEach {
                     it.getComponent(navController).invoke()
                 }
@@ -50,8 +52,7 @@ data class TopAppBarComponent(
             actions = {
                 componentParser.parseList(
                     data = model,
-                    componentTag = "actionIcons",
-                    componentStateManager = stateManager
+                    componentTag = "actionIcons"
                 ).forEach {
                     it.getComponentAsRow(navController).invoke(this)
                 }
@@ -67,44 +68,36 @@ data class TopAppBarComponent(
 @Preview(showBackground = true)
 @Composable
 fun TopAppBarComponentPreview() {
-    val jsonModel = """
-            "type": "topAppBar",
-            "properties": [
-            ],
-            "components": [
-                {
-                    "type": "text",
-                    "properties": [
-                        {
-                            "name": "text",
-                            "value": "Salve"
-                        }
-                    ]
-                }
-            ],
-            "navigationIcons": [
-                {
-                    "type": "button",
-                    "properties": [
-                        {
-                            "name": "text",
-                            "value": "Salve"
-                        }
-                    ]
-                }
-            ],
-            "actionIcons": [
-                {
-                    "type": "button",
-                    "properties": [
-                        {
-                            "name": "text",
-                            "value": "Salve"
-                        }
-                    ]
-                }
-            ]
-    """
+    val component = component(
+        "topAppBar",
+        listOf(),
+        listOf(
+            component(
+                "text",
+                listOf(
+                    property("text", "TopBar Title")
+                )
+            )
+        ),
+        customComponents = arrayOf(
+            "navigationIcons" to listOf(
+                component(
+                    "icon",
+                    listOf(
+                        property("icon", "LeftArrow")
+                    )
+                )
+            ),
+            "actionIcons" to listOf(
+                component(
+                    "icon",
+                    listOf(
+                        property("icon", "User")
+                    )
+                )
+            )
+        )
+    )
 
-    SdUiComponentPreview(jsonModel)
+    SdUiComponentPreview(component)
 }

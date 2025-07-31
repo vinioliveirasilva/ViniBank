@@ -3,6 +3,7 @@ package com.example.serverdriveui.ui.component.components.sdui.properties
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.component.properties.BasePropertyData
 import com.example.serverdriveui.ui.state.ComponentStateManager
+import com.example.serverdriveui.util.JsonUtil.asString
 import kotlinx.coroutines.flow.StateFlow
 
 interface FlowIdentifierComponent {
@@ -17,9 +18,9 @@ class FlowIdentifierProperty(
     stateManager = stateManager,
     properties = properties,
     propertyName = "flow",
-    propertyValueTransformation = { it },
-    defaultPropertyValue = ""
+    transformToData = { it?.asString() },
+    defaultPropertyValue = "",
 ) {
-    override fun getFlowIdentifier() = getValue()
+    override fun getFlowIdentifier() = getValueAsState()
     override fun setFlowIdentifier(value: String) = setValue(value)
 }

@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
+import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.components.BaseComponent
 import com.example.serverdriveui.ui.component.properties.ErrorComponentProperty
 import com.example.serverdriveui.ui.component.properties.ErrorMessageComponentProperty
@@ -21,15 +22,15 @@ import com.example.serverdriveui.ui.component.properties.VisualTransformationCom
 import com.example.serverdriveui.ui.component.properties.VisualTransformationProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.example.serverdriveui.util.asValue
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 
 data class TextInputComponent(
     private val model: JsonObject,
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
-    private val validatorParser: ValidatorParser
-) : BaseComponent(model, properties, stateManager, validatorParser),
+    private val validatorParser: ValidatorParser,
+    private val actionParser: ActionParser,
+) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     TextComponentProperty by TextProperty(properties, stateManager),
     LabelComponentProperty by LabelProperty(properties, stateManager),
     VisualTransformationComponentProperty by VisualTransformationProperty(properties, stateManager),
@@ -42,17 +43,15 @@ data class TextInputComponent(
         navController: NavHostController,
         modifier: Modifier,
     ): @Composable () -> Unit = {
-        val text = getText().asValue()
-        val isError = getIsError().asValue()
 
         TextField(
-            keyboardOptions = getKeyboardOptions().asValue(),
-            visualTransformation = getVisualTransformation().asValue(),
+            keyboardOptions = getKeyboardOptions(),
+            visualTransformation = getVisualTransformation(),
             singleLine = true,
-            isError = isError,
-            supportingText = { if (isError) Text(text = getErrorMessage().asValue()) },
-            label = { Text(text = getLabel().asValue()) },
-            value = text,
+            isError = getIsError(),
+            supportingText = { if (getIsError()) Text(text = getErrorMessage()) },
+            label = { Text(text = getLabel()) },
+            value = getText(),
             onValueChange = {
                 setIsError(false)
                 setText(it)

@@ -1,9 +1,7 @@
 package com.example.network
 
 import com.example.network.retrofit.CryptoManager
-import com.example.network.retrofit.DHExchangePartner
 import com.example.network.retrofit.EncodeProvider
-import com.example.network.retrofit.asHex
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
@@ -12,36 +10,15 @@ import okhttp3.Response
 import okhttp3.ResponseBody
 import okio.Buffer
 import retrofit2.Invocation
-import java.security.AlgorithmParameterGenerator
-import java.security.KeyPair
-import java.security.SecureRandom
-import javax.crypto.spec.DHParameterSpec
+
 
 annotation class Encrypt()
 annotation class HandShake()
 
-class KeyExchangeManager() {
-    lateinit var exchangePartner: DHExchangePartner
-    lateinit var keyPair: KeyPair
-    lateinit var encodedPublicKey: ByteArray
-
-    fun init() {
-        AlgorithmParameterGenerator.getInstance("DH").apply {
-            init(512, SecureRandom())
-            exchangePartner = DHExchangePartner(
-                this.generateParameters()
-                    .getParameterSpec<DHParameterSpec?>(DHParameterSpec::class.java) as DHParameterSpec
-            )
-            keyPair = exchangePartner.createPersonalDHKeypairAndInitAgreement()
-            encodedPublicKey = keyPair.public.encoded
-        }
-    }
-}
-
 class CryptoInterceptor(
     private val encoderProvider: EncodeProvider,
     private val keyExchangeManager: KeyExchangeManager,
-    private val crypto: CryptoManager = CryptoManager()
+    private val crypto: CryptoManager = CryptoManager(),
 ) : Interceptor {
 
     private lateinit var sessionId: String
@@ -58,7 +35,8 @@ class CryptoInterceptor(
         val isEncrypt = req.getAnnotation(Encrypt::class.java) != null
         val isHandShake = req.getAnnotation(HandShake::class.java) != null
 
-        return chain.proceed(req.handleRequest(isHandShake, isEncrypt)).handleResponse(isHandShake, isEncrypt)
+        return chain.proceed(req.handleRequest(isHandShake, isEncrypt))
+            .handleResponse(isHandShake, isEncrypt)
     }
 
     private fun Request.handleRequest(isHandShake: Boolean, isEncrypt: Boolean): Request {
@@ -69,7 +47,8 @@ class CryptoInterceptor(
         }
     }
 
-    private fun Request.createHandShakeRequest(): Request = newBuilder().addHandShakeHeaders().build()
+    private fun Request.createHandShakeRequest(): Request =
+        newBuilder().addHandShakeHeaders().build()
 
     private fun Request.createEncryptedRequest(): Request {
         val (data, iv) = crypto.encrypt(readBody(this), secret)
@@ -89,7 +68,7 @@ class CryptoInterceptor(
     }
 
     private fun Request.Builder.addHandShakeHeaders() = apply {
-        header(Header.PUBLIC_KEY, encoderProvider.encode(keyExchangeManager.encodedPublicKey))
+        header(Header.PUBLIC_KEY, encoderProvider.encode(keyExchangeManager.getEncodedPublicKey()))
     }
 
     private fun Response.handleResponse(isHandShake: Boolean, isEncrypt: Boolean): Response {
@@ -102,13 +81,8 @@ class CryptoInterceptor(
 
     private fun Response.doOnHandShakeResponse(): Response {
         sessionId = header(Header.SESSION_ID).orEmpty()
-
-        val partnerPublicKey = keyExchangeManager.exchangePartner.createPublicKeyFromEncodedMaterial(
-            encoderProvider.decode(readBody(this))
-        )
-        keyExchangeManager.exchangePartner.phaseOne(partnerPublicKey)
-
-        secret = keyExchangeManager.exchangePartner.generateSharedSecret().asHex()
+        keyExchangeManager.createPublicKeyAndRunPhaseOne(encoderProvider.decode(readBody(this)))
+        secret = keyExchangeManager.generateSecret()
         return this.newBuilder().body(ResponseBody.create(JSON_MEDIA_TYPE, EMPTY_JSON)).build()
     }
 
