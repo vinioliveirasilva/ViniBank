@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
+import com.vini.designsystemsdui.PropertyOptions.HorizontalArrangementOptions
 
 class HorizontalArrangementProperty(
     private val properties: Map<String, PropertyModel>,
@@ -21,14 +22,6 @@ class HorizontalArrangementProperty(
     @Composable
     override fun getHorizontalArrangement() = getValue().toOption().arrangement
     override fun setHorizontalArrangement(value: HorizontalArrangementOptions) = setValue(value.id)
-}
-
-enum class HorizontalArrangementOptions(val id: String, val arrangement: Arrangement.Horizontal) {
-    Start("Start", Arrangement.Start),
-    End("End", Arrangement.End),
-    Center("Center", Arrangement.Center),
-    SpaceBetween("SpaceBetween", Arrangement.SpaceBetween),
-    SpaceAround("SpaceAround", Arrangement.SpaceAround),
 }
 
 private fun String?.toOption() =

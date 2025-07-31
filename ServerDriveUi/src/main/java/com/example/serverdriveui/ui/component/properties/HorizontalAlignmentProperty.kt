@@ -5,6 +5,7 @@ import androidx.compose.ui.Alignment
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
+import com.vini.designsystemsdui.PropertyOptions.HorizontalAlignmentOptions
 
 class HorizontalAlignmentProperty(
     private val properties: Map<String, PropertyModel>,
@@ -22,12 +23,6 @@ class HorizontalAlignmentProperty(
     override fun getHorizontalAlignment() = getValue().toOption().alignment
 
     override fun setHorizontalAlignment(value: HorizontalAlignmentOptions) = setValue(value.id)
-}
-
-enum class HorizontalAlignmentOptions(val id: String, val alignment: Alignment.Horizontal) {
-    Center("Center", Alignment.CenterHorizontally),
-    Start("Start", Alignment.Start),
-    End("End", Alignment.End),
 }
 
 private fun String?.toOption() =

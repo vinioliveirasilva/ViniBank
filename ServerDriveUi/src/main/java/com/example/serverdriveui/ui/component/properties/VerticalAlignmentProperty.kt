@@ -5,6 +5,7 @@ import androidx.compose.ui.Alignment
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
+import com.vini.designsystemsdui.PropertyOptions.VerticalAlignmentOption
 
 class VerticalAlignmentProperty(
     private val properties: Map<String, PropertyModel>,
@@ -22,12 +23,6 @@ class VerticalAlignmentProperty(
     override fun getVerticalAlignment() = getValue().toOption().verticalAlignment
 
     override fun setVerticalAlignment(value: VerticalAlignmentOption) = setValue(value.id)
-}
-
-enum class VerticalAlignmentOption(val id: String, val verticalAlignment: Alignment.Vertical) {
-    Top("Top", Alignment.Top),
-    Center("Center", Alignment.CenterVertically),
-    Bottom("Bottom", Alignment.Bottom),
 }
 
 private fun String?.toOption() =

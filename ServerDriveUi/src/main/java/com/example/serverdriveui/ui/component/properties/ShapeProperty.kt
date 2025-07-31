@@ -8,6 +8,7 @@ import androidx.compose.ui.unit.dp
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
+import com.vini.designsystemsdui.PropertyOptions.ShapeOptions
 
 interface ShapeComponentProperty {
     @Composable
@@ -30,14 +31,6 @@ class ShapeProperty(
     override fun getShape() = getValue().toOption().shape
 
     override fun setShape(shape: ShapeOptions) = setValue(shape.id)
-}
-
-enum class ShapeOptions(val id: String, val shape: Shape) {
-    None("None", RoundedCornerShape(0.dp)),
-    Small("Small", RoundedCornerShape(4.dp)),
-    Medium("Medium", RoundedCornerShape(8.dp)),
-    Large("Large", RoundedCornerShape(16.dp)),
-    Circle("Circle", CircleShape),
 }
 
 private fun String?.toOption(): ShapeOptions =

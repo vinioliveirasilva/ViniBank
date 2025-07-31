@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
+import com.vini.designsystemsdui.PropertyOptions.VerticalFillTypeOption
 
 data class VerticalFillTypeProperty(
     private val properties: Map<String, PropertyModel>,
@@ -22,14 +23,6 @@ data class VerticalFillTypeProperty(
     override val verticalFillTypeModifier: Modifier
         @Composable
         get() = getValue().toOption().modifier
-}
-
-enum class VerticalFillTypeOption(val id: String, val modifier: Modifier) {
-    Max("Max", Modifier.Companion.fillMaxHeight()),
-    Half("Half", Modifier.Companion.fillMaxHeight(.5f)),
-    Quarter("Quarter", Modifier.Companion.fillMaxHeight(.25f)),
-    Wrap("Wrap", Modifier.wrapContentHeight()),
-    None("", Modifier)
 }
 
 private fun String?.toOption() =
