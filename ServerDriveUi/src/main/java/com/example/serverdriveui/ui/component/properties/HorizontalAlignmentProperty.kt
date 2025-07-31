@@ -5,7 +5,7 @@ import androidx.compose.ui.Alignment
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
-import com.vini.designsystemsdui.PropertyOptions.HorizontalAlignmentOptions
+import com.vini.designsystemsdui.property.HorizontalAlignmentOptions
 
 class HorizontalAlignmentProperty(
     private val properties: Map<String, PropertyModel>,
@@ -16,18 +16,14 @@ class HorizontalAlignmentProperty(
         properties = properties,
         propertyName = "horizontalAlignment",
         transformToData = { it?.asString() },
-        defaultPropertyValue = HorizontalAlignmentOptions.Start.id,
+        defaultPropertyValue = HorizontalAlignmentOptions.Start.name,
     ) {
 
     @Composable
-    override fun getHorizontalAlignment() = getValue().toOption().alignment
+    override fun getHorizontalAlignment() = HorizontalAlignmentOptions.valueOf(getValue()).alignment
 
-    override fun setHorizontalAlignment(value: HorizontalAlignmentOptions) = setValue(value.id)
+    override fun setHorizontalAlignment(value: HorizontalAlignmentOptions) = setValue(value.name)
 }
-
-private fun String?.toOption() =
-    HorizontalAlignmentOptions.entries.firstOrNull { it.id == this }
-        ?: HorizontalAlignmentOptions.Start
 
 interface HorizontalAlignmentComponentProperty {
     @Composable

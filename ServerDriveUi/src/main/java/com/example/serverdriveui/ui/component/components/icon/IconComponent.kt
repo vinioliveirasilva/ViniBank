@@ -18,8 +18,7 @@ import com.example.serverdriveui.ui.component.properties.SizeComponentModifier
 import com.example.serverdriveui.ui.component.properties.SizeModifier
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.vini.designsystemsdui.ComponentUtil.component
-import com.vini.designsystemsdui.ComponentUtil.property
+import com.vini.designsystemsdui.component.icon
 import kotlinx.serialization.json.JsonObject
 
 class IconComponent(
@@ -47,7 +46,8 @@ class IconComponent(
         } ?: drawableIcon?.let {
             Icon(
                 modifier = modifier.then(sizeModifier),
-                painter = painterResource(it), contentDescription = null
+                painter = painterResource(it),
+                contentDescription = null
             )
         }
     }
@@ -59,15 +59,8 @@ class IconComponent(
 
 @Preview(showBackground = true)
 @Composable
-private fun IconComponentPreview() {
-
+private fun Preview() {
     SdUiComponentPreview(
-        component(
-            "icon",
-            listOf(
-                property("icon", "Payment"),
-                property("size", "48")
-            )
-        )
+        icon(iconName = "Add")
     )
 }

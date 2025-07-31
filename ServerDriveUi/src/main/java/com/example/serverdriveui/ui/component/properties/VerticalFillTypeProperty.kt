@@ -1,13 +1,11 @@
 package com.example.serverdriveui.ui.component.properties
 
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
-import com.vini.designsystemsdui.PropertyOptions.VerticalFillTypeOption
+import com.vini.designsystemsdui.property.VerticalFillTypeOption
 
 data class VerticalFillTypeProperty(
     private val properties: Map<String, PropertyModel>,
@@ -18,15 +16,12 @@ data class VerticalFillTypeProperty(
         properties = properties,
         propertyName = "verticalFillType",
         transformToData = { it?.asString() },
-        defaultPropertyValue = VerticalFillTypeOption.None.id,
+        defaultPropertyValue = VerticalFillTypeOption.None.name,
     ) {
     override val verticalFillTypeModifier: Modifier
         @Composable
-        get() = getValue().toOption().modifier
+        get() = VerticalFillTypeOption.valueOf(getValue()).modifier
 }
-
-private fun String?.toOption() =
-    VerticalFillTypeOption.entries.firstOrNull { it.id == this } ?: VerticalFillTypeOption.None
 
 interface VerticalFillTypeComponentProperty {
     @get:Composable

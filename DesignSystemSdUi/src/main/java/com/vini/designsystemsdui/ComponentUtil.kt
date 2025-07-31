@@ -10,12 +10,12 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
 
-private typealias Property = JsonObject
-private typealias Component = JsonObject
-private typealias Validator = JsonObject
-private typealias Action = JsonObject
+typealias Property = JsonObject
+typealias Component = JsonObject
+typealias Validator = JsonObject
+typealias Action = JsonObject
 
-object ComponentUtil {
+internal object ComponentUtil {
     fun property(name: String, value: String, id: String? = null): Property = buildJsonObject {
         put("name", name)
         put("value", value)
@@ -131,4 +131,8 @@ object ComponentUtil {
             }
         )
     )
+}
+
+object ComponentHelper {
+
 }

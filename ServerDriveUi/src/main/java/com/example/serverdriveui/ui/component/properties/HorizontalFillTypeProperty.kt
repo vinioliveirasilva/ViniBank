@@ -1,13 +1,11 @@
 package com.example.serverdriveui.ui.component.properties
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
-import com.vini.designsystemsdui.PropertyOptions.HorizontalFillTypeOption
+import com.vini.designsystemsdui.property.HorizontalFillTypeOption
 
 data class HorizontalFillTypeProperty(
     private val properties: Map<String, PropertyModel>,
@@ -17,17 +15,14 @@ data class HorizontalFillTypeProperty(
         stateManager = stateManager,
         properties = properties,
         propertyName = "horizontalFillType",
-        defaultPropertyValue = HorizontalFillTypeOption.None.id,
+        defaultPropertyValue = HorizontalFillTypeOption.None.name,
         transformToData = { it?.asString() }
     ) {
 
     override val horizontalFillTypeModifier: Modifier
         @Composable
-        get() = getValue().toOptions().modifier
+        get() = HorizontalFillTypeOption.valueOf(getValue()).modifier
 }
-
-private fun String?.toOptions(): HorizontalFillTypeOption =
-    HorizontalFillTypeOption.entries.firstOrNull { it.id == this } ?: HorizontalFillTypeOption.None
 
 interface HorizontalFillTypeComponentProperty {
     @get:Composable

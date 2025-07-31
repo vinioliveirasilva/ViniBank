@@ -14,8 +14,8 @@ import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.vini.designsystemsdui.ComponentUtil.component
-import com.vini.designsystemsdui.ComponentUtil.property
+import com.vini.designsystemsdui.component.bottomSheet
+import com.vini.designsystemsdui.component.text
 import kotlinx.serialization.json.JsonObject
 
 class BottomSheetComponent(
@@ -53,20 +53,12 @@ class BottomSheetComponent(
 
 @Preview(showBackground = true)
 @Composable
-fun Preview() {
+private fun Preview() {
     SdUiComponentPreview(
-        component(
-            "bottomSheet",
-            listOf(
-                property("shouldShow", "true"),
-            ),
-            listOf(
-                component(
-                    "text",
-                    listOf(
-                        property("text", "Dialog text, can be anything, just for example")
-                    )
-                )
+        bottomSheet(
+            shouldShow = true,
+            components = listOf(
+                text("Dialog text, can be anything, just for example")
             )
         )
     )

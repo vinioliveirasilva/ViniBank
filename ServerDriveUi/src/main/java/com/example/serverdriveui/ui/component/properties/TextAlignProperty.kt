@@ -5,7 +5,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
-import com.vini.designsystemsdui.PropertyOptions.TextAlignOption
+import com.vini.designsystemsdui.property.TextAlignOption
 
 class TextAlignProperty(
     private val properties: Map<String, PropertyModel>,
@@ -16,17 +16,14 @@ class TextAlignProperty(
         properties = properties,
         propertyName = "textAlign",
         transformToData = { it?.asString() },
-        defaultPropertyValue = TextAlignOption.Start.id,
+        defaultPropertyValue = TextAlignOption.Start.name,
     ) {
 
     @Composable
-    override fun getTextAlign() = getValue().toTextAlign().textAlign
+    override fun getTextAlign() = TextAlignOption.valueOf(getValue()).textAlign
 
-    override fun setTextAlign(textAlign: TextAlignOption) = setValue(textAlign.id)
+    override fun setTextAlign(textAlign: TextAlignOption) = setValue(textAlign.name)
 }
-
-private fun String?.toTextAlign() =
-    TextAlignOption.entries.firstOrNull { it.id == this } ?: TextAlignOption.Start
 
 interface TextAlignComponentProperty {
 

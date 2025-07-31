@@ -5,7 +5,7 @@ import androidx.compose.ui.Alignment
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
-import com.vini.designsystemsdui.PropertyOptions.AlignmentOptions
+import com.vini.designsystemsdui.property.AlignmentOptions
 
 interface ContentAlignmentComponentProperty {
 
@@ -24,15 +24,12 @@ class ContentAlignmentProperty(
         properties = properties,
         propertyName = "contentAlignment",
         transformToData = { it?.asString() },
-        defaultPropertyValue = AlignmentOptions.TopStart.id,
+        defaultPropertyValue = AlignmentOptions.TopStart.name,
     ) {
 
     @Composable
-    override fun getContentAlignment() = getValue().toOptions().alignment
+    override fun getContentAlignment() = AlignmentOptions.valueOf(getValue()).alignment
 
-    override fun setContentAlignment(value: AlignmentOptions) = setValue(value.id)
+    override fun setContentAlignment(value: AlignmentOptions) = setValue(value.name)
 }
-
-private fun String?.toOptions() =
-    AlignmentOptions.entries.firstOrNull { it.id == this } ?: AlignmentOptions.TopStart
 

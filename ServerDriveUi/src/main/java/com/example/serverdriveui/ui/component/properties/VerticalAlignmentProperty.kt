@@ -5,7 +5,7 @@ import androidx.compose.ui.Alignment
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
-import com.vini.designsystemsdui.PropertyOptions.VerticalAlignmentOption
+import com.vini.designsystemsdui.property.VerticalAlignmentOption
 
 class VerticalAlignmentProperty(
     private val properties: Map<String, PropertyModel>,
@@ -16,17 +16,14 @@ class VerticalAlignmentProperty(
         properties = properties,
         propertyName = "verticalAlignment",
         transformToData = { it?.asString() },
-        defaultPropertyValue = VerticalAlignmentOption.Top.id,
+        defaultPropertyValue = VerticalAlignmentOption.Top.name,
     ) {
 
     @Composable
-    override fun getVerticalAlignment() = getValue().toOption().verticalAlignment
+    override fun getVerticalAlignment() = VerticalAlignmentOption.valueOf(getValue()).verticalAlignment
 
-    override fun setVerticalAlignment(value: VerticalAlignmentOption) = setValue(value.id)
+    override fun setVerticalAlignment(value: VerticalAlignmentOption) = setValue(value.name)
 }
-
-private fun String?.toOption() =
-    VerticalAlignmentOption.entries.firstOrNull { it.id == this } ?: VerticalAlignmentOption.Top
 
 interface VerticalAlignmentComponentProperty {
     @Composable

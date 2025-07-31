@@ -13,10 +13,13 @@ import com.example.serverdriveui.ui.component.components.icon.properties.IconDra
 import com.example.serverdriveui.ui.component.components.icon.properties.IconDrawableProperty
 import com.example.serverdriveui.ui.component.components.icon.properties.IconNameComponent
 import com.example.serverdriveui.ui.component.components.icon.properties.IconNameProperty
+import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
 import com.example.serverdriveui.ui.component.properties.SizeComponentModifier
 import com.example.serverdriveui.ui.component.properties.SizeModifier
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
+import com.vini.designsystemsdui.component.icon
+import com.vini.designsystemsdui.component.image
 import kotlinx.serialization.json.JsonObject
 
 class ImageComponent(
@@ -38,12 +41,14 @@ class ImageComponent(
         icon?.let {
             Image(
                 modifier = modifier.then(sizeModifier),
-                imageVector = it, contentDescription = null
+                imageVector = it,
+                contentDescription = null
             )
         } ?: drawableIcon?.let {
             Image(
                 modifier = modifier.then(sizeModifier),
-                painter = painterResource(it), contentDescription = null
+                painter = painterResource(it),
+                contentDescription = null
             )
         }
     }
@@ -56,20 +61,7 @@ class ImageComponent(
 @Preview(showBackground = true)
 @Composable
 private fun IconComponentPreview() {
-
-//    SdUiComponentPreview(
-//        """
-//            "type": "image",
-//            "properties": [
-//                {
-//                    "name": "iconDrawable",
-//                    "value": "Mastercard"
-//                },
-//                {
-//                    "name": "size",
-//                    "value": "48"
-//                }
-//            ]
-//        """
-//    )
+    SdUiComponentPreview(
+        image(drawableName = "Mastercard")
+    )
 }

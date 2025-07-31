@@ -3,13 +3,19 @@ package com.example.serverdriveui.ui.component.components.button
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.components.BaseComponent
 import com.example.serverdriveui.ui.component.manager.ComponentParser
+import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
+import com.vini.designsystemsdui.component.button
+import com.vini.designsystemsdui.component.icon
+import com.vini.designsystemsdui.component.iconButton
+import com.vini.designsystemsdui.component.outlinedButton
 import kotlinx.serialization.json.JsonObject
 
 class IconButtonComponent(
@@ -40,4 +46,17 @@ class IconButtonComponent(
     companion object {
         const val IDENTIFIER = "iconButton"
     }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+private fun Preview() {
+    SdUiComponentPreview(
+        iconButton(
+            content = listOf(
+                icon(iconName = "Visibility")
+            )
+        )
+    )
 }

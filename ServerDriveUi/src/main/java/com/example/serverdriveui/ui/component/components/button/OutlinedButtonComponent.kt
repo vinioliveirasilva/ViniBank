@@ -18,7 +18,8 @@ import com.example.serverdriveui.ui.component.properties.TextComponentProperty
 import com.example.serverdriveui.ui.component.properties.TextProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.vini.designsystemsdui.outlinedButton
+import com.vini.designsystemsdui.component.elevatedButton
+import com.vini.designsystemsdui.component.outlinedButton
 import kotlinx.serialization.json.JsonObject
 
 /**
@@ -62,6 +63,6 @@ data class OutlinedButtonComponent(
 @Composable
 private fun Preview() {
     SdUiComponentPreview(
-        outlinedButton(text = "salve", shape = "Small")
+        outlinedButton()
     )
 }

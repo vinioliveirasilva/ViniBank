@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
-import com.vini.designsystemsdui.PropertyOptions.HorizontalArrangementOptions
+import com.vini.designsystemsdui.property.HorizontalArrangementOptions
 
 class HorizontalArrangementProperty(
     private val properties: Map<String, PropertyModel>,
@@ -15,18 +15,14 @@ class HorizontalArrangementProperty(
         stateManager = stateManager,
         properties = properties,
         propertyName = "horizontalArrangement",
-        defaultPropertyValue = HorizontalArrangementOptions.Start.id,
+        defaultPropertyValue = HorizontalArrangementOptions.Start.name,
         transformToData = { it?.asString() }
     ) {
 
     @Composable
-    override fun getHorizontalArrangement() = getValue().toOption().arrangement
-    override fun setHorizontalArrangement(value: HorizontalArrangementOptions) = setValue(value.id)
+    override fun getHorizontalArrangement() = HorizontalArrangementOptions.valueOf(getValue()).arrangement
+    override fun setHorizontalArrangement(value: HorizontalArrangementOptions) = setValue(value.name)
 }
-
-private fun String?.toOption() =
-    HorizontalArrangementOptions.entries.firstOrNull { it.id == this }
-        ?: HorizontalArrangementOptions.Start
 
 interface HorizontalArrangementComponentProperty {
 
