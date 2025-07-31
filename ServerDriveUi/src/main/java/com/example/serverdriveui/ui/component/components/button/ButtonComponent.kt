@@ -56,6 +56,6 @@ data class ButtonComponent(
 @Composable
 private fun Preview() {
     SdUiComponentPreview(
-        button(text = "salve", shape = "Small")
+        button(text = "salve", shape = "Circle")
     )
 }

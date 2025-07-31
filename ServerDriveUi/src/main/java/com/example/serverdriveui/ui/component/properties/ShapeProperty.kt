@@ -24,7 +24,7 @@ class ShapeProperty(
         properties = properties,
         propertyName = "shape",
         transformToData = { it?.asString() },
-        defaultPropertyValue = ShapeOptions.None.id,
+        defaultPropertyValue = ShapeOptions.Circle.id,
     ) {
     @Composable
     override fun getShape() = getValue().toOption().shape
@@ -33,7 +33,7 @@ class ShapeProperty(
 }
 
 enum class ShapeOptions(val id: String, val shape: Shape) {
-    None("", RoundedCornerShape(0.dp)),
+    None("None", RoundedCornerShape(0.dp)),
     Small("Small", RoundedCornerShape(4.dp)),
     Medium("Medium", RoundedCornerShape(8.dp)),
     Large("Large", RoundedCornerShape(16.dp)),
