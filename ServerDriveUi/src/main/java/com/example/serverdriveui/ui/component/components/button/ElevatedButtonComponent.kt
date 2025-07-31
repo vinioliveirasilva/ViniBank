@@ -10,6 +10,8 @@ import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.components.BaseComponent
 import com.example.serverdriveui.ui.component.properties.EnabledComponentProperty
 import com.example.serverdriveui.ui.component.properties.EnabledProperty
+import com.example.serverdriveui.ui.component.properties.ShapeComponentProperty
+import com.example.serverdriveui.ui.component.properties.ShapeProperty
 import com.example.serverdriveui.ui.component.properties.TextComponentProperty
 import com.example.serverdriveui.ui.component.properties.TextProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
@@ -28,7 +30,8 @@ data class ElevatedButtonComponent(
     private val actionParser: ActionParser,
 ) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     TextComponentProperty by TextProperty(properties, stateManager),
-    EnabledComponentProperty by EnabledProperty(properties, stateManager) {
+    EnabledComponentProperty by EnabledProperty(properties, stateManager),
+    ShapeComponentProperty by ShapeProperty(properties, stateManager) {
 
     @Composable
     override fun getInternalComponent(
@@ -39,6 +42,7 @@ data class ElevatedButtonComponent(
             ElevatedButton(
                 enabled = isEnabled,
                 modifier = modifier,
+                shape = getShape(),
                 onClick = {
                     actions["OnClick"]?.execute(navController)
                 },
