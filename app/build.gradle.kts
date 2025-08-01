@@ -67,8 +67,6 @@ android {
 
 dependencies {
 
-
-    implementation(project(":Auth"))
     implementation(project(":Network"))
     implementation(project(":Router"))
     implementation(project(":Common"))

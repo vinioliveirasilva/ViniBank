@@ -1,7 +1,6 @@
 package com.example.serverdriveui
 
 import com.example.network.ktor.KtorHttpClientProvider
-import com.example.serverdriveui.service.SdUiService
 import com.example.serverdriveui.service.model.SdUiRequest
 import io.ktor.http.HttpMethod
 import kotlinx.coroutines.channels.awaitClose
@@ -31,7 +30,6 @@ private data class ScreenModel(
 )
 
 class SdUiRepository(
-    private val sdUiService: SdUiService,
     private val ktor: KtorHttpClientProvider,
 ) {
     private val cache = mutableMapOf<String, JsonObject>()

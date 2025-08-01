@@ -57,9 +57,6 @@ dependencies {
     //Lottie
     implementation(libs.lottie.compose)
 
-    //Retrofit
-    implementation(libs.retrofit)
-
     //Koin
     implementation(libs.koin)
 

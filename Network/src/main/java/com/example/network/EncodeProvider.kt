@@ -1,4 +1,4 @@
-package com.example.network.retrofit
+package com.example.network
 
 import java.util.Base64
 
