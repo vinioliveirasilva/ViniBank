@@ -12,6 +12,7 @@ import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
+import com.vini.designsystemsdui.ComponentProperty
 import com.vini.designsystemsdui.component.icon
 import com.vini.designsystemsdui.component.text
 import com.vini.designsystemsdui.component.topBar
@@ -70,14 +71,14 @@ data class TopAppBarComponent(
 @Composable
 fun TopAppBarComponentPreview() {
     val component = topBar(
-        titleComponents = listOf(
-            text("TopBar Title")
+        components = listOf(
+            text(textProperty = ComponentProperty.TextProperty("TopBar Title"))
         ),
         navigationIcons = listOf(
-            icon(iconName = "LeftArrow")
+            icon(iconName = ComponentProperty.IconNameProperty("LeftArrow"))
         ),
         actionIcons = listOf(
-            icon(iconName = "User")
+            icon(iconName = ComponentProperty.IconNameProperty("User"))
         )
     )
 

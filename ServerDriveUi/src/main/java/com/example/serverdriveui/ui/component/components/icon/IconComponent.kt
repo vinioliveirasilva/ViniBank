@@ -18,6 +18,7 @@ import com.example.serverdriveui.ui.component.properties.SizeComponentModifier
 import com.example.serverdriveui.ui.component.properties.SizeModifier
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
+import com.vini.designsystemsdui.ComponentProperty
 import com.vini.designsystemsdui.component.icon
 import kotlinx.serialization.json.JsonObject
 
@@ -61,6 +62,6 @@ class IconComponent(
 @Composable
 private fun Preview() {
     SdUiComponentPreview(
-        icon(iconName = "Add")
+        icon(iconName = ComponentProperty.IconNameProperty("Add"))
     )
 }

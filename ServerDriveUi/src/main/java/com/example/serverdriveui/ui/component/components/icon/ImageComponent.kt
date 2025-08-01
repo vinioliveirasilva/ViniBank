@@ -18,6 +18,7 @@ import com.example.serverdriveui.ui.component.properties.SizeComponentModifier
 import com.example.serverdriveui.ui.component.properties.SizeModifier
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
+import com.vini.designsystemsdui.ComponentProperty
 import com.vini.designsystemsdui.component.icon
 import com.vini.designsystemsdui.component.image
 import kotlinx.serialization.json.JsonObject
@@ -62,6 +63,6 @@ class ImageComponent(
 @Composable
 private fun IconComponentPreview() {
     SdUiComponentPreview(
-        image(drawableName = "Mastercard")
+        image(drawableName = ComponentProperty.DrawableNameProperty("Mastercard"))
     )
 }

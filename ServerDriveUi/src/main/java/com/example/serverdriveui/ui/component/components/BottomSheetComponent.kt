@@ -14,6 +14,7 @@ import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
+import com.vini.designsystemsdui.ComponentProperty
 import com.vini.designsystemsdui.component.bottomSheet
 import com.vini.designsystemsdui.component.text
 import kotlinx.serialization.json.JsonObject
@@ -56,9 +57,9 @@ class BottomSheetComponent(
 private fun Preview() {
     SdUiComponentPreview(
         bottomSheet(
-            shouldShow = true,
+            shouldShow = ComponentProperty.ShouldShowProperty(true),
             components = listOf(
-                text("Dialog text, can be anything, just for example")
+                text(textProperty = ComponentProperty.TextProperty("Dialog text, can be anything, just for example"))
             )
         )
     )

@@ -1,33 +1,45 @@
 package com.vini.designsystemsdui.component
 
 import com.vini.designsystemsdui.Component
+import com.vini.designsystemsdui.ComponentProperty.HeightProperty
+import com.vini.designsystemsdui.ComponentProperty.HorizontalAlignmentProperty
+import com.vini.designsystemsdui.ComponentProperty.HorizontalFillTypeProperty
+import com.vini.designsystemsdui.ComponentProperty.PaddingHorizontalProperty
+import com.vini.designsystemsdui.ComponentProperty.PaddingVerticalProperty
+import com.vini.designsystemsdui.ComponentProperty.ShouldShowProperty
+import com.vini.designsystemsdui.ComponentProperty.VerticalAlignmentProperty
+import com.vini.designsystemsdui.ComponentProperty.VerticalFillTypeProperty
+import com.vini.designsystemsdui.ComponentProperty.VisibilityProperty
+import com.vini.designsystemsdui.ComponentProperty.WidthProperty
 import com.vini.designsystemsdui.ComponentUtil
-import com.vini.designsystemsdui.property.HorizontalFillTypeOption
-import com.vini.designsystemsdui.property.VerticalFillTypeOption
 
 fun bottomSheet(
-    shouldShow: Boolean = true,
+    shouldShow: ShouldShowProperty = ShouldShowProperty(),
     components: List<Component> = emptyList(),
 
-    horizontalFillType: HorizontalFillTypeOption = HorizontalFillTypeOption.None,
-    verticalFillTypeOption: VerticalFillTypeOption = VerticalFillTypeOption.None,
-    paddingVertical: Int = 0,
-    paddingHorizontal: Int = 0,
-    height: Int? = null,
-    width: Int? = null,
-    isVisibility: Boolean = true,
+    verticalAlignment: VerticalAlignmentProperty = VerticalAlignmentProperty(),
+    horizontalAlignment: HorizontalAlignmentProperty = HorizontalAlignmentProperty(),
+    horizontalFillType: HorizontalFillTypeProperty = HorizontalFillTypeProperty(),
+    verticalFillTypeOption: VerticalFillTypeProperty = VerticalFillTypeProperty(),
+    paddingVertical: PaddingVerticalProperty = PaddingVerticalProperty(),
+    paddingHorizontal: PaddingHorizontalProperty = PaddingHorizontalProperty(),
+    height: HeightProperty? = null,
+    width: WidthProperty? = null,
+    isVisibility: VisibilityProperty = VisibilityProperty(),
 ) = ComponentUtil.component(
     "bottomSheet",
     listOfNotNull(
-        ComponentUtil.property("shouldShow", shouldShow),
+        shouldShow.build(),
 
-        ComponentUtil.property("horizontalFillType", horizontalFillType.name),
-        ComponentUtil.property("verticalFillType", verticalFillTypeOption.name),
-        ComponentUtil.property("paddingVertical", paddingVertical),
-        ComponentUtil.property("paddingHorizontal", paddingHorizontal),
-        height?.let { ComponentUtil.property("height", it) },
-        width?.let { ComponentUtil.property("width", it) },
-        ComponentUtil.property("isVisible", isVisibility),
+        verticalAlignment.build(),
+        horizontalAlignment.build(),
+        horizontalFillType.build(),
+        verticalFillTypeOption.build(),
+        paddingVertical.build(),
+        paddingHorizontal.build(),
+        height?.build(),
+        width?.build(),
+        isVisibility.build(),
     ),
     components = components,
 )

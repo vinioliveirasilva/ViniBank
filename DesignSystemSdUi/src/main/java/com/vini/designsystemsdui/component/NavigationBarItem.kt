@@ -1,24 +1,25 @@
 package com.vini.designsystemsdui.component
 
+import com.vini.designsystemsdui.Component
+import com.vini.designsystemsdui.ComponentProperty.DestinationIndexProperty
 import com.vini.designsystemsdui.ComponentProperty.HeightProperty
 import com.vini.designsystemsdui.ComponentProperty.HorizontalAlignmentProperty
 import com.vini.designsystemsdui.ComponentProperty.HorizontalFillTypeProperty
-import com.vini.designsystemsdui.ComponentProperty.IsEnabledProperty
 import com.vini.designsystemsdui.ComponentProperty.PaddingHorizontalProperty
 import com.vini.designsystemsdui.ComponentProperty.PaddingVerticalProperty
-import com.vini.designsystemsdui.ComponentProperty.ShapeProperty
-import com.vini.designsystemsdui.ComponentProperty.TextProperty
+import com.vini.designsystemsdui.ComponentProperty.SelectedNavigationDestinationIndexProperty
 import com.vini.designsystemsdui.ComponentProperty.VerticalAlignmentProperty
 import com.vini.designsystemsdui.ComponentProperty.VerticalFillTypeProperty
 import com.vini.designsystemsdui.ComponentProperty.VisibilityProperty
 import com.vini.designsystemsdui.ComponentProperty.WidthProperty
 import com.vini.designsystemsdui.ComponentUtil
-import com.vini.designsystemsdui.property.ShapeOptions
 
-fun button(
-    text: TextProperty = TextProperty("ButtonText"),
-    isEnabled: IsEnabledProperty = IsEnabledProperty(),
-    shape: ShapeProperty = ShapeProperty(ShapeOptions.Circle),
+fun navigationBarItem(
+    selectedDestinationIndex: SelectedNavigationDestinationIndexProperty = SelectedNavigationDestinationIndexProperty(),
+    destinationIndex: DestinationIndexProperty = DestinationIndexProperty(),
+    components: List<Component> = emptyList(),
+    selectedIcon: List<Component> = emptyList(),
+    unselectedIcon: List<Component> = emptyList(),
 
     verticalAlignment: VerticalAlignmentProperty = VerticalAlignmentProperty(),
     horizontalAlignment: HorizontalAlignmentProperty = HorizontalAlignmentProperty(),
@@ -30,11 +31,10 @@ fun button(
     width: WidthProperty? = null,
     isVisibility: VisibilityProperty = VisibilityProperty(),
 ) = ComponentUtil.component(
-    type = "button",
-    properties = listOfNotNull(
-        text.build(),
-        isEnabled.build(),
-        shape.build(),
+    "navigationBarItem",
+    listOfNotNull(
+        selectedDestinationIndex.build(),
+        destinationIndex.build(),
 
         verticalAlignment.build(),
         horizontalAlignment.build(),
@@ -45,5 +45,10 @@ fun button(
         height?.build(),
         width?.build(),
         isVisibility.build(),
+    ),
+    components = components,
+    customComponents = arrayOf(
+        "selectedIcon" to selectedIcon,
+        "unselectedIcon" to unselectedIcon,
     )
 )
