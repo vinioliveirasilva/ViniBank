@@ -24,5 +24,18 @@ data class FontWeightProperty(
     defaultPropertyValue = FontWeightOption.Default.name
 ) {
     @Composable
-    override fun getFontWeight() = FontWeightOption.valueOf(getValue()).fontWeight
+    override fun getFontWeight() = FontWeightOption.valueOf(getValue()).toFontWeight()
+
+    private fun FontWeightOption.toFontWeight(): FontWeight = when(this) {
+        FontWeightOption.Thin -> FontWeight.Thin
+        FontWeightOption.ExtraLight -> FontWeight.ExtraLight
+        FontWeightOption.Light -> FontWeight.Light
+        FontWeightOption.Normal -> FontWeight.Normal
+        FontWeightOption.Medium -> FontWeight.Medium
+        FontWeightOption.SemiBold -> FontWeight.SemiBold
+        FontWeightOption.Bold -> FontWeight.Bold
+        FontWeightOption.ExtraBold -> FontWeight.ExtraBold
+        FontWeightOption.Black -> FontWeight.Black
+        FontWeightOption.Default -> FontWeight.Normal
+    }
 }

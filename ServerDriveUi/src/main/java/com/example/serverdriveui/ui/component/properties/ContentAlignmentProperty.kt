@@ -28,8 +28,20 @@ class ContentAlignmentProperty(
     ) {
 
     @Composable
-    override fun getContentAlignment() = AlignmentOptions.valueOf(getValue()).alignment
+    override fun getContentAlignment() = AlignmentOptions.valueOf(getValue()).toAlignment()
 
     override fun setContentAlignment(value: AlignmentOptions) = setValue(value.name)
+
+    private fun AlignmentOptions.toAlignment() = when(this) {
+        AlignmentOptions.TopStart -> Alignment.TopStart
+        AlignmentOptions.TopCenter -> Alignment.TopCenter
+        AlignmentOptions.TopEnd -> Alignment.TopEnd
+        AlignmentOptions.CenterStart -> Alignment.CenterStart
+        AlignmentOptions.Center -> Alignment.Center
+        AlignmentOptions.CenterEnd -> Alignment.CenterEnd
+        AlignmentOptions.BottomStart -> Alignment.BottomStart
+        AlignmentOptions.BottomCenter -> Alignment.BottomCenter
+        AlignmentOptions.BottomEnd -> Alignment.BottomEnd
+    }
 }
 

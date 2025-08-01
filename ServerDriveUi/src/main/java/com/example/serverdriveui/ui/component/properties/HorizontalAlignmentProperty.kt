@@ -20,9 +20,15 @@ class HorizontalAlignmentProperty(
     ) {
 
     @Composable
-    override fun getHorizontalAlignment() = HorizontalAlignmentOptions.valueOf(getValue()).alignment
+    override fun getHorizontalAlignment() = HorizontalAlignmentOptions.valueOf(getValue()).toAlignment()
 
     override fun setHorizontalAlignment(value: HorizontalAlignmentOptions) = setValue(value.name)
+
+    private fun HorizontalAlignmentOptions.toAlignment() = when(this) {
+        HorizontalAlignmentOptions.Center -> Alignment.CenterHorizontally
+        HorizontalAlignmentOptions.Start -> Alignment.Start
+        HorizontalAlignmentOptions.End -> Alignment.End
+    }
 }
 
 interface HorizontalAlignmentComponentProperty {

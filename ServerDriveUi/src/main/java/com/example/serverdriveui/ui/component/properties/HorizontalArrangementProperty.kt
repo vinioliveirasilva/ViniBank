@@ -20,8 +20,16 @@ class HorizontalArrangementProperty(
     ) {
 
     @Composable
-    override fun getHorizontalArrangement() = HorizontalArrangementOptions.valueOf(getValue()).arrangement
+    override fun getHorizontalArrangement() = HorizontalArrangementOptions.valueOf(getValue()).toArrangement()
     override fun setHorizontalArrangement(value: HorizontalArrangementOptions) = setValue(value.name)
+
+    private fun HorizontalArrangementOptions.toArrangement() = when(this) {
+        HorizontalArrangementOptions.Start -> Arrangement.Start
+        HorizontalArrangementOptions.End -> Arrangement.End
+        HorizontalArrangementOptions.Center -> Arrangement.Center
+        HorizontalArrangementOptions.SpaceBetween -> Arrangement.SpaceBetween
+        HorizontalArrangementOptions.SpaceAround -> Arrangement.SpaceAround
+    }
 }
 
 interface HorizontalArrangementComponentProperty {

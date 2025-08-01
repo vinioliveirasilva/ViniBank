@@ -1,5 +1,8 @@
 package com.example.serverdriveui.ui.component.properties
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.serverdriveui.service.model.PropertyModel
@@ -21,7 +24,17 @@ data class HorizontalFillTypeProperty(
 
     override val horizontalFillTypeModifier: Modifier
         @Composable
-        get() = HorizontalFillTypeOption.valueOf(getValue()).modifier
+        get() = HorizontalFillTypeOption.valueOf(getValue()).toFillType()
+
+    @SuppressLint("ModifierFactoryExtensionFunction")
+    private fun HorizontalFillTypeOption.toFillType() = when (this) {
+        HorizontalFillTypeOption.Max -> Modifier.fillMaxWidth()
+        HorizontalFillTypeOption.Half -> Modifier.fillMaxWidth(.5f)
+        HorizontalFillTypeOption.Quarter -> Modifier.fillMaxWidth(.25f)
+        HorizontalFillTypeOption.Wrap -> Modifier.wrapContentWidth()
+        HorizontalFillTypeOption.None -> Modifier
+
+    }
 }
 
 interface HorizontalFillTypeComponentProperty {

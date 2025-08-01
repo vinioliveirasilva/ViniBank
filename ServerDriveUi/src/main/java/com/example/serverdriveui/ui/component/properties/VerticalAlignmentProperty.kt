@@ -20,9 +20,15 @@ class VerticalAlignmentProperty(
     ) {
 
     @Composable
-    override fun getVerticalAlignment() = VerticalAlignmentOption.valueOf(getValue()).verticalAlignment
+    override fun getVerticalAlignment() = VerticalAlignmentOption.valueOf(getValue()).toAlignment()
 
     override fun setVerticalAlignment(value: VerticalAlignmentOption) = setValue(value.name)
+
+    private fun VerticalAlignmentOption.toAlignment() = when(this) {
+        VerticalAlignmentOption.Top -> Alignment.Companion.Top
+        VerticalAlignmentOption.Center -> Alignment.Companion.CenterVertically
+        VerticalAlignmentOption.Bottom -> Alignment.Companion.Bottom
+    }
 }
 
 interface VerticalAlignmentComponentProperty {

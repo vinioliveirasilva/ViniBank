@@ -20,9 +20,15 @@ class TextAlignProperty(
     ) {
 
     @Composable
-    override fun getTextAlign() = TextAlignOption.valueOf(getValue()).textAlign
+    override fun getTextAlign() = TextAlignOption.valueOf(getValue()).toTextAlign()
 
     override fun setTextAlign(textAlign: TextAlignOption) = setValue(textAlign.name)
+
+    private fun TextAlignOption.toTextAlign() = when(this) {
+        TextAlignOption.Start -> TextAlign.Start
+        TextAlignOption.Center -> TextAlign.Center
+        TextAlignOption.End -> TextAlign.End
+    }
 }
 
 interface TextAlignComponentProperty {
