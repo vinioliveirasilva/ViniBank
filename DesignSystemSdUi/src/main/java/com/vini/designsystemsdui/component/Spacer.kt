@@ -1,18 +1,20 @@
 package com.vini.designsystemsdui.component
 
+import com.vini.designsystemsdui.Action
 import com.vini.designsystemsdui.Component
-import com.vini.designsystemsdui.ComponentProperty.HeightProperty
-import com.vini.designsystemsdui.ComponentProperty.HorizontalAlignmentProperty
-import com.vini.designsystemsdui.ComponentProperty.HorizontalFillTypeProperty
-import com.vini.designsystemsdui.ComponentProperty.PaddingHorizontalProperty
-import com.vini.designsystemsdui.ComponentProperty.PaddingVerticalProperty
-import com.vini.designsystemsdui.ComponentProperty.SizeProperty
-import com.vini.designsystemsdui.ComponentProperty.VerticalAlignmentProperty
-import com.vini.designsystemsdui.ComponentProperty.VerticalFillTypeProperty
-import com.vini.designsystemsdui.ComponentProperty.VisibilityProperty
-import com.vini.designsystemsdui.ComponentProperty.WeightProperty
-import com.vini.designsystemsdui.ComponentProperty.WidthProperty
 import com.vini.designsystemsdui.ComponentUtil
+import com.vini.designsystemsdui.Validator
+import com.vini.designsystemsdui.property.HeightProperty
+import com.vini.designsystemsdui.property.HorizontalAlignmentProperty
+import com.vini.designsystemsdui.property.HorizontalFillTypeProperty
+import com.vini.designsystemsdui.property.PaddingHorizontalProperty
+import com.vini.designsystemsdui.property.PaddingVerticalProperty
+import com.vini.designsystemsdui.property.SizeProperty
+import com.vini.designsystemsdui.property.VerticalAlignmentProperty
+import com.vini.designsystemsdui.property.VerticalFillTypeProperty
+import com.vini.designsystemsdui.property.VisibilityProperty
+import com.vini.designsystemsdui.property.WeightProperty
+import com.vini.designsystemsdui.property.WidthProperty
 
 fun spacer(
     size: SizeProperty? = null,
@@ -26,6 +28,8 @@ fun spacer(
     widthProperty: WidthProperty? = null,
     weight: WeightProperty? = null,
     isVisibilityProperty: VisibilityProperty = VisibilityProperty(),
+    actions: List<Action> = emptyList(),
+    validators: List<Validator> = emptyList()
 ): Component = ComponentUtil.component(
     "text",
     listOfNotNull(
@@ -40,5 +44,7 @@ fun spacer(
         widthProperty?.build(),
         weight?.build(),
         isVisibilityProperty.build(),
-    )
+    ),
+    actions = actions,
+    validators = validators,
 )

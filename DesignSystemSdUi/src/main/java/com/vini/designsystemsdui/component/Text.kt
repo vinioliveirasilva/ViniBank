@@ -1,20 +1,22 @@
 package com.vini.designsystemsdui.component
 
+import com.vini.designsystemsdui.Action
 import com.vini.designsystemsdui.Component
-import com.vini.designsystemsdui.ComponentProperty.FontSizeProperty
-import com.vini.designsystemsdui.ComponentProperty.FontWeightProperty
-import com.vini.designsystemsdui.ComponentProperty.HeightProperty
-import com.vini.designsystemsdui.ComponentProperty.HorizontalAlignmentProperty
-import com.vini.designsystemsdui.ComponentProperty.HorizontalFillTypeProperty
-import com.vini.designsystemsdui.ComponentProperty.PaddingHorizontalProperty
-import com.vini.designsystemsdui.ComponentProperty.PaddingVerticalProperty
-import com.vini.designsystemsdui.ComponentProperty.TextAlignProperty
-import com.vini.designsystemsdui.ComponentProperty.TextProperty
-import com.vini.designsystemsdui.ComponentProperty.VerticalAlignmentProperty
-import com.vini.designsystemsdui.ComponentProperty.VerticalFillTypeProperty
-import com.vini.designsystemsdui.ComponentProperty.VisibilityProperty
-import com.vini.designsystemsdui.ComponentProperty.WidthProperty
 import com.vini.designsystemsdui.ComponentUtil
+import com.vini.designsystemsdui.Validator
+import com.vini.designsystemsdui.property.FontSizeProperty
+import com.vini.designsystemsdui.property.FontWeightProperty
+import com.vini.designsystemsdui.property.HeightProperty
+import com.vini.designsystemsdui.property.HorizontalAlignmentProperty
+import com.vini.designsystemsdui.property.HorizontalFillTypeProperty
+import com.vini.designsystemsdui.property.PaddingHorizontalProperty
+import com.vini.designsystemsdui.property.PaddingVerticalProperty
+import com.vini.designsystemsdui.property.TextAlignProperty
+import com.vini.designsystemsdui.property.TextProperty
+import com.vini.designsystemsdui.property.VerticalAlignmentProperty
+import com.vini.designsystemsdui.property.VerticalFillTypeProperty
+import com.vini.designsystemsdui.property.VisibilityProperty
+import com.vini.designsystemsdui.property.WidthProperty
 
 fun text(
     textProperty: TextProperty = TextProperty("text"),
@@ -31,6 +33,8 @@ fun text(
     heightProperty: HeightProperty? = null,
     widthProperty: WidthProperty? = null,
     isVisibilityProperty: VisibilityProperty = VisibilityProperty(),
+    actions: List<Action> = emptyList(),
+    validators: List<Validator> = emptyList()
 ): Component = ComponentUtil.component(
     "text",
     listOfNotNull(
@@ -47,5 +51,7 @@ fun text(
         heightProperty?.build(),
         widthProperty?.build(),
         isVisibilityProperty.build(),
-    )
+    ),
+    actions = actions,
+    validators = validators,
 )

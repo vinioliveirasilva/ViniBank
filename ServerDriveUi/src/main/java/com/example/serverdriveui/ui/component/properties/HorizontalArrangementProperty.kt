@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
-import com.vini.designsystemsdui.property.HorizontalArrangementOptions
+import com.vini.designsystemsdui.property.options.HorizontalArrangementOption
 
 class HorizontalArrangementProperty(
     private val properties: Map<String, PropertyModel>,
@@ -15,20 +15,20 @@ class HorizontalArrangementProperty(
         stateManager = stateManager,
         properties = properties,
         propertyName = "horizontalArrangement",
-        defaultPropertyValue = HorizontalArrangementOptions.Start.name,
+        defaultPropertyValue = HorizontalArrangementOption.Start.name,
         transformToData = { it?.asString() }
     ) {
 
     @Composable
-    override fun getHorizontalArrangement() = HorizontalArrangementOptions.valueOf(getValue()).toArrangement()
-    override fun setHorizontalArrangement(value: HorizontalArrangementOptions) = setValue(value.name)
+    override fun getHorizontalArrangement() = HorizontalArrangementOption.valueOf(getValue()).toArrangement()
+    override fun setHorizontalArrangement(value: HorizontalArrangementOption) = setValue(value.name)
 
-    private fun HorizontalArrangementOptions.toArrangement() = when(this) {
-        HorizontalArrangementOptions.Start -> Arrangement.Start
-        HorizontalArrangementOptions.End -> Arrangement.End
-        HorizontalArrangementOptions.Center -> Arrangement.Center
-        HorizontalArrangementOptions.SpaceBetween -> Arrangement.SpaceBetween
-        HorizontalArrangementOptions.SpaceAround -> Arrangement.SpaceAround
+    private fun HorizontalArrangementOption.toArrangement() = when(this) {
+        HorizontalArrangementOption.Start -> Arrangement.Start
+        HorizontalArrangementOption.End -> Arrangement.End
+        HorizontalArrangementOption.Center -> Arrangement.Center
+        HorizontalArrangementOption.SpaceBetween -> Arrangement.SpaceBetween
+        HorizontalArrangementOption.SpaceAround -> Arrangement.SpaceAround
     }
 }
 
@@ -36,5 +36,5 @@ interface HorizontalArrangementComponentProperty {
 
     @Composable
     fun getHorizontalArrangement(): Arrangement.Horizontal
-    fun setHorizontalArrangement(value: HorizontalArrangementOptions)
+    fun setHorizontalArrangement(value: HorizontalArrangementOption)
 }

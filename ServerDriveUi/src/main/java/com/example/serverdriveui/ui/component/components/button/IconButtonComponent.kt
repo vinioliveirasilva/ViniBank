@@ -12,9 +12,9 @@ import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.vini.designsystemsdui.ComponentProperty
 import com.vini.designsystemsdui.component.icon
 import com.vini.designsystemsdui.component.iconButton
+import com.vini.designsystemsdui.property.IconNameProperty
 import kotlinx.serialization.json.JsonObject
 
 class IconButtonComponent(
@@ -54,7 +54,7 @@ private fun Preview() {
     SdUiComponentPreview(
         iconButton(
             components = listOf(
-                icon(iconName = ComponentProperty.IconNameProperty("Visibility"))
+                icon(iconName = IconNameProperty("Visibility"))
             )
         )
     )

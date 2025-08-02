@@ -12,10 +12,11 @@ import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.vini.designsystemsdui.ComponentProperty
 import com.vini.designsystemsdui.component.icon
 import com.vini.designsystemsdui.component.text
 import com.vini.designsystemsdui.component.topBar
+import com.vini.designsystemsdui.property.IconNameProperty
+import com.vini.designsystemsdui.property.TextProperty
 import kotlinx.serialization.json.JsonObject
 
 data class TopAppBarComponent(
@@ -72,13 +73,13 @@ data class TopAppBarComponent(
 fun TopAppBarComponentPreview() {
     val component = topBar(
         components = listOf(
-            text(textProperty = ComponentProperty.TextProperty("TopBar Title"))
+            text(textProperty = TextProperty("TopBar Title"))
         ),
         navigationIcons = listOf(
-            icon(iconName = ComponentProperty.IconNameProperty("LeftArrow"))
+            icon(iconName = IconNameProperty("LeftArrow"))
         ),
         actionIcons = listOf(
-            icon(iconName = ComponentProperty.IconNameProperty("User"))
+            icon(iconName = IconNameProperty("User"))
         )
     )
 

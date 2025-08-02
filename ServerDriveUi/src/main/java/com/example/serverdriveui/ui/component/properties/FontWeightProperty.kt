@@ -5,7 +5,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
-import com.vini.designsystemsdui.property.FontWeightOption
+import com.vini.designsystemsdui.property.options.FontWeightOption
 
 
 interface FontWeightComponentProperty {

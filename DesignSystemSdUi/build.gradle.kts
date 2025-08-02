@@ -22,7 +22,7 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "com.vini"
             artifactId = "designsystemsdui"
-            version = "0.0.2"
+            version = "0.0.13"
 
             afterEvaluate { artifact(tasks.getByName("jar")) }
         }

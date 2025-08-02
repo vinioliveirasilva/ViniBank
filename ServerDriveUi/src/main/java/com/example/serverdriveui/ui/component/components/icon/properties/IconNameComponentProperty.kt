@@ -45,7 +45,7 @@ import com.example.serverdriveui.ui.component.properties.BasePropertyData
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
 
-class IconNameProperty(
+class IconNameComponentProperty(
     private val properties: Map<String, PropertyModel>,
     private val stateManager: ComponentStateManager,
 ) : IconNameComponent,

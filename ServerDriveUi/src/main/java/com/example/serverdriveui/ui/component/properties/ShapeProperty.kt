@@ -8,7 +8,7 @@ import androidx.compose.ui.unit.dp
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
-import com.vini.designsystemsdui.property.ShapeOptions
+import com.vini.designsystemsdui.property.options.ShapeOptions
 
 interface ShapeComponentProperty {
     @Composable

@@ -5,7 +5,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
-import com.vini.designsystemsdui.property.TextAlignOption
+import com.vini.designsystemsdui.property.options.TextAlignOption
 
 class TextAlignProperty(
     private val properties: Map<String, PropertyModel>,

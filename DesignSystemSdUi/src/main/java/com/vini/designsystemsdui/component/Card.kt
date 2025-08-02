@@ -1,16 +1,18 @@
 package com.vini.designsystemsdui.component
 
+import com.vini.designsystemsdui.Action
 import com.vini.designsystemsdui.Component
-import com.vini.designsystemsdui.ComponentProperty.HeightProperty
-import com.vini.designsystemsdui.ComponentProperty.HorizontalAlignmentProperty
-import com.vini.designsystemsdui.ComponentProperty.HorizontalFillTypeProperty
-import com.vini.designsystemsdui.ComponentProperty.PaddingHorizontalProperty
-import com.vini.designsystemsdui.ComponentProperty.PaddingVerticalProperty
-import com.vini.designsystemsdui.ComponentProperty.VerticalAlignmentProperty
-import com.vini.designsystemsdui.ComponentProperty.VerticalFillTypeProperty
-import com.vini.designsystemsdui.ComponentProperty.VisibilityProperty
-import com.vini.designsystemsdui.ComponentProperty.WidthProperty
 import com.vini.designsystemsdui.ComponentUtil
+import com.vini.designsystemsdui.Validator
+import com.vini.designsystemsdui.property.HeightProperty
+import com.vini.designsystemsdui.property.HorizontalAlignmentProperty
+import com.vini.designsystemsdui.property.HorizontalFillTypeProperty
+import com.vini.designsystemsdui.property.PaddingHorizontalProperty
+import com.vini.designsystemsdui.property.PaddingVerticalProperty
+import com.vini.designsystemsdui.property.VerticalAlignmentProperty
+import com.vini.designsystemsdui.property.VerticalFillTypeProperty
+import com.vini.designsystemsdui.property.VisibilityProperty
+import com.vini.designsystemsdui.property.WidthProperty
 
 fun card(
     components: List<Component> = emptyList(),
@@ -24,6 +26,8 @@ fun card(
     heightProperty: HeightProperty? = null,
     widthProperty: WidthProperty? = null,
     isVisibilityProperty: VisibilityProperty = VisibilityProperty(),
+    actions: List<Action> = emptyList(),
+    validators: List<Validator> = emptyList()
 ): Component = ComponentUtil.component(
     "card",
     listOfNotNull(
@@ -37,5 +41,7 @@ fun card(
         widthProperty?.build(),
         isVisibilityProperty.build(),
     ),
-    components = components
+    components = components,
+    actions = actions,
+    validators = validators,
 )

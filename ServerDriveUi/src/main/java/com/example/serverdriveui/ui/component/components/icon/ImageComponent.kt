@@ -12,15 +12,14 @@ import com.example.serverdriveui.ui.component.components.BaseComponent
 import com.example.serverdriveui.ui.component.components.icon.properties.IconDrawableComponent
 import com.example.serverdriveui.ui.component.components.icon.properties.IconDrawableProperty
 import com.example.serverdriveui.ui.component.components.icon.properties.IconNameComponent
-import com.example.serverdriveui.ui.component.components.icon.properties.IconNameProperty
+import com.example.serverdriveui.ui.component.components.icon.properties.IconNameComponentProperty
 import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
 import com.example.serverdriveui.ui.component.properties.SizeComponentModifier
 import com.example.serverdriveui.ui.component.properties.SizeModifier
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.vini.designsystemsdui.ComponentProperty
-import com.vini.designsystemsdui.component.icon
 import com.vini.designsystemsdui.component.image
+import com.vini.designsystemsdui.property.DrawableNameProperty
 import kotlinx.serialization.json.JsonObject
 
 class ImageComponent(
@@ -31,7 +30,7 @@ class ImageComponent(
     private val actionParser: ActionParser,
 ) : BaseComponent(model, properties, stateManager, validatorParser, actionParser),
     SizeComponentModifier by SizeModifier(properties, stateManager),
-    IconNameComponent by IconNameProperty(properties, stateManager),
+    IconNameComponent by IconNameComponentProperty(properties, stateManager),
     IconDrawableComponent by IconDrawableProperty(properties, stateManager) {
 
     @Composable
@@ -63,6 +62,6 @@ class ImageComponent(
 @Composable
 private fun IconComponentPreview() {
     SdUiComponentPreview(
-        image(drawableName = ComponentProperty.DrawableNameProperty("Mastercard"))
+        image(drawableName = DrawableNameProperty("Mastercard"))
     )
 }

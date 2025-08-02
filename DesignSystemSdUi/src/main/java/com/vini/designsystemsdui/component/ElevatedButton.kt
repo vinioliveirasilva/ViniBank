@@ -1,19 +1,21 @@
 package com.vini.designsystemsdui.component
 
-import com.vini.designsystemsdui.ComponentProperty.HeightProperty
-import com.vini.designsystemsdui.ComponentProperty.HorizontalAlignmentProperty
-import com.vini.designsystemsdui.ComponentProperty.HorizontalFillTypeProperty
-import com.vini.designsystemsdui.ComponentProperty.IsEnabledProperty
-import com.vini.designsystemsdui.ComponentProperty.PaddingHorizontalProperty
-import com.vini.designsystemsdui.ComponentProperty.PaddingVerticalProperty
-import com.vini.designsystemsdui.ComponentProperty.ShapeProperty
-import com.vini.designsystemsdui.ComponentProperty.TextProperty
-import com.vini.designsystemsdui.ComponentProperty.VerticalAlignmentProperty
-import com.vini.designsystemsdui.ComponentProperty.VerticalFillTypeProperty
-import com.vini.designsystemsdui.ComponentProperty.VisibilityProperty
-import com.vini.designsystemsdui.ComponentProperty.WidthProperty
+import com.vini.designsystemsdui.Action
 import com.vini.designsystemsdui.ComponentUtil
-import com.vini.designsystemsdui.property.ShapeOptions
+import com.vini.designsystemsdui.Validator
+import com.vini.designsystemsdui.property.HeightProperty
+import com.vini.designsystemsdui.property.HorizontalAlignmentProperty
+import com.vini.designsystemsdui.property.HorizontalFillTypeProperty
+import com.vini.designsystemsdui.property.IsEnabledProperty
+import com.vini.designsystemsdui.property.PaddingHorizontalProperty
+import com.vini.designsystemsdui.property.PaddingVerticalProperty
+import com.vini.designsystemsdui.property.ShapeProperty
+import com.vini.designsystemsdui.property.TextProperty
+import com.vini.designsystemsdui.property.VerticalAlignmentProperty
+import com.vini.designsystemsdui.property.VerticalFillTypeProperty
+import com.vini.designsystemsdui.property.VisibilityProperty
+import com.vini.designsystemsdui.property.WidthProperty
+import com.vini.designsystemsdui.property.options.ShapeOptions
 
 fun elevatedButton(
     text: TextProperty = TextProperty("ElevatedButtonText"),
@@ -28,7 +30,9 @@ fun elevatedButton(
     paddingHorizontal: PaddingHorizontalProperty = PaddingHorizontalProperty(),
     height: HeightProperty? = null,
     width: WidthProperty? = null,
-    isVisibility: VisibilityProperty = VisibilityProperty(),
+    visibility: VisibilityProperty = VisibilityProperty(),
+    actions: List<Action> = emptyList(),
+    validators: List<Validator> = emptyList()
 ) = ComponentUtil.component(
     type = "elevatedButton",
     properties = listOfNotNull(
@@ -44,6 +48,8 @@ fun elevatedButton(
         paddingHorizontal.build(),
         height?.build(),
         width?.build(),
-        isVisibility.build(),
-    )
+        visibility.build(),
+    ),
+    actions = actions,
+    validators = validators,
 )

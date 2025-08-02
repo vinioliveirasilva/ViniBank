@@ -6,7 +6,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
-import com.vini.designsystemsdui.property.KeyboardOptionsOption
+import com.vini.designsystemsdui.property.options.KeyboardOptionsOption
 
 class KeyboardOptionsProperty(
     private val properties: Map<String, PropertyModel>,

@@ -1,4 +1,4 @@
-package com.vini.designsystemsdui.property
+package com.vini.designsystemsdui.property.options
 
 enum class FontWeightOption {
     Thin,

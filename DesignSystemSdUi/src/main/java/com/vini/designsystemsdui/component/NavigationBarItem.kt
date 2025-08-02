@@ -1,18 +1,20 @@
 package com.vini.designsystemsdui.component
 
+import com.vini.designsystemsdui.Action
 import com.vini.designsystemsdui.Component
-import com.vini.designsystemsdui.ComponentProperty.DestinationIndexProperty
-import com.vini.designsystemsdui.ComponentProperty.HeightProperty
-import com.vini.designsystemsdui.ComponentProperty.HorizontalAlignmentProperty
-import com.vini.designsystemsdui.ComponentProperty.HorizontalFillTypeProperty
-import com.vini.designsystemsdui.ComponentProperty.PaddingHorizontalProperty
-import com.vini.designsystemsdui.ComponentProperty.PaddingVerticalProperty
-import com.vini.designsystemsdui.ComponentProperty.SelectedNavigationDestinationIndexProperty
-import com.vini.designsystemsdui.ComponentProperty.VerticalAlignmentProperty
-import com.vini.designsystemsdui.ComponentProperty.VerticalFillTypeProperty
-import com.vini.designsystemsdui.ComponentProperty.VisibilityProperty
-import com.vini.designsystemsdui.ComponentProperty.WidthProperty
 import com.vini.designsystemsdui.ComponentUtil
+import com.vini.designsystemsdui.Validator
+import com.vini.designsystemsdui.property.DestinationIndexProperty
+import com.vini.designsystemsdui.property.HeightProperty
+import com.vini.designsystemsdui.property.HorizontalAlignmentProperty
+import com.vini.designsystemsdui.property.HorizontalFillTypeProperty
+import com.vini.designsystemsdui.property.PaddingHorizontalProperty
+import com.vini.designsystemsdui.property.PaddingVerticalProperty
+import com.vini.designsystemsdui.property.SelectedNavigationDestinationIndexProperty
+import com.vini.designsystemsdui.property.VerticalAlignmentProperty
+import com.vini.designsystemsdui.property.VerticalFillTypeProperty
+import com.vini.designsystemsdui.property.VisibilityProperty
+import com.vini.designsystemsdui.property.WidthProperty
 
 fun navigationBarItem(
     selectedDestinationIndex: SelectedNavigationDestinationIndexProperty = SelectedNavigationDestinationIndexProperty(),
@@ -29,7 +31,9 @@ fun navigationBarItem(
     paddingHorizontal: PaddingHorizontalProperty = PaddingHorizontalProperty(),
     height: HeightProperty? = null,
     width: WidthProperty? = null,
-    isVisibility: VisibilityProperty = VisibilityProperty(),
+    visibility: VisibilityProperty = VisibilityProperty(),
+    actions: List<Action> = emptyList(),
+    validators: List<Validator> = emptyList()
 ) = ComponentUtil.component(
     "navigationBarItem",
     listOfNotNull(
@@ -44,11 +48,13 @@ fun navigationBarItem(
         paddingHorizontal.build(),
         height?.build(),
         width?.build(),
-        isVisibility.build(),
+        visibility.build(),
     ),
     components = components,
     customComponents = arrayOf(
         "selectedIcon" to selectedIcon,
         "unselectedIcon" to unselectedIcon,
-    )
+    ),
+    actions = actions,
+    validators = validators,
 )

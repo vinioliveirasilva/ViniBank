@@ -7,7 +7,7 @@ import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
 import com.vini.designsystem.compose.textfield.MaskVisualTransformation
-import com.vini.designsystemsdui.property.VisualTransformationOption
+import com.vini.designsystemsdui.property.options.VisualTransformationOption
 
 class VisualTransformationProperty(
     private val properties: Map<String, PropertyModel>,

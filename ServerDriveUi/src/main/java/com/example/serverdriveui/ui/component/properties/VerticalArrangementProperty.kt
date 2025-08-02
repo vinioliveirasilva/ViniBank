@@ -6,7 +6,7 @@ import androidx.compose.ui.unit.dp
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
-import com.vini.designsystemsdui.property.VerticalArrangementOption
+import com.vini.designsystemsdui.property.options.VerticalArrangementOption
 
 class VerticalArrangementProperty(
     private val properties: Map<String, PropertyModel>,

@@ -5,7 +5,7 @@ import androidx.compose.ui.Alignment
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
-import com.vini.designsystemsdui.property.AlignmentOptions
+import com.vini.designsystemsdui.property.options.AlignmentOptions
 
 interface ContentAlignmentComponentProperty {
 
