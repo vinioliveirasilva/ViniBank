@@ -4,10 +4,12 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.components.BaseComponent
+import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
 import com.example.serverdriveui.ui.component.properties.EnabledComponentProperty
 import com.example.serverdriveui.ui.component.properties.EnabledProperty
 import com.example.serverdriveui.ui.component.properties.ShapeComponentProperty
@@ -16,6 +18,7 @@ import com.example.serverdriveui.ui.component.properties.TextComponentProperty
 import com.example.serverdriveui.ui.component.properties.TextProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
+import com.vini.designsystemsdui.component.elevatedButton
 import kotlinx.serialization.json.JsonObject
 
 /**
@@ -53,5 +56,14 @@ data class ElevatedButtonComponent(
     companion object {
         const val IDENTIFIER = "elevatedButton"
     }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+private fun Preview() {
+    SdUiComponentPreview(
+        elevatedButton()
+    )
 }
 

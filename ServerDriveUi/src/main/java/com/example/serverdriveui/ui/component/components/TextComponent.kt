@@ -3,10 +3,12 @@ package com.example.serverdriveui.ui.component.components
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.action.manager.ActionParser
+import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
 import com.example.serverdriveui.ui.component.properties.FontSizeComponentProperty
 import com.example.serverdriveui.ui.component.properties.FontSizeProperty
 import com.example.serverdriveui.ui.component.properties.FontWeightComponentProperty
@@ -18,6 +20,7 @@ import com.example.serverdriveui.ui.component.properties.TextProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
 import com.example.serverdriveui.util.StringUtil.toAnnotatedStringFromHtml
+import com.vini.designsystemsdui.component.text
 import kotlinx.serialization.json.JsonObject
 
 data class TextComponent(
@@ -49,4 +52,12 @@ data class TextComponent(
     companion object {
         const val IDENTIFIER = "text"
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun Preview() {
+    SdUiComponentPreview(
+        text()
+    )
 }

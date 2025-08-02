@@ -1,8 +1,7 @@
 package com.example.network.ktor
 
-import com.example.network.AesCryptoInterceptor
+import com.example.network.EncodeProvider
 import com.example.network.FastKeyExchangeManager
-import com.example.network.retrofit.EncodeProvider
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.android.Android
@@ -42,13 +41,13 @@ class KtorHttpClientProvider(
             method = HttpMethod.Companion.Get
             contentType(ContentType.Text.Plain)
             header(
-                AesCryptoInterceptor.Companion.Header.PUBLIC_KEY,
+                Header.PUBLIC_KEY,
                 encoderProvider.encode(keyExchangeManager.getEncodedPublicKey())
             )
         }.doOnHandShakeResponse()
 
     private suspend fun HttpResponse.doOnHandShakeResponse() {
-        sessionId = headers[AesCryptoInterceptor.Companion.Header.SESSION_ID].orEmpty()
+        sessionId = headers[Header.SESSION_ID].orEmpty()
         keyExchangeManager.createPublicKeyAndRunPhaseOne(encoderProvider.decode(body<String>()))
     }
 
@@ -61,14 +60,14 @@ class KtorHttpClientProvider(
         client.request("$BASE_URL$path") {
             this.method = method
             contentType(ContentType.Text.Plain)
-            header(AesCryptoInterceptor.Companion.Header.IV, encoderProvider.encode(lastIv))
-            header(AesCryptoInterceptor.Companion.Header.SESSION_ID, sessionId)
+            header(Header.IV, encoderProvider.encode(lastIv))
+            header(Header.SESSION_ID, sessionId)
             this.body = encoderProvider.encode(encryptedData)
         }.doOnEncryptedResponse(onSuccess)
     }
 
     private suspend fun HttpResponse.doOnEncryptedResponse(onSuccess: suspend (String) -> Unit) {
-        iv = headers[AesCryptoInterceptor.Companion.Header.IV] ?: throw IllegalStateException("IV not found")
+        iv = headers[Header.IV] ?: throw IllegalStateException("IV not found")
         val dec = keyExchangeManager.decrypt(
             encryptedData = encoderProvider.decode(body()),
             iv = encoderProvider.decode(iv)
@@ -78,5 +77,11 @@ class KtorHttpClientProvider(
 
     private companion object {
         const val BASE_URL = "http://10.0.2.2:8080"
+
+        object Header {
+            const val IV = "iv"
+            const val SESSION_ID = "sessionId"
+            const val PUBLIC_KEY = "publicKey"
+        }
     }
 }

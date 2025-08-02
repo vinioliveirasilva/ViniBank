@@ -6,6 +6,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
+import com.vini.designsystemsdui.property.options.KeyboardOptionsOption
 
 class KeyboardOptionsProperty(
     private val properties: Map<String, PropertyModel>,
@@ -15,26 +16,24 @@ class KeyboardOptionsProperty(
         stateManager = stateManager,
         properties = properties,
         propertyName = "keyboardOptions",
-        defaultPropertyValue = KeyboardOptionsOption.Default.id,
+        defaultPropertyValue = KeyboardOptionsOption.Default.name,
         transformToData = { it?.asString() }
     ) {
 
     @Composable
-    override fun getKeyboardOptions() = getValue().toOption().keyboardOptions
+    override fun getKeyboardOptions() = KeyboardOptionsOption.valueOf(getValue()).toKeyboardOptions()
 
-    override fun setKeyboardOptions(keyboardOptions: KeyboardOptionsOption) = setValue(keyboardOptions.id)
+    override fun setKeyboardOptions(keyboardOptions: KeyboardOptionsOption) =
+        setValue(keyboardOptions.name)
+
+    private fun KeyboardOptionsOption.toKeyboardOptions() = when(this) {
+        KeyboardOptionsOption.Default -> KeyboardOptions.Default
+        KeyboardOptionsOption.Number -> KeyboardOptions(keyboardType = KeyboardType.Number)
+        KeyboardOptionsOption.Phone -> KeyboardOptions(keyboardType = KeyboardType.Phone)
+        KeyboardOptionsOption.Password -> KeyboardOptions(keyboardType = KeyboardType.Password)
+
+    }
 }
-
-enum class KeyboardOptionsOption(val id: String, val keyboardOptions: KeyboardOptions) {
-    Default("Default", KeyboardOptions.Default),
-    Number("Number", KeyboardOptions(keyboardType = KeyboardType.Number)),
-    Phone("Phone", KeyboardOptions(keyboardType = KeyboardType.Phone)),
-    Password("Password", KeyboardOptions(keyboardType = KeyboardType.Password)),
-}
-
-private fun String?.toOption() =
-    KeyboardOptionsOption.entries.firstOrNull { it.id == this }
-        ?: KeyboardOptionsOption.Default
 
 interface KeyboardOptionsComponentProperty {
     @Composable

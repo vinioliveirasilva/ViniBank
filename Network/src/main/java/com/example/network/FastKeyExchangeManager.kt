@@ -1,6 +1,5 @@
 package com.example.network
 
-import com.example.network.retrofit.EncodeProvider
 import com.vini.common.Benchmark
 import java.security.KeyFactory
 import java.security.PublicKey

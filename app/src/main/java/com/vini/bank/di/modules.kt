@@ -1,6 +1,5 @@
 package com.vini.bank.di
 
-import com.example.auth.AuthModule
 import com.example.network.NetworkModule
 import com.example.router.RouterModule
 import com.example.serverdriveui.di.ServerDriverUiModules
@@ -19,7 +18,6 @@ val CoreModules = module {
     includes(
         StorageModule,
         CommonModule,
-        AuthModule,
         RouterModule,
         NetworkModule,
     )

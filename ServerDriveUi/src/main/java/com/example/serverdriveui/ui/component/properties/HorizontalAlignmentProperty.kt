@@ -5,6 +5,7 @@ import androidx.compose.ui.Alignment
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
+import com.vini.designsystemsdui.property.options.HorizontalAlignmentOption
 
 class HorizontalAlignmentProperty(
     private val properties: Map<String, PropertyModel>,
@@ -15,27 +16,23 @@ class HorizontalAlignmentProperty(
         properties = properties,
         propertyName = "horizontalAlignment",
         transformToData = { it?.asString() },
-        defaultPropertyValue = HorizontalAlignmentOptions.Start.id,
+        defaultPropertyValue = HorizontalAlignmentOption.Start.name,
     ) {
 
     @Composable
-    override fun getHorizontalAlignment() = getValue().toOption().alignment
+    override fun getHorizontalAlignment() = HorizontalAlignmentOption.valueOf(getValue()).toAlignment()
 
-    override fun setHorizontalAlignment(value: HorizontalAlignmentOptions) = setValue(value.id)
+    override fun setHorizontalAlignment(value: HorizontalAlignmentOption) = setValue(value.name)
+
+    private fun HorizontalAlignmentOption.toAlignment() = when(this) {
+        HorizontalAlignmentOption.Center -> Alignment.CenterHorizontally
+        HorizontalAlignmentOption.Start -> Alignment.Start
+        HorizontalAlignmentOption.End -> Alignment.End
+    }
 }
-
-enum class HorizontalAlignmentOptions(val id: String, val alignment: Alignment.Horizontal) {
-    Center("Center", Alignment.CenterHorizontally),
-    Start("Start", Alignment.Start),
-    End("End", Alignment.End),
-}
-
-private fun String?.toOption() =
-    HorizontalAlignmentOptions.entries.firstOrNull { it.id == this }
-        ?: HorizontalAlignmentOptions.Start
 
 interface HorizontalAlignmentComponentProperty {
     @Composable
     fun getHorizontalAlignment(): Alignment.Horizontal
-    fun setHorizontalAlignment(value: HorizontalAlignmentOptions)
+    fun setHorizontalAlignment(value: HorizontalAlignmentOption)
 }

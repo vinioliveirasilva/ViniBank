@@ -5,6 +5,7 @@ import androidx.compose.ui.Alignment
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
+import com.vini.designsystemsdui.property.options.VerticalAlignmentOption
 
 class VerticalAlignmentProperty(
     private val properties: Map<String, PropertyModel>,
@@ -15,23 +16,20 @@ class VerticalAlignmentProperty(
         properties = properties,
         propertyName = "verticalAlignment",
         transformToData = { it?.asString() },
-        defaultPropertyValue = VerticalAlignmentOption.Top.id,
+        defaultPropertyValue = VerticalAlignmentOption.Top.name,
     ) {
 
     @Composable
-    override fun getVerticalAlignment() = getValue().toOption().verticalAlignment
+    override fun getVerticalAlignment() = VerticalAlignmentOption.valueOf(getValue()).toAlignment()
 
-    override fun setVerticalAlignment(value: VerticalAlignmentOption) = setValue(value.id)
+    override fun setVerticalAlignment(value: VerticalAlignmentOption) = setValue(value.name)
+
+    private fun VerticalAlignmentOption.toAlignment() = when(this) {
+        VerticalAlignmentOption.Top -> Alignment.Companion.Top
+        VerticalAlignmentOption.Center -> Alignment.Companion.CenterVertically
+        VerticalAlignmentOption.Bottom -> Alignment.Companion.Bottom
+    }
 }
-
-enum class VerticalAlignmentOption(val id: String, val verticalAlignment: Alignment.Vertical) {
-    Top("Top", Alignment.Top),
-    Center("Center", Alignment.CenterVertically),
-    Bottom("Bottom", Alignment.Bottom),
-}
-
-private fun String?.toOption() =
-    VerticalAlignmentOption.entries.firstOrNull { it.id == this } ?: VerticalAlignmentOption.Top
 
 interface VerticalAlignmentComponentProperty {
     @Composable

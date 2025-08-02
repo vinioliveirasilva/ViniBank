@@ -12,8 +12,11 @@ import com.example.serverdriveui.ui.component.manager.ComponentParser
 import com.example.serverdriveui.ui.component.manager.SdUiComponentPreview
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.vini.designsystemsdui.ComponentUtil.component
-import com.vini.designsystemsdui.ComponentUtil.property
+import com.vini.designsystemsdui.component.icon
+import com.vini.designsystemsdui.component.text
+import com.vini.designsystemsdui.component.topBar
+import com.vini.designsystemsdui.property.IconNameProperty
+import com.vini.designsystemsdui.property.TextProperty
 import kotlinx.serialization.json.JsonObject
 
 data class TopAppBarComponent(
@@ -68,34 +71,15 @@ data class TopAppBarComponent(
 @Preview(showBackground = true)
 @Composable
 fun TopAppBarComponentPreview() {
-    val component = component(
-        "topAppBar",
-        listOf(),
-        listOf(
-            component(
-                "text",
-                listOf(
-                    property("text", "TopBar Title")
-                )
-            )
+    val component = topBar(
+        components = listOf(
+            text(textProperty = TextProperty("TopBar Title"))
         ),
-        customComponents = arrayOf(
-            "navigationIcons" to listOf(
-                component(
-                    "icon",
-                    listOf(
-                        property("icon", "LeftArrow")
-                    )
-                )
-            ),
-            "actionIcons" to listOf(
-                component(
-                    "icon",
-                    listOf(
-                        property("icon", "User")
-                    )
-                )
-            )
+        navigationIcons = listOf(
+            icon(iconName = IconNameProperty("LeftArrow"))
+        ),
+        actionIcons = listOf(
+            icon(iconName = IconNameProperty("User"))
         )
     )
 

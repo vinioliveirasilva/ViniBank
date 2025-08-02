@@ -1,7 +1,6 @@
 package com.vini.bank.di
 
 import com.example.network.FastKeyExchangeManager
-import com.example.network.KeyExchangeManager
 import com.vini.bank.LauncherActivity
 import com.vini.bank.LauncherViewModel
 import com.vini.bank.initializers.CryptoBindInitializer
@@ -19,6 +18,5 @@ val LauncherModule = module {
     }
     singleOf(::CryptoKeyInitializer) bind Initializer::class
     singleOf(::CryptoBindInitializer) bind Initializer::class
-    singleOf(::KeyExchangeManager)
     singleOf(::FastKeyExchangeManager)
 }

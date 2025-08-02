@@ -18,7 +18,7 @@ import com.example.serverdriveui.ui.component.properties.TextComponentProperty
 import com.example.serverdriveui.ui.component.properties.TextProperty
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.ui.validator.manager.ValidatorParser
-import com.vini.designsystemsdui.button
+import com.vini.designsystemsdui.component.button
 import kotlinx.serialization.json.JsonObject
 
 data class ButtonComponent(
@@ -56,6 +56,6 @@ data class ButtonComponent(
 @Composable
 private fun Preview() {
     SdUiComponentPreview(
-        button(text = "salve", shape = "Circle")
+        button()
     )
 }

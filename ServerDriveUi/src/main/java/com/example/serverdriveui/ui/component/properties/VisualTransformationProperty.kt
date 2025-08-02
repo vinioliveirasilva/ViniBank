@@ -4,10 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import com.example.serverdriveui.service.model.PropertyModel
-import com.example.serverdriveui.ui.component.properties.VisualTransformationOption.None
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
 import com.vini.designsystem.compose.textfield.MaskVisualTransformation
+import com.vini.designsystemsdui.property.options.VisualTransformationOption
 
 class VisualTransformationProperty(
     private val properties: Map<String, PropertyModel>,
@@ -18,40 +18,30 @@ class VisualTransformationProperty(
         properties = properties,
         propertyName = "visualTransformation",
         transformToData = { it?.asString() },
-        defaultPropertyValue = None.id,
+        defaultPropertyValue = VisualTransformationOption.None.name,
     ) {
 
     @Composable
-    override fun getVisualTransformation() = getValue().toOption().visualTransformation
+    override fun getVisualTransformation() =
+        VisualTransformationOption.valueOf(getValue()).toVisualTransformation()
 
     override fun setVisualTransformation(visualTransformation: VisualTransformationOption) =
-        setValue(visualTransformation.id)
-}
+        setValue(visualTransformation.name)
 
-private fun String?.toOption() =
-    VisualTransformationOption.entries.firstOrNull { it.id == this }
-        ?: None
-
-enum class VisualTransformationOption(
-    val id: String,
-    val visualTransformation: VisualTransformation,
-) {
-    None("None", VisualTransformation.None),
-    Password("Password", PasswordVisualTransformation()),
-    Phone(
-        "Phone",
-        MaskVisualTransformation(
+    private fun VisualTransformationOption.toVisualTransformation() = when (this) {
+        VisualTransformationOption.None -> VisualTransformation.None
+        VisualTransformationOption.Password -> PasswordVisualTransformation()
+        VisualTransformationOption.Phone -> MaskVisualTransformation(
             mask = "## #####-####",
             toIgnore = '#'
         )
-    ),
-    Document(
-        "Documento.CPF",
-        MaskVisualTransformation(
+
+        VisualTransformationOption.CpfDocument -> MaskVisualTransformation(
             mask = "###.###.###-##",
             toIgnore = '#'
         )
-    ),
+    }
+
 }
 
 interface VisualTransformationComponentProperty {

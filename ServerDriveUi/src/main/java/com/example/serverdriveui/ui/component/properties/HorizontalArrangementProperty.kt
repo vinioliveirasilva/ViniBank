@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
+import com.vini.designsystemsdui.property.options.HorizontalArrangementOption
 
 class HorizontalArrangementProperty(
     private val properties: Map<String, PropertyModel>,
@@ -14,30 +15,26 @@ class HorizontalArrangementProperty(
         stateManager = stateManager,
         properties = properties,
         propertyName = "horizontalArrangement",
-        defaultPropertyValue = HorizontalArrangementOptions.Start.id,
+        defaultPropertyValue = HorizontalArrangementOption.Start.name,
         transformToData = { it?.asString() }
     ) {
 
     @Composable
-    override fun getHorizontalArrangement() = getValue().toOption().arrangement
-    override fun setHorizontalArrangement(value: HorizontalArrangementOptions) = setValue(value.id)
-}
+    override fun getHorizontalArrangement() = HorizontalArrangementOption.valueOf(getValue()).toArrangement()
+    override fun setHorizontalArrangement(value: HorizontalArrangementOption) = setValue(value.name)
 
-enum class HorizontalArrangementOptions(val id: String, val arrangement: Arrangement.Horizontal) {
-    Start("Start", Arrangement.Start),
-    End("End", Arrangement.End),
-    Center("Center", Arrangement.Center),
-    SpaceBetween("SpaceBetween", Arrangement.SpaceBetween),
-    SpaceAround("SpaceAround", Arrangement.SpaceAround),
+    private fun HorizontalArrangementOption.toArrangement() = when(this) {
+        HorizontalArrangementOption.Start -> Arrangement.Start
+        HorizontalArrangementOption.End -> Arrangement.End
+        HorizontalArrangementOption.Center -> Arrangement.Center
+        HorizontalArrangementOption.SpaceBetween -> Arrangement.SpaceBetween
+        HorizontalArrangementOption.SpaceAround -> Arrangement.SpaceAround
+    }
 }
-
-private fun String?.toOption() =
-    HorizontalArrangementOptions.entries.firstOrNull { it.id == this }
-        ?: HorizontalArrangementOptions.Start
 
 interface HorizontalArrangementComponentProperty {
 
     @Composable
     fun getHorizontalArrangement(): Arrangement.Horizontal
-    fun setHorizontalArrangement(value: HorizontalArrangementOptions)
+    fun setHorizontalArrangement(value: HorizontalArrangementOption)
 }

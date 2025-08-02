@@ -8,6 +8,7 @@ import androidx.compose.ui.unit.dp
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
+import com.vini.designsystemsdui.property.options.ShapeOptions
 
 interface ShapeComponentProperty {
     @Composable
@@ -24,21 +25,19 @@ class ShapeProperty(
         properties = properties,
         propertyName = "shape",
         transformToData = { it?.asString() },
-        defaultPropertyValue = ShapeOptions.Circle.id,
+        defaultPropertyValue = ShapeOptions.Circle.name,
     ) {
     @Composable
-    override fun getShape() = getValue().toOption().shape
+    override fun getShape() = ShapeOptions.valueOf(getValue()).toShape()
 
-    override fun setShape(shape: ShapeOptions) = setValue(shape.id)
+    override fun setShape(shape: ShapeOptions) = setValue(shape.name)
+
+
+    private fun ShapeOptions.toShape() = when(this) {
+        ShapeOptions.None -> RoundedCornerShape(0.dp)
+        ShapeOptions.Small -> RoundedCornerShape(4.dp)
+        ShapeOptions.Medium -> RoundedCornerShape(8.dp)
+        ShapeOptions.Large -> RoundedCornerShape(16.dp)
+        ShapeOptions.Circle -> CircleShape
+    }
 }
-
-enum class ShapeOptions(val id: String, val shape: Shape) {
-    None("None", RoundedCornerShape(0.dp)),
-    Small("Small", RoundedCornerShape(4.dp)),
-    Medium("Medium", RoundedCornerShape(8.dp)),
-    Large("Large", RoundedCornerShape(16.dp)),
-    Circle("Circle", CircleShape),
-}
-
-private fun String?.toOption(): ShapeOptions =
-    ShapeOptions.entries.firstOrNull { it.id == this } ?: ShapeOptions.None

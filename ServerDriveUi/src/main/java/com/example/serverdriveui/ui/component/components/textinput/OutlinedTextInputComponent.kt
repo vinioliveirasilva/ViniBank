@@ -9,6 +9,8 @@ import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.action.manager.ActionParser
 import com.example.serverdriveui.ui.component.components.BaseComponent
 import com.example.serverdriveui.ui.component.manager.ComponentParser
+import com.example.serverdriveui.ui.component.properties.EnabledComponentProperty
+import com.example.serverdriveui.ui.component.properties.EnabledProperty
 import com.example.serverdriveui.ui.component.properties.ErrorComponentProperty
 import com.example.serverdriveui.ui.component.properties.ErrorMessageComponentProperty
 import com.example.serverdriveui.ui.component.properties.ErrorMessageProperty
@@ -38,7 +40,9 @@ data class OutlinedTextInputComponent(
     VisualTransformationComponentProperty by VisualTransformationProperty(properties, stateManager),
     KeyboardOptionsComponentProperty by KeyboardOptionsProperty(properties, stateManager),
     ErrorComponentProperty by ErrorProperty(properties, stateManager),
-    ErrorMessageComponentProperty by ErrorMessageProperty(properties, stateManager) {
+    ErrorMessageComponentProperty by ErrorMessageProperty(properties, stateManager),
+    EnabledComponentProperty by EnabledProperty(properties, stateManager)
+{
 
     @Composable
     override fun getInternalComponent(
@@ -46,6 +50,7 @@ data class OutlinedTextInputComponent(
         modifier: Modifier
     ): @Composable () -> Unit = {
         OutlinedTextField(
+            enabled = getEnabled(),
             keyboardOptions = getKeyboardOptions(),
             visualTransformation = getVisualTransformation(),
             singleLine = true,

@@ -5,6 +5,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.state.ComponentStateManager
 import com.example.serverdriveui.util.JsonUtil.asString
+import com.vini.designsystemsdui.property.options.TextAlignOption
 
 class TextAlignProperty(
     private val properties: Map<String, PropertyModel>,
@@ -15,23 +16,20 @@ class TextAlignProperty(
         properties = properties,
         propertyName = "textAlign",
         transformToData = { it?.asString() },
-        defaultPropertyValue = TextAlignOption.Start.id,
+        defaultPropertyValue = TextAlignOption.Start.name,
     ) {
 
     @Composable
-    override fun getTextAlign() = getValue().toTextAlign().textAlign
+    override fun getTextAlign() = TextAlignOption.valueOf(getValue()).toTextAlign()
 
-    override fun setTextAlign(textAlign: TextAlignOption) = setValue(textAlign.id)
+    override fun setTextAlign(textAlign: TextAlignOption) = setValue(textAlign.name)
+
+    private fun TextAlignOption.toTextAlign() = when(this) {
+        TextAlignOption.Start -> TextAlign.Start
+        TextAlignOption.Center -> TextAlign.Center
+        TextAlignOption.End -> TextAlign.End
+    }
 }
-
-enum class TextAlignOption(val id: String, val textAlign: TextAlign) {
-    Start("Start", TextAlign.Start),
-    Center("Center", TextAlign.Center),
-    End("End", TextAlign.End),
-}
-
-private fun String?.toTextAlign() =
-    TextAlignOption.entries.firstOrNull { it.id == this } ?: TextAlignOption.Start
 
 interface TextAlignComponentProperty {
 

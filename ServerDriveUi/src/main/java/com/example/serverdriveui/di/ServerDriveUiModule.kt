@@ -4,7 +4,6 @@ import com.example.serverdriveui.GlobalStateManager
 import com.example.serverdriveui.SdUiActivityViewModel
 import com.example.serverdriveui.SdUiRepository
 import com.example.serverdriveui.SdUiViewModel
-import com.example.serverdriveui.service.SdUiService
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.service.model.ValidatorModel
 import com.example.serverdriveui.ui.action.actions.BackAction
@@ -69,7 +68,6 @@ import org.koin.core.Koin
 import org.koin.core.qualifier.named
 import org.koin.core.scope.Scope
 import org.koin.dsl.module
-import retrofit2.Retrofit
 
 const val sdUiComponents = "sdUiComponents"
 const val sdUiActivity = "sdUiActivity"
@@ -542,8 +540,7 @@ val ServerDriveUiModule = module {
         scoped<ValidatorParser> { ValidatorParser(koinScope = this) }
     }
 
-    single<SdUiRepository> { SdUiRepository(sdUiService = get(), ktor = get()) }
-    single<SdUiService> { get<Retrofit>().create(SdUiService::class.java) }
+    single<SdUiRepository> { SdUiRepository(ktor = get()) }
 }
 
 val ServerDriveUiValidators = module {
