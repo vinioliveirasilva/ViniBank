@@ -1,6 +1,5 @@
 package com.vini.designsystemsdui.property
 
-import com.vini.designsystemsdui.property.BaseComponentProperty
 import com.vini.designsystemsdui.property.options.HorizontalFillTypeOption
 
 class HorizontalFillTypeProperty(

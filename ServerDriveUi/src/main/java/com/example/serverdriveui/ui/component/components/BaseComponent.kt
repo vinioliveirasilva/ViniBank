@@ -6,6 +6,8 @@ import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavHostController
 import com.example.serverdriveui.service.model.PropertyModel
 import com.example.serverdriveui.ui.action.manager.Action
@@ -49,14 +51,15 @@ open class BaseComponent(
     VisibilityComponentProperty by VisibilityProperty(properties, stateManager) {
 
     val actions: Map<String, Action> = actionParser.parseActions(model)
-
-    init {
-        actions.forEach { (_, action) -> action.initialize() }
-        validatorParser.parse(model).forEach { validator -> validator.initialize() }
-    }
+    private val validators = validatorParser.parse(model)
 
     @Composable
     private fun IntermediateComponent(navController: NavHostController, modifier: Modifier) {
+        LifecycleEventEffect(event = Lifecycle.Event.ON_CREATE) {
+            actions.forEach { (_, action) -> action.initialize() }
+            validators.forEach { validator -> validator.initialize() }
+        }
+
         if (getIsVisible()) {
             getInternalComponent(navController, modifier).invoke()
         }

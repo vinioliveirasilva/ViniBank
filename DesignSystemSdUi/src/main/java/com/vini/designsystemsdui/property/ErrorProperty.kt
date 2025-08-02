@@ -1,6 +1,6 @@
 package com.vini.designsystemsdui.property
 
 class ErrorProperty(
-    val isVisible: Boolean = true,
+    val isError: Boolean = false,
     val id: String? = null,
-) : BaseComponentProperty.BooleanComponentProperty("isError", isVisible, id)
+) : BaseComponentProperty.BooleanComponentProperty("isError", isError, id)
